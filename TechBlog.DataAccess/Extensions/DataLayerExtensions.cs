@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using TechBlog.DataAccess.Context;
 using TechBlog.DataAccess.Repositories.Abstractions;
 using TechBlog.DataAccess.Repositories.Concretes;
+using TechBlog.DataAccess.UnitOfWorks;
 
 namespace TechBlog.DataAccess.Extensions;
 
@@ -14,6 +15,7 @@ public static class DataLayerExtensions
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(
             config.GetConnectionString("DefaultConnection")));
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         return services;
     }
 }
