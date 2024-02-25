@@ -1,3 +1,4 @@
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using TechBlog.Entity.Entites;
 
@@ -17,4 +18,9 @@ public class AppDbContext : DbContext
     public DbSet<Article> Articles { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<Image> Images { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+    }
 }
