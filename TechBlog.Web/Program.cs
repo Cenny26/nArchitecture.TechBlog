@@ -1,9 +1,11 @@
 using TechBlog.DataAccess.Extensions;
+using TechBlog.Service.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.LoadServiceLayerExtensions();
 builder.Services.LoadDataLayerExtension(builder.Configuration);
 
 var app = builder.Build();
