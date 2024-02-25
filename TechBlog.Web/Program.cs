@@ -1,13 +1,9 @@
-using Microsoft.EntityFrameworkCore;
-using TechBlog.DataAccess.Context;
 using TechBlog.DataAccess.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(
-    builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.LoadDataLayerExtension(builder.Configuration);
 
 var app = builder.Build();
