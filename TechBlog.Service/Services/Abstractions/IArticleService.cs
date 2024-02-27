@@ -1,8 +1,8 @@
-using TechBlog.Entity.Entites;
+using TechBlog.Entity.DTOs.Articles;
 
 namespace TechBlog.Service.Services.Abstractions;
 
 public interface IArticleService
 {
-    Task<List<Article>> GetAllArticleAsync();
+    Task<List<ArticleDto>> GetAllArticleAsync();
 }
