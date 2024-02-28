@@ -53,21 +53,21 @@ namespace TechBlog.DataAccess.Migrations
                         new
                         {
                             Id = new Guid("2f673fe9-4ad1-493c-ab04-b3619397deb5"),
-                            ConcurrencyStamp = "9bfc189b-6131-4a10-ae08-fc65e07af6ad",
+                            ConcurrencyStamp = "817fe947-c2a7-4b5b-851d-88da9ccfb791",
                             Name = "Superadmin",
                             NormalizedName = "SUPERADMIN"
                         },
                         new
                         {
                             Id = new Guid("62c7c6fd-01d6-4410-9e4a-53490b59a3c7"),
-                            ConcurrencyStamp = "50a6811e-25ef-4c14-983a-4c5708c6dc8a",
+                            ConcurrencyStamp = "d8123cf5-6b5c-422e-8a45-22680fa982d1",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = new Guid("bf78885c-c25e-4fa8-bc01-7b90eb93c840"),
-                            ConcurrencyStamp = "c1b468a4-d579-4f94-8278-bdebd1e4a02d",
+                            ConcurrencyStamp = "f78ec356-1cb0-4870-b492-d38539f8315b",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -121,6 +121,9 @@ namespace TechBlog.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("ImageId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -160,6 +163,8 @@ namespace TechBlog.DataAccess.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ImageId");
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -175,18 +180,19 @@ namespace TechBlog.DataAccess.Migrations
                         {
                             Id = new Guid("2ef9cdda-913e-4e51-a905-54cbb8eb75c5"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "8163646d-8811-404a-bc14-8aea1ce0487c",
+                            ConcurrencyStamp = "c85195b1-ac3c-4ea8-a7de-e4ed8cf761a9",
                             Email = "superadmin@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Kanan",
+                            ImageId = new Guid("a8cb5130-8ebb-429b-a048-1c70b90212fb"),
                             LastName = "Huseynov",
                             LockoutEnabled = false,
                             NormalizedEmail = "SUPERADMIN@GMAIL.COM",
                             NormalizedUserName = "SUPERADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEKWZCb8WUoMx5FaeloL2eXBmcKt11ePmr3NLTNaKWBvB4Unv+cY6kYjsxWUhKy2HfQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEAg5+NFYWmlTiwg6DUwAgDB83c9ZLdfpCZX8s0zSOubmbLEDs4lEAqkxg3SRague1w==",
                             PhoneNumber = "+994515268342",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "c7080444-c846-4a18-b360-855c78fd9d2a",
+                            SecurityStamp = "78dfd8d3-fec6-4763-8710-f58d6eed92d0",
                             TwoFactorEnabled = false,
                             UserName = "superadmin@gmail.com"
                         },
@@ -194,18 +200,19 @@ namespace TechBlog.DataAccess.Migrations
                         {
                             Id = new Guid("8bfa84a0-7e9e-44cb-b703-9a817212eaee"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "76709b3a-63db-4e9c-8cb8-b104c3d29ae4",
+                            ConcurrencyStamp = "54d94caf-a3c5-4b49-b96a-8a754c125db5",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Kanan",
+                            ImageId = new Guid("3eb72197-9048-4826-ad10-cbca7094a4d1"),
                             LastName = "Huseynov",
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEKraGtpj3yKEUIUGu+r0xytEcIGevf8B/CaBRj7Kq4cP1Xh6Ocek8cOWynqbgbMO7Q==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEI+Rg5VnQwxrcfbg8XjCgSNrdvX1APWbvtvMnzhgpjD6W/zT0RpmNf3NALUo+lwhqg==",
                             PhoneNumber = "+994515268342",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "94c12aa8-9b16-4752-b1c5-f2440f069f55",
+                            SecurityStamp = "05a57a43-e906-4ff4-a007-4cfb7dcb77f6",
                             TwoFactorEnabled = false,
                             UserName = "admin@gmail.com"
                         });
@@ -330,7 +337,7 @@ namespace TechBlog.DataAccess.Migrations
                     b.Property<DateTime?>("DeletedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("ImageId")
+                    b.Property<Guid?>("ImageId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDeleted")
@@ -346,6 +353,9 @@ namespace TechBlog.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("ViewCount")
                         .HasColumnType("int");
 
@@ -355,31 +365,35 @@ namespace TechBlog.DataAccess.Migrations
 
                     b.HasIndex("ImageId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Articles");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("9905f041-d2cc-4620-8bb1-ff17393ef662"),
+                            Id = new Guid("a90f53fb-17b7-4b5f-9e87-94d43dda4cfe"),
                             CategoryId = new Guid("dc5c1e7e-74f3-4475-b766-a0c7d9381d25"),
                             Content = "ASP.NET Core is a cross-platform framework for building modern web applications. Developed by Microsoft, it provides developers with a powerful set of tools for creating scalable and high-performance web applications. ASP.NET Core is built on top of the .NET Core runtime, offering improved performance and flexibility compared to its predecessor. It supports various programming languages, including C#, F#, and Visual Basic, allowing developers to choose the language they are most comfortable with. ASP.NET Core follows a modular and lightweight architecture, enabling developers to optimize their applications for different deployment scenarios. With features like dependency injection, middleware pipeline, and built-in security mechanisms, ASP.NET Core simplifies the development process and promotes best practices in web development. Overall, ASP.NET Core is a modern and versatile framework for building next-generation web applications.",
                             CreatedBy = "Admin",
-                            CreatedDate = new DateTime(2024, 2, 28, 13, 2, 30, 470, DateTimeKind.Local).AddTicks(5846),
+                            CreatedDate = new DateTime(2024, 2, 28, 14, 4, 12, 761, DateTimeKind.Local).AddTicks(8067),
                             ImageId = new Guid("a8cb5130-8ebb-429b-a048-1c70b90212fb"),
                             IsDeleted = false,
                             Title = "ASP.NET Core test blog",
+                            UserId = new Guid("2ef9cdda-913e-4e51-a905-54cbb8eb75c5"),
                             ViewCount = 10
                         },
                         new
                         {
-                            Id = new Guid("de8439cd-abae-4b59-a661-782cbf2edd07"),
+                            Id = new Guid("3728c8fc-ad9e-4650-b571-14b1a2677865"),
                             CategoryId = new Guid("11e3fba7-16ed-4a07-9cef-bdc1f03f3e04"),
                             Content = "C# is a powerful programming language developed by Microsoft. It is widely used for building various types of applications, including desktop, web, and mobile apps. C# is known for its simplicity and ease of use, making it a popular choice among developers. It offers strong typing, object-oriented programming features, and support for modern programming paradigms. With C#, developers can write efficient and maintainable code for their projects. The language is continuously evolving, with new features and improvements being introduced regularly. Overall, C# is a fundamental tool for software development in the Microsoft ecosystem.",
                             CreatedBy = "Admin",
-                            CreatedDate = new DateTime(2024, 2, 28, 13, 2, 30, 470, DateTimeKind.Local).AddTicks(5865),
+                            CreatedDate = new DateTime(2024, 2, 28, 14, 4, 12, 761, DateTimeKind.Local).AddTicks(8090),
                             ImageId = new Guid("3eb72197-9048-4826-ad10-cbca7094a4d1"),
                             IsDeleted = false,
                             Title = "C# test blog",
+                            UserId = new Guid("8bfa84a0-7e9e-44cb-b703-9a817212eaee"),
                             ViewCount = 25
                         });
                 });
@@ -425,7 +439,7 @@ namespace TechBlog.DataAccess.Migrations
                         {
                             Id = new Guid("dc5c1e7e-74f3-4475-b766-a0c7d9381d25"),
                             CreatedBy = "Admin",
-                            CreatedDate = new DateTime(2024, 2, 28, 13, 2, 30, 470, DateTimeKind.Local).AddTicks(7414),
+                            CreatedDate = new DateTime(2024, 2, 28, 14, 4, 12, 762, DateTimeKind.Local).AddTicks(835),
                             IsDeleted = false,
                             Name = "ASP.NET Core"
                         },
@@ -433,7 +447,7 @@ namespace TechBlog.DataAccess.Migrations
                         {
                             Id = new Guid("11e3fba7-16ed-4a07-9cef-bdc1f03f3e04"),
                             CreatedBy = "Admin",
-                            CreatedDate = new DateTime(2024, 2, 28, 13, 2, 30, 470, DateTimeKind.Local).AddTicks(7418),
+                            CreatedDate = new DateTime(2024, 2, 28, 14, 4, 12, 762, DateTimeKind.Local).AddTicks(842),
                             IsDeleted = false,
                             Name = "C#"
                         });
@@ -484,7 +498,7 @@ namespace TechBlog.DataAccess.Migrations
                         {
                             Id = new Guid("a8cb5130-8ebb-429b-a048-1c70b90212fb"),
                             CreatedBy = "Admin",
-                            CreatedDate = new DateTime(2024, 2, 28, 13, 2, 30, 470, DateTimeKind.Local).AddTicks(8567),
+                            CreatedDate = new DateTime(2024, 2, 28, 14, 4, 12, 762, DateTimeKind.Local).AddTicks(2339),
                             FileName = "images/test/aspnetcore",
                             FileType = "jpg",
                             IsDeleted = false
@@ -493,7 +507,7 @@ namespace TechBlog.DataAccess.Migrations
                         {
                             Id = new Guid("3eb72197-9048-4826-ad10-cbca7094a4d1"),
                             CreatedBy = "Admin",
-                            CreatedDate = new DateTime(2024, 2, 28, 13, 2, 30, 470, DateTimeKind.Local).AddTicks(8575),
+                            CreatedDate = new DateTime(2024, 2, 28, 14, 4, 12, 762, DateTimeKind.Local).AddTicks(2348),
                             FileName = "images/test/csharp",
                             FileType = "jpg",
                             IsDeleted = false
@@ -507,6 +521,17 @@ namespace TechBlog.DataAccess.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("TechBlog.Entity.Entites.AppUser", b =>
+                {
+                    b.HasOne("TechBlog.Entity.Entites.Image", "Image")
+                        .WithMany("Users")
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Image");
                 });
 
             modelBuilder.Entity("TechBlog.Entity.Entites.AppUserClaim", b =>
@@ -561,13 +586,24 @@ namespace TechBlog.DataAccess.Migrations
 
                     b.HasOne("TechBlog.Entity.Entites.Image", "Image")
                         .WithMany("Articles")
-                        .HasForeignKey("ImageId")
+                        .HasForeignKey("ImageId");
+
+                    b.HasOne("TechBlog.Entity.Entites.AppUser", "User")
+                        .WithMany("Articles")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Category");
 
                     b.Navigation("Image");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("TechBlog.Entity.Entites.AppUser", b =>
+                {
+                    b.Navigation("Articles");
                 });
 
             modelBuilder.Entity("TechBlog.Entity.Entites.Category", b =>
@@ -578,6 +614,8 @@ namespace TechBlog.DataAccess.Migrations
             modelBuilder.Entity("TechBlog.Entity.Entites.Image", b =>
                 {
                     b.Navigation("Articles");
+
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

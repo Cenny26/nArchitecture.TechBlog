@@ -55,7 +55,8 @@ public class UserMap : IEntityTypeConfiguration<AppUser>
             Email = "superadmin@gmail.com",
             NormalizedEmail = "SUPERADMIN@GMAIL.COM",
             EmailConfirmed = true,
-            SecurityStamp = Guid.NewGuid().ToString()
+            SecurityStamp = Guid.NewGuid().ToString(),
+            ImageId = Guid.Parse("A8CB5130-8EBB-429B-A048-1C70B90212FB")
         };
         superadmin.PasswordHash = CreatePasswordHash(superadmin, "123456");
         
@@ -71,7 +72,8 @@ public class UserMap : IEntityTypeConfiguration<AppUser>
             Email = "admin@gmail.com",
             NormalizedEmail = "ADMIN@GMAIL.COM",
             EmailConfirmed = true,
-            SecurityStamp = Guid.NewGuid().ToString()
+            SecurityStamp = Guid.NewGuid().ToString(),
+            ImageId = Guid.Parse("3EB72197-9048-4826-AD10-CBCA7094A4D1")
         };
         admin.PasswordHash = CreatePasswordHash(admin, "123456");
 
