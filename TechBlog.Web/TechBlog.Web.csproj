@@ -26,7 +26,6 @@
 
     <ItemGroup>
       <AdditionalFiles Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
-      <AdditionalFiles Include="Areas\Admin\Views\Shared\_ValidationScriptsPartial.cshtml" />
     </ItemGroup>
 
 </Project>
