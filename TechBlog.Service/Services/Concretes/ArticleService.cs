@@ -17,9 +17,9 @@ public class ArticleService : IArticleService
         _mapper = mapper;
     }
 
-    public async Task<List<ArticleDto>> GetAllArticleAsync()
+    public async Task<List<ArticleDto>> GetAllArticlesWithCategoryNonDeletedAsync()
     {
-        var articles = await _unitOfWork.GetRepository<Article>().GetAllAsync();
+        var articles = await _unitOfWork.GetRepository<Article>().GetAllAsync(x => !x.IsDeleted, x => x.Category);
         var map = _mapper.Map<List<ArticleDto>>(articles);
         return map;
     }
