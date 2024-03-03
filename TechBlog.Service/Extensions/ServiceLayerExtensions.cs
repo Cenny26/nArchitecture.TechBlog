@@ -13,6 +13,7 @@ public static class ServiceLayerExtensions
 
         services.AddAutoMapper(assembly);
         services.AddScoped<IArticleService, ArticleService>();
+        services.AddScoped<ICategoryService, CategoryService>();
         return services;
     }
 }
