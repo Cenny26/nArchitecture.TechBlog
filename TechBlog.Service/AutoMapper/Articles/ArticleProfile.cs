@@ -11,5 +11,6 @@ public class ArticleProfile : Profile
         CreateMap<ArticleDto, Article>().ReverseMap();
         CreateMap<ArticleUpdateDto, Article>().ReverseMap();
         CreateMap<ArticleUpdateDto, ArticleDto>().ReverseMap();
+        CreateMap<ArticleAddDto, Article>().ReverseMap();
     }
 }
