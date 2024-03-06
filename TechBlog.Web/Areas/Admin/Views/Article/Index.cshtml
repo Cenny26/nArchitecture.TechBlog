@@ -34,14 +34,19 @@
                     </tr>
                 </tfoot>
                 <tbody class="table-border-bottom-0">
-                    @foreach (var article in Model){
+                    @foreach (var article in Model)
+                    {
                         <tr name="@article.Id">
                             <td>@article.Title</td>
                             <td>@article.Category.Name</td>
                             <td>@article.CreatedDate.ToShortDateString()</td>
                             <td>@article.CreatedBy</td>
                             <td>@(article.IsDeleted ? "Inactive" : "Active")</td>
-                            <td></td>
+                            <td>
+                                <a class="btn btn-primary btn-sm" data-id="@article.Id" asp-route-articleId="@article.Id" asp-area="Admin" asp-controller="Article" asp-action="Update">
+                                    <i class="bx bxs-edit"></i>
+                                </a>
+                            </td>
                         </tr>
                     }
                 </tbody>
