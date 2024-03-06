@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using TechBlog.Entity.DTOs.Articles;
-using TechBlog.Entity.Entites;
 using TechBlog.Service.Services.Abstractions;
 
 namespace TechBlog.Web.Areas.Admin.Controllers
@@ -66,6 +65,13 @@ namespace TechBlog.Web.Areas.Admin.Controllers
             articleUpdateDto.Categories = categories;
 
             return View(articleUpdateDto);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(Guid articleId)
+        {
+            await _articleService.SafeDeleteArticleAsync(articleId);
+            return RedirectToAction("Index", "Article", new { Area = "Admin" });
         }
     }
 }

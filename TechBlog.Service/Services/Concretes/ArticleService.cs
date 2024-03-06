@@ -57,4 +57,15 @@ public class ArticleService : IArticleService
         await _unitOfWork.GetRepository<Article>().UpdateAsync(article);
         await _unitOfWork.SaveAsync();
     }
+
+    public async Task SafeDeleteArticleAsync(Guid articleId)
+    {
+        var article = await _unitOfWork.GetRepository<Article>().GetByGuidAsync(articleId);
+
+        article.IsDeleted = true;
+        article.DeletedTime = DateTime.Now;
+
+        await _unitOfWork.GetRepository<Article>().UpdateAsync(article);
+        await _unitOfWork.SaveAsync();
+    }
 }

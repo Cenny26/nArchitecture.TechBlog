@@ -46,6 +46,9 @@
                                 <a class="btn btn-primary btn-sm" data-id="@article.Id" asp-route-articleId="@article.Id" asp-area="Admin" asp-controller="Article" asp-action="Update">
                                     <i class="bx bxs-edit"></i>
                                 </a>
+                                <a class="btn btn-danger btn-sm" data-id="@article.Id" asp-route-articleId="@article.Id" asp-area="Admin" asp-controller="Article" asp-action="Delete">
+                                    <i class="bx bx-minus-circle"></i>
+                                </a>
                             </td>
                         </tr>
                     }
