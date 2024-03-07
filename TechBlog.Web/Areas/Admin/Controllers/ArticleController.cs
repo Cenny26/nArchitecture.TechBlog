@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using NToastNotify;
 using TechBlog.Entity.DTOs.Articles;
 using TechBlog.Entity.Entites;
 using TechBlog.Service.Extensions;
 using TechBlog.Service.Services.Abstractions;
+using TechBlog.Web.ResultMessages;
 
 namespace TechBlog.Web.Areas.Admin.Controllers
 {
@@ -15,13 +17,15 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         private readonly ICategoryService _categoryService;
         private readonly IMapper _mapper;
         private readonly IValidator<Article> _validator;
+        private readonly IToastNotification _notification;
 
-        public ArticleController(IArticleService articleService, ICategoryService categoryService, IMapper mapper, IValidator<Article> validator)
+        public ArticleController(IArticleService articleService, ICategoryService categoryService, IMapper mapper, IValidator<Article> validator, IToastNotification notification)
         {
             _articleService = articleService;
             _categoryService = categoryService;
             _mapper = mapper;
             _validator = validator;
+            _notification = notification;
         }
 
         [HttpGet]
@@ -47,6 +51,7 @@ namespace TechBlog.Web.Areas.Admin.Controllers
             if (result.IsValid)
             {
                 await _articleService.CreateArticleAsync(articleAddDto);
+                _notification.AddSuccessToastMessage(Messages.Article.Add(articleAddDto.Title), new ToastrOptions { Title = "Successful!" });
                 return RedirectToAction("Index", "Article", new { Area = "Admin" });
             }
             else
@@ -79,7 +84,10 @@ namespace TechBlog.Web.Areas.Admin.Controllers
 
             if (result.IsValid)
             {
-                await _articleService.UpdateArticleAsync(articleUpdateDto);
+                var title = await _articleService.UpdateArticleAsync(articleUpdateDto);
+                _notification.AddSuccessToastMessage(Messages.Article.Update(title), new ToastrOptions { Title = "Successful!" });
+
+                return RedirectToAction("Index", "Article", new { Area = "Admin" });
             }
             else
             {
@@ -95,7 +103,9 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(Guid articleId)
         {
-            await _articleService.SafeDeleteArticleAsync(articleId);
+            var title = await _articleService.SafeDeleteArticleAsync(articleId);
+            _notification.AddSuccessToastMessage(Messages.Article.Delete(title), new ToastrOptions { Title = "Successful!" });
+
             return RedirectToAction("Index", "Article", new { Area = "Admin" });
         }
     }
