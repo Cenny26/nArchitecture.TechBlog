@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using TechBlog.Service.FluentValidations;
+using TechBlog.Service.Helpers.Images.Abstractions;
+using TechBlog.Service.Helpers.Images.Concretes;
 using TechBlog.Service.Services.Abstractions;
 using TechBlog.Service.Services.Concretes;
 
@@ -17,6 +19,7 @@ public static class ServiceLayerExtensions
 
         services.AddScoped<IArticleService, ArticleService>();
         services.AddScoped<ICategoryService, CategoryService>();
+        services.AddScoped<IImageHelper, ImageHelper>();
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         services.AddAutoMapper(assembly);
         services.AddControllersWithViews().AddFluentValidation(opt =>
