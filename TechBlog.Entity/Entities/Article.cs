@@ -8,13 +8,14 @@ public class Article : EntityBase
     {
         
     }
-    public Article(string title, string content, Guid categoryId, Guid imageId, Guid userId)
+    public Article(string title, string content, Guid categoryId, Guid imageId, Guid userId, string createdBy)
     {
         Title = title;
         Content = content;
         CategoryId = categoryId;
         ImageId = imageId;
         UserId = userId;
+        CreatedBy = createdBy;
     }
     
     public string Title { get; set; }
