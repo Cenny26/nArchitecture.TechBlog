@@ -37,6 +37,7 @@ public class ArticleService : IArticleService
 
         var imageUpload = await _imageHelper.Upload(articleAddDto.Title, articleAddDto.Photo, ImageType.Post);
         Image image = new Image(imageUpload.FullName, articleAddDto.Photo.ContentType, userEmail);
+
         await _unitOfWork.GetRepository<Image>().AddAsync(image); 
 
         var article = new Article(articleAddDto.Title, articleAddDto.Content, articleAddDto.CategoryId, image.Id, userId, userEmail);
@@ -49,21 +50,34 @@ public class ArticleService : IArticleService
     {
         var articles = await _unitOfWork.GetRepository<Article>().GetAllAsync(x => !x.IsDeleted, x => x.Category);
         var map = _mapper.Map<List<ArticleDto>>(articles);
+
         return map;
     }
 
     public async Task<ArticleDto> GetArticleWithCategoryNonDeletedAsync(Guid articleId)
     {
-        var article = await _unitOfWork.GetRepository<Article>().GetAsync(x => !x.IsDeleted && x.Id == articleId, x => x.Category);
+        var article = await _unitOfWork.GetRepository<Article>().GetAsync(x => !x.IsDeleted && x.Id == articleId, x => x.Category, i => i.Image);
         var map = _mapper.Map<ArticleDto>(article);
+
         return map;
     }
 
     public async Task<string> UpdateArticleAsync(ArticleUpdateDto articleUpdateDto)
     {
         var userEmail = _user.GetLoggedInEmail();
+        var article = await _unitOfWork.GetRepository<Article>().GetAsync(x => !x.IsDeleted && x.Id == articleUpdateDto.Id, x => x.Category, i => i.Image);
 
-        var article = await _unitOfWork.GetRepository<Article>().GetAsync(x => !x.IsDeleted && x.Id == articleUpdateDto.Id, x => x.Category);
+        if (articleUpdateDto.Photo != null)
+        {
+            _imageHelper.Delete(article.Image.FileName);
+
+            var imageUpload = await _imageHelper.Upload(articleUpdateDto.Title, articleUpdateDto.Photo, ImageType.Post);
+            Image image = new Image(imageUpload.FullName, articleUpdateDto.Photo.ContentType, userEmail);
+
+            await _unitOfWork.GetRepository<Image>().AddAsync(image);
+
+            article.ImageId = image.Id;
+        }
 
         article.Title = articleUpdateDto.Title;
         article.Content = articleUpdateDto.Content;

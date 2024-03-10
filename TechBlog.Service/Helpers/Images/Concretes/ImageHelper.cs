@@ -62,7 +62,7 @@ namespace TechBlog.Service.Helpers.Images.Concretes
 
         public void Delete(string imageName)
         {
-            var fileToDelete = Path.Combine($"{wwwroot}/{imageName}/{imageName}");
+            var fileToDelete = Path.Combine($"{wwwroot}/{imgFolder}/{imageName}");
             if (File.Exists(fileToDelete))
                 File.Delete(fileToDelete);
         }
