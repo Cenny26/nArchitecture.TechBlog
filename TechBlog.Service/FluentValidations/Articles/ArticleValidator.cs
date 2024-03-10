@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using TechBlog.Entity.Entites;
 
-namespace TechBlog.Service.FluentValidations
+namespace TechBlog.Service.FluentValidations.Articles
 {
     public class ArticleValidator : AbstractValidator<Article>
     {

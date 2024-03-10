@@ -2,7 +2,7 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
-using TechBlog.Service.FluentValidations;
+using TechBlog.Service.FluentValidations.Articles;
 using TechBlog.Service.Helpers.Images.Abstractions;
 using TechBlog.Service.Helpers.Images.Concretes;
 using TechBlog.Service.Services.Abstractions;
