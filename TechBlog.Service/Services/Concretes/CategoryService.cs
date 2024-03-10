@@ -43,5 +43,43 @@ namespace TechBlog.Service.Services.Concretes
             await _unitOfWork.GetRepository<Category>().AddAsync(category);
             await _unitOfWork.SaveAsync();
         }
+
+        public async Task<Category> GetCategoryByGuid(Guid categoryId)
+        {
+            var category = await _unitOfWork.GetRepository<Category>().GetByGuidAsync(categoryId);
+            return category;
+        }
+
+        public async Task<string> UpdateCategoryAsync(CategoryUpdateDto categoryUpdateDto)
+        {
+            var userEmail = _user.GetLoggedInEmail();
+
+            var category = await _unitOfWork.GetRepository<Category>().GetAsync(x => !x.IsDeleted && x.Id ==  categoryUpdateDto.Id);
+
+            category.Name = categoryUpdateDto.Name;
+            category.ModifiedBy = userEmail;
+            category.ModifiedDate = DateTime.Now;
+
+            await _unitOfWork.GetRepository<Category>().UpdateAsync(category);
+            await _unitOfWork.SaveAsync();
+
+            return category.Name;
+        }
+
+        public async Task<string> SafeDeleteCategoryAsync(Guid categoryId)
+        {
+            var userEmail = _user.GetLoggedInEmail();
+
+            var category = await _unitOfWork.GetRepository<Category>().GetByGuidAsync(categoryId);
+
+            category.IsDeleted = true;
+            category.DeletedBy = userEmail;
+            category.ModifiedDate= DateTime.Now;
+
+            await _unitOfWork.GetRepository<Category>().UpdateAsync(category);
+            await _unitOfWork.SaveAsync();
+
+            return category.Name;
+        }
     }
 }

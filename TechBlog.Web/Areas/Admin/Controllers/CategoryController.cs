@@ -2,7 +2,6 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
-using TechBlog.Entity.DTOs.Articles;
 using TechBlog.Entity.DTOs.Categories;
 using TechBlog.Entity.Entites;
 using TechBlog.Service.Extensions;
@@ -54,6 +53,40 @@ namespace TechBlog.Web.Areas.Admin.Controllers
 
             result.AddToModelState(this.ModelState);
             return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Update(Guid categoryId)
+        {
+            var category = await _categoryService.GetCategoryByGuid(categoryId);
+            var map = _mapper.Map<Category, CategoryUpdateDto>(category);
+
+            return View(map);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(CategoryUpdateDto categoryUpdateDto)
+        {
+            var map = _mapper.Map<Category>(categoryUpdateDto);
+            var result = await _validator.ValidateAsync(map);
+
+            if (result.IsValid)
+            {
+                var name = await _categoryService.UpdateCategoryAsync(categoryUpdateDto);
+                _notification.AddSuccessToastMessage(Messages.Category.Update(name), new ToastrOptions { Title = "Successful!" });
+                return RedirectToAction("Index", "Category", new { Area = "Admin" });
+            }
+
+            result.AddToModelState(this.ModelState);
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(Guid categoryId)
+        {
+            var name = await _categoryService.SafeDeleteCategoryAsync(categoryId);
+            _notification.AddSuccessToastMessage(Messages.Category.Delete(name), new ToastrOptions { Title = "Successful!" });
+            return RedirectToAction("Index", "Category", new { Area = "Admin" });
         }
     }
 }
