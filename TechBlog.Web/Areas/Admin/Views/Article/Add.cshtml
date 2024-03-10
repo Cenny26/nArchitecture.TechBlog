@@ -31,6 +31,11 @@
                             <span asp-validation-for="Content" class="text-danger"></span>
                         </div>
                         <div class="form-group">
+                            <label asp-for="Photo" class="form-label">Photo</label>
+                            <input asp-for="Photo" type="file" accept="image/" class="form-control mb-3" id="defaultFormControlInput" aria-describedby="defaultFormControlHelp">
+                            <span asp-validation-for="Photo" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
                             <button type="submit" class="btn btn-primary btn-block">Save</button>
                         </div>
                     </div>

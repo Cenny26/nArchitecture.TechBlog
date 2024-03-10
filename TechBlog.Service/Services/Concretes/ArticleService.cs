@@ -4,7 +4,9 @@ using System.Security.Claims;
 using TechBlog.DataAccess.UnitOfWorks;
 using TechBlog.Entity.DTOs.Articles;
 using TechBlog.Entity.Entites;
+using TechBlog.Entity.Enums;
 using TechBlog.Service.Extensions;
+using TechBlog.Service.Helpers.Images.Abstractions;
 using TechBlog.Service.Services.Abstractions;
 
 #nullable disable
@@ -16,13 +18,15 @@ public class ArticleService : IArticleService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly IHttpContextAccessor _accessor;
+    private readonly IImageHelper _imageHelper;
     private readonly ClaimsPrincipal _user;
 
-    public ArticleService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor Accessor)
+    public ArticleService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor Accessor, IImageHelper imageHelper)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _accessor = Accessor;
+        _imageHelper = imageHelper;
         _user = _accessor.HttpContext.User;
     }
 
@@ -30,11 +34,15 @@ public class ArticleService : IArticleService
     {
         var userId = _user.GetLoggedInUserId();
         var userEmail = _user.GetLoggedInEmail();
-        var imageId = Guid.Parse("A8CB5130-8EBB-429B-A048-1C70B90212FB");
-        var article = new Article(articleAddDto.Title, articleAddDto.Content, articleAddDto.CategoryId, imageId, userId, userEmail);
+
+        var imageUpload = await _imageHelper.Upload(articleAddDto.Title, articleAddDto.Photo, ImageType.Post);
+        Image image = new Image(imageUpload.FullName, articleAddDto.Photo.ContentType, userEmail);
+        await _unitOfWork.GetRepository<Image>().AddAsync(image); 
+
+        var article = new Article(articleAddDto.Title, articleAddDto.Content, articleAddDto.CategoryId, image.Id, userId, userEmail);
 
         await _unitOfWork.GetRepository<Article>().AddAsync(article);
-        await _unitOfWork.SaveAsync();
+        await _unitOfWork.SaveAsync(); // Both of image and article entities
     }
 
     public async Task<List<ArticleDto>> GetAllArticlesWithCategoryNonDeletedAsync()
