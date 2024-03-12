@@ -48,11 +48,32 @@ namespace TechBlog.Web.Areas.Admin.Controllers
             {
                 await _categoryService.CreateCategoryAsync(categoryAddDto);
                 _notification.AddSuccessToastMessage(Messages.Category.Add(categoryAddDto.Name), new ToastrOptions { Title = "Successful!" });
+
                 return RedirectToAction("Index", "Category", new { Area = "Admin" });
             }
 
             result.AddToModelState(this.ModelState);
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddWithAjax([FromBody] CategoryAddDto categoryAddDto)
+        {
+            var map = _mapper.Map<Category>(categoryAddDto);
+            var result = await _validator.ValidateAsync(map);
+
+            if (result.IsValid)
+            {
+                await _categoryService.CreateCategoryAsync(categoryAddDto);
+                _notification.AddSuccessToastMessage(Messages.Category.Add(categoryAddDto.Name), new ToastrOptions { Title = "Successful!" });
+
+                return Json(Messages.Category.Add(categoryAddDto.Name));
+            }
+            else
+            {
+                _notification.AddErrorToastMessage(result.Errors.First().ErrorMessage, new ToastrOptions { Title = "UnSuccessful!" });
+                return Json(result.Errors.First().ErrorMessage);
+            }
         }
 
         [HttpGet]
