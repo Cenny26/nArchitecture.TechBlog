@@ -38,15 +38,15 @@
         {
             public static string Add(string userName)
             {
-                return $"User wirh email: {userName} has been added successfully.";
+                return $"User with email: {userName} has been added successfully.";
             }
             public static string Update(string userName)
             {
-                return $"User wirh email: {userName} has been updated successfully.";
+                return $"User with email: {userName} has been updated successfully.";
             }
             public static string Delete(string userName)
             {
-                return $"User wirh email: {userName} has been deleted successfully.";
+                return $"User with email: {userName} has been deleted successfully.";
             }
         }
     }
