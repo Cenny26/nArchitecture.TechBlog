@@ -79,9 +79,7 @@ public class ArticleService : IArticleService
             article.ImageId = image.Id;
         }
 
-        article.Title = articleUpdateDto.Title;
-        article.Content = articleUpdateDto.Content;
-        article.CategoryId = articleUpdateDto.CategoryId;
+        _mapper.Map(articleUpdateDto, article);
         article.ModifiedDate = DateTime.Now;
         article.ModifiedBy = userEmail;
 
