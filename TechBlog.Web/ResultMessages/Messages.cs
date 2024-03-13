@@ -6,15 +6,15 @@
         {
             public static string Add(string articleTitle)
             {
-                return $"Article titled {articleTitle} has been added successfully.";
+                return $"Article with title: {articleTitle} has been added successfully.";
             }
             public static string Update(string articleTitle)
             {
-                return $"Article titled {articleTitle} has been updated successfully.";
+                return $"Article with title: {articleTitle} has been updated successfully.";
             }
             public static string Delete(string articleTitle)
             {
-                return $"Article titled {articleTitle} has been deleted successfully.";
+                return $"Article with title: {articleTitle} has been deleted successfully.";
             }
         }
 
@@ -22,15 +22,31 @@
         {
             public static string Add(string categoryName)
             {
-                return $"Category titled {categoryName} has been added successfully.";
+                return $"Category with title: {categoryName} has been added successfully.";
             }
             public static string Update(string categoryName)
             {
-                return $"Category titled {categoryName} has been updated successfully.";
+                return $"Category with title: {categoryName} has been updated successfully.";
             }
             public static string Delete(string categoryName)
             {
-                return $"Category titled {categoryName} has been deleted successfully.";
+                return $"Category with title: {categoryName} has been deleted successfully.";
+            }
+        }
+
+        public static class User
+        {
+            public static string Add(string userName)
+            {
+                return $"User wirh email: {userName} has been added successfully.";
+            }
+            public static string Update(string userName)
+            {
+                return $"User wirh email: {userName} has been updated successfully.";
+            }
+            public static string Delete(string userName)
+            {
+                return $"User wirh email: {userName} has been deleted successfully.";
             }
         }
     }
