@@ -81,5 +81,29 @@ namespace TechBlog.Service.Services.Concretes
 
             return category.Name;
         }
+
+        public async Task<List<CategoryDto>> GetAllCategoriesDeleted()
+        {
+            var categories = await _unitOfWork.GetRepository<Category>().GetAllAsync(x => x.IsDeleted);
+            var map = _mapper.Map<List<CategoryDto>>(categories);
+
+            return map;
+        }
+
+        public async Task<string> UndoDeleteCategoryAsync(Guid categoryId)
+        {
+            var userEmail = _user.GetLoggedInEmail();
+
+            var category = await _unitOfWork.GetRepository<Category>().GetByGuidAsync(categoryId);
+
+            category.IsDeleted = false;
+            category.DeletedBy = null;
+            category.ModifiedDate = null;
+
+            await _unitOfWork.GetRepository<Category>().UpdateAsync(category);
+            await _unitOfWork.SaveAsync();
+
+            return category.Name;
+        }
     }
 }

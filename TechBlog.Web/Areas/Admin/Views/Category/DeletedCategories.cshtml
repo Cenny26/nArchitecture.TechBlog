@@ -1,0 +1,54 @@
+﻿@model List<CategoryDto>
+
+<div class="container-xxl flex-grow-1 container-p-y">
+
+    <h4 class="py-3 mb-4">
+        <span class="text-muted fw-light">Recycle Bin /</span> Categories
+    </h4>
+
+    <!-- Basic Bootstrap Table -->
+    <div class="card">
+        <div class="table-responsive text-nowrap m-5">
+
+            <table class="table table-bordered" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Creation Date</th>
+                        <th>Creator</th>
+                        <th>Status</th>
+                        <th>Transactions</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>Name</th>
+                        <th>Creation Date</th>
+                        <th>Creator</th>
+                        <th>Status</th>
+                        <th>Transactions</th>
+                    </tr>
+                </tfoot>
+                <tbody class="table-border-bottom-0">
+                    @foreach (var category in Model)
+                    {
+                        <tr name="@category.Id">
+                            <td>@category.Name</td>
+                            <td>@category.CreatedDate.ToShortDateString()</td>
+                            <td>@category.CreatedBy</td>
+                            <td>@(category.IsDeleted ? "Inactive" : "Active")</td>
+                            <td>
+                                <a class="btn btn-warning btn-sm" data-id="@category.Id" asp-route-categoryId="@category.Id" asp-area="Admin" asp-controller="Category" asp-action="UndoDelete">
+                                    <i class="bx bx-undo"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+    <!--/ Basic Bootstrap Table -->
+
+</div>

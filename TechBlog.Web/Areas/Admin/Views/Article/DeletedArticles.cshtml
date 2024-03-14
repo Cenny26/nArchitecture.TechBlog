@@ -1,0 +1,57 @@
+﻿@model List<ArticleDto>
+
+<div class="container-xxl flex-grow-1 container-p-y">
+
+    <h4 class="py-3 mb-4">
+        <span class="text-muted fw-light">Recycle Bin /</span> Articles
+    </h4>
+
+    <!-- Basic Bootstrap Table -->
+    <div class="card">
+        <div class="table-responsive text-nowrap m-5">
+            
+            <table class="table table-bordered" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Creation Date</th>
+                        <th>Creator</th>
+                        <th>Status</th>
+                        <th>Transactions</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Creation Date</th>
+                        <th>Creator</th>
+                        <th>Status</th>
+                        <th>Transactions</th>
+                    </tr>
+                </tfoot>
+                <tbody class="table-border-bottom-0">
+                    @foreach (var article in Model)
+                    {
+                        <tr name="@article.Id">
+                            <td>@article.Title</td>
+                            <td>@article.Category.Name</td>
+                            <td>@article.CreatedDate.ToShortDateString()</td>
+                            <td>@article.CreatedBy</td>
+                            <td>@(article.IsDeleted ? "Inactive" : "Active")</td>
+                            <td>
+                                <a class="btn btn-warning btn-sm" data-id="@article.Id" asp-route-articleId="@article.Id" asp-area="Admin" asp-controller="Article" asp-action="UndoDelete">
+                                    <i class="bx bx-undo"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+    <!--/ Basic Bootstrap Table -->
+
+</div>

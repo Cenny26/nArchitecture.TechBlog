@@ -16,6 +16,10 @@
             {
                 return $"Article with title: {articleTitle} has been deleted successfully.";
             }
+            public static string UndoDelete(string articleTitle)
+            {
+                return $"Article with title: {articleTitle} has been successfully undo from deleted articles.";
+            }
         }
 
         public static class Category
@@ -31,6 +35,10 @@
             public static string Delete(string categoryName)
             {
                 return $"Category with title: {categoryName} has been deleted successfully.";
+            }
+            public static string UndoDelete(string categoryName)
+            {
+                return $"Category with title: {categoryName} has been successfully undo from deleted categories.";
             }
         }
 
