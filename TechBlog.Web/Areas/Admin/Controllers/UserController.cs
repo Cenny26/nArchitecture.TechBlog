@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,13 +20,15 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         private readonly RoleManager<AppRole> _roleManager;
         private readonly IMapper _mapper;
         private readonly IToastNotification _notification;
+        private readonly IValidator<AppUser> _validator;
 
-        public UserController(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, IMapper mapper, IToastNotification notification)
+        public UserController(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, IMapper mapper, IToastNotification notification, IValidator<AppUser> validator)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _mapper = mapper;
             _notification = notification;
+            _validator = validator;
         }
 
         public async Task<IActionResult> Index()
@@ -56,6 +60,7 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         public async Task<IActionResult> Add(UserAddDto userAddDto)
         {
             var map = _mapper.Map<AppUser>(userAddDto);
+            var validation = await _validator.ValidateAsync(map);
             var roles = await _roleManager.Roles.ToListAsync();
 
             if (ModelState.IsValid)
@@ -76,6 +81,7 @@ namespace TechBlog.Web.Areas.Admin.Controllers
                 {
                     foreach (var error in result.Errors)
                         ModelState.AddModelError("", error.Description);
+                    validation.AddToModelState(this.ModelState);
 
                     return View(new UserAddDto() { Roles = roles });
                 }
@@ -108,25 +114,36 @@ namespace TechBlog.Web.Areas.Admin.Controllers
                 var roles = await _roleManager.Roles.ToListAsync();
                 if (ModelState.IsValid)
                 {
-                    var map = _mapper.Map(userUpdateDto, user);               
-                    user.UserName = userUpdateDto.Email;
-                    user.SecurityStamp = Guid.NewGuid().ToString();
-
-                    var result = await _userManager.UpdateAsync(user);
-                    if (result.Succeeded)
+                    var map = _mapper.Map(userUpdateDto, user);
+                    var validation = await _validator.ValidateAsync(map);
+                    if (validation.IsValid)
                     {
-                        await _userManager.RemoveFromRoleAsync(user, userRole);
-                        var findRole = await _roleManager.FindByIdAsync(userUpdateDto.RoleId.ToString());
-                        await _userManager.AddToRoleAsync(user, findRole.Name);
+                        user.UserName = userUpdateDto.Email;
+                        user.SecurityStamp = Guid.NewGuid().ToString();
 
-                        _notification.AddSuccessToastMessage(Messages.User.Update(userUpdateDto.Email), new ToastrOptions { Title = "Successful!" });
+                        var result = await _userManager.UpdateAsync(user);
+                        if (result.Succeeded)
+                        {
+                            await _userManager.RemoveFromRoleAsync(user, userRole);
+                            var findRole = await _roleManager.FindByIdAsync(userUpdateDto.RoleId.ToString());
+                            await _userManager.AddToRoleAsync(user, findRole.Name);
 
-                        return RedirectToAction("Index", "User", new { Area = "Admin" });
+                            _notification.AddSuccessToastMessage(Messages.User.Update(userUpdateDto.Email), new ToastrOptions { Title = "Successful!" });
+
+                            return RedirectToAction("Index", "User", new { Area = "Admin" });
+                        }
+                        else
+                        {
+                            foreach (var error in result.Errors)
+                                ModelState.AddModelError("", error.Description);
+                            validation.AddToModelState(this.ModelState);
+
+                            return View(new UserUpdateDto() { Roles = roles });
+                        }
                     }
                     else
                     {
-                        foreach (var error in result.Errors)
-                            ModelState.AddModelError("", error.Description);
+                        validation.AddToModelState(this.ModelState);
 
                         return View(new UserUpdateDto() { Roles = roles });
                     }
