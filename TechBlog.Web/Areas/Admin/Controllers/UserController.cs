@@ -73,7 +73,7 @@ namespace TechBlog.Web.Areas.Admin.Controllers
                     var findRole = await _roleManager.FindByIdAsync(userAddDto.RoleId.ToString());
                     await _userManager.AddToRoleAsync(map, findRole.ToString());
 
-                    _notification.AddSuccessToastMessage(Messages.User.Add(userAddDto.Email), new ToastrOptions { Title = "Successful!" });
+                    _notification.AddSuccessToastMessage(ActionMessages.User.Add(userAddDto.Email), new ToastrOptions { Title = "Successful!" });
 
                     return RedirectToAction("Index", "User", new { Area = "Admin" });
                 }
@@ -128,7 +128,7 @@ namespace TechBlog.Web.Areas.Admin.Controllers
                             var findRole = await _roleManager.FindByIdAsync(userUpdateDto.RoleId.ToString());
                             await _userManager.AddToRoleAsync(user, findRole.Name);
 
-                            _notification.AddSuccessToastMessage(Messages.User.Update(userUpdateDto.Email), new ToastrOptions { Title = "Successful!" });
+                            _notification.AddSuccessToastMessage(ActionMessages.User.Update(userUpdateDto.Email), new ToastrOptions { Title = "Successful!" });
 
                             return RedirectToAction("Index", "User", new { Area = "Admin" });
                         }
@@ -160,7 +160,7 @@ namespace TechBlog.Web.Areas.Admin.Controllers
             var result = await _userManager.DeleteAsync(user);
             if (result.Succeeded)
             {
-                _notification.AddSuccessToastMessage(Messages.User.Delete(user.Email), new ToastrOptions { Title = "Successful!" });
+                _notification.AddSuccessToastMessage(ActionMessages.User.Delete(user.Email), new ToastrOptions { Title = "Successful!" });
 
                 return RedirectToAction("Index", "User", new { Area = "Admin" });
             }

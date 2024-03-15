@@ -1,6 +1,6 @@
 ﻿namespace TechBlog.Web.ResultMessages
 {
-    public static class Messages
+    public static class ActionMessages
     {
         public static class Article
         {

@@ -55,7 +55,7 @@ namespace TechBlog.Web.Areas.Admin.Controllers
             if (result.IsValid)
             {
                 await _categoryService.CreateCategoryAsync(categoryAddDto);
-                _notification.AddSuccessToastMessage(Messages.Category.Add(categoryAddDto.Name), new ToastrOptions { Title = "Successful!" });
+                _notification.AddSuccessToastMessage(ActionMessages.Category.Add(categoryAddDto.Name), new ToastrOptions { Title = "Successful!" });
 
                 return RedirectToAction("Index", "Category", new { Area = "Admin" });
             }
@@ -73,9 +73,9 @@ namespace TechBlog.Web.Areas.Admin.Controllers
             if (result.IsValid)
             {
                 await _categoryService.CreateCategoryAsync(categoryAddDto);
-                _notification.AddSuccessToastMessage(Messages.Category.Add(categoryAddDto.Name), new ToastrOptions { Title = "Successful!" });
+                _notification.AddSuccessToastMessage(ActionMessages.Category.Add(categoryAddDto.Name), new ToastrOptions { Title = "Successful!" });
 
-                return Json(Messages.Category.Add(categoryAddDto.Name));
+                return Json(ActionMessages.Category.Add(categoryAddDto.Name));
             }
             else
             {
@@ -102,7 +102,7 @@ namespace TechBlog.Web.Areas.Admin.Controllers
             if (result.IsValid)
             {
                 var name = await _categoryService.UpdateCategoryAsync(categoryUpdateDto);
-                _notification.AddSuccessToastMessage(Messages.Category.Update(name), new ToastrOptions { Title = "Successful!" });
+                _notification.AddSuccessToastMessage(ActionMessages.Category.Update(name), new ToastrOptions { Title = "Successful!" });
                 return RedirectToAction("Index", "Category", new { Area = "Admin" });
             }
 
@@ -114,7 +114,7 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         public async Task<IActionResult> Delete(Guid categoryId)
         {
             var name = await _categoryService.SafeDeleteCategoryAsync(categoryId);
-            _notification.AddSuccessToastMessage(Messages.Category.Delete(name), new ToastrOptions { Title = "Successful!" });
+            _notification.AddSuccessToastMessage(ActionMessages.Category.Delete(name), new ToastrOptions { Title = "Successful!" });
             return RedirectToAction("Index", "Category", new { Area = "Admin" });
         }
 
@@ -122,7 +122,7 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         public async Task<IActionResult> UndoDelete(Guid categoryId)
         {
             var name = await _categoryService.SafeDeleteCategoryAsync(categoryId);
-            _notification.AddSuccessToastMessage(Messages.Category.UndoDelete(name), new ToastrOptions { Title = "Successful!" });
+            _notification.AddSuccessToastMessage(ActionMessages.Category.UndoDelete(name), new ToastrOptions { Title = "Successful!" });
             return RedirectToAction("Index", "Category", new { Area = "Admin" });
         }
     }

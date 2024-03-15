@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
 using TechBlog.Entity.DTOs.Articles;
 using TechBlog.Entity.Entites;
 using TechBlog.Service.Extensions;
 using TechBlog.Service.Services.Abstractions;
+using TechBlog.Web.Constants.Roles;
 using TechBlog.Web.ResultMessages;
 
 namespace TechBlog.Web.Areas.Admin.Controllers
@@ -29,6 +31,7 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = $"{RoleConsts.Superadmin}, {RoleConsts.Admin}, {RoleConsts.User}")]
         public async Task<IActionResult> Index()
         {
             var articles = await _articleService.GetAllArticlesWithCategoryNonDeletedAsync();
@@ -36,6 +39,7 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = $"{RoleConsts.Superadmin}, {RoleConsts.Admin}")]
         public async Task<IActionResult> DeletedArticles()
         {
             var articles = await _articleService.GetAllArticlesWithCategoryDeletedAsync();
@@ -43,6 +47,7 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = $"{RoleConsts.Superadmin}, {RoleConsts.Admin}")]
         public async Task<IActionResult> Add()
         {
             var categories = await _categoryService.GetAllCategoriesNonDeleted();
@@ -50,6 +55,7 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = $"{RoleConsts.Superadmin}, {RoleConsts.Admin}")]
         public async Task<IActionResult> Add(ArticleAddDto articleAddDto)
         {
             var map = _mapper.Map<Article>(articleAddDto);
@@ -58,7 +64,7 @@ namespace TechBlog.Web.Areas.Admin.Controllers
             if (result.IsValid)
             {
                 await _articleService.CreateArticleAsync(articleAddDto);
-                _notification.AddSuccessToastMessage(Messages.Article.Add(articleAddDto.Title), new ToastrOptions { Title = "Successful!" });
+                _notification.AddSuccessToastMessage(ActionMessages.Article.Add(articleAddDto.Title), new ToastrOptions { Title = "Successful!" });
                 return RedirectToAction("Index", "Article", new { Area = "Admin" });
             }
             else
@@ -72,6 +78,7 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = $"{RoleConsts.Superadmin}, {RoleConsts.Admin}")]
         public async Task<IActionResult> Update(Guid articleId)
         {
             var article = await _articleService.GetArticleWithCategoryNonDeletedAsync(articleId);
@@ -84,6 +91,7 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = $"{RoleConsts.Superadmin}, {RoleConsts.Admin}")] 
         public async Task<IActionResult> Update(ArticleUpdateDto articleUpdateDto)
         {
             var map = _mapper.Map<Article>(articleUpdateDto);
@@ -92,7 +100,7 @@ namespace TechBlog.Web.Areas.Admin.Controllers
             if (result.IsValid)
             {
                 var title = await _articleService.UpdateArticleAsync(articleUpdateDto);
-                _notification.AddSuccessToastMessage(Messages.Article.Update(title), new ToastrOptions { Title = "Successful!" });
+                _notification.AddSuccessToastMessage(ActionMessages.Article.Update(title), new ToastrOptions { Title = "Successful!" });
 
                 return RedirectToAction("Index", "Article", new { Area = "Admin" });
             }
@@ -108,19 +116,21 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = $"{RoleConsts.Superadmin}, {RoleConsts.Admin}")]
         public async Task<IActionResult> Delete(Guid articleId)
         {
             var title = await _articleService.SafeDeleteArticleAsync(articleId);
-            _notification.AddSuccessToastMessage(Messages.Article.Delete(title), new ToastrOptions { Title = "Successful!" });
+            _notification.AddSuccessToastMessage(ActionMessages.Article.Delete(title), new ToastrOptions { Title = "Successful!" });
 
             return RedirectToAction("Index", "Article", new { Area = "Admin" });
         }
 
         [HttpGet]
+        [Authorize(Roles = $"{RoleConsts.Superadmin}, {RoleConsts.Admin}")]
         public async Task<IActionResult> UndoDelete(Guid articleId)
         {
             var title = await _articleService.UndoDeleteArticleAsync(articleId);
-            _notification.AddSuccessToastMessage(Messages.Article.UndoDelete(title), new ToastrOptions { Title = "Successful!" });
+            _notification.AddSuccessToastMessage(ActionMessages.Article.UndoDelete(title), new ToastrOptions { Title = "Successful!" });
 
             return RedirectToAction("Index", "Article", new { Area = "Admin" });
         }
