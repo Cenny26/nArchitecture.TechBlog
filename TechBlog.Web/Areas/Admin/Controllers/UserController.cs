@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NToastNotify;
 using TechBlog.Entity.DTOs.Users;
 using TechBlog.Entity.Entites;
+using TechBlog.Web.Constants.Roles;
 using TechBlog.Web.ResultMessages;
 
 #nullable disable
@@ -31,6 +33,8 @@ namespace TechBlog.Web.Areas.Admin.Controllers
             _validator = validator;
         }
 
+        [HttpGet]
+        [Authorize(Roles = $"{RoleConsts.Superadmin}, {RoleConsts.Admin}, {RoleConsts.User}")]
         public async Task<IActionResult> Index()
         {
             var users = await _userManager.Users.ToListAsync();
@@ -49,6 +53,7 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = $"{RoleConsts.Superadmin}")]
         public async Task<IActionResult> Add()
         {
             var roles = await _roleManager.Roles.ToListAsync();
@@ -57,6 +62,7 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = $"{RoleConsts.Superadmin}")]
         public async Task<IActionResult> Add(UserAddDto userAddDto)
         {
             var map = _mapper.Map<AppUser>(userAddDto);
@@ -91,6 +97,7 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = $"{RoleConsts.Superadmin}")]
         public async Task<IActionResult> Update(Guid userId)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
@@ -105,6 +112,7 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = $"{RoleConsts.Superadmin}")]
         public async Task<IActionResult> Update(UserUpdateDto userUpdateDto)
         {
             var user = await _userManager.FindByIdAsync(userUpdateDto.Id.ToString());
@@ -153,6 +161,8 @@ namespace TechBlog.Web.Areas.Admin.Controllers
             return NotFound();
         }
 
+        [HttpPost]
+        [Authorize(Roles = $"{RoleConsts.Superadmin}")]
         public async Task<IActionResult> Delete(Guid userId)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());

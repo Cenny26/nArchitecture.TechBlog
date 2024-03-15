@@ -10,9 +10,14 @@
     <div class="card">
         <div class="table-responsive text-nowrap m-5">
 
-            <a class="btn btn-success mb-3" asp-area="Admin" asp-controller="User" asp-action="Add">
-                Add User <i class="bx bx-plus"></i>
-            </a>
+            @{
+                @if (User.IsInRole(RoleConsts.Superadmin))
+                {
+                    <a class="btn btn-success mb-3" asp-area="Admin" asp-controller="User" asp-action="Add">
+                        Add User <i class="bx bx-plus"></i>
+                    </a>
+                }
+            }
 
             <table class="table table-bordered" id="usersTable" width="100%" cellspacing="0">
                 <thead>
@@ -24,7 +29,12 @@
                         <th>Role</th>
                         <th>Email COnfirmation</th>
                         <th>Connection Errors</th>
-                        <th>Transactions</th>
+                        @{
+                            @if (User.IsInRole(RoleConsts.Superadmin))
+                            {
+                                <th>Transactions</th>
+                            }
+                        }
                     </tr>
                 </thead>
                 <tfoot>
@@ -36,7 +46,12 @@
                         <th>Role</th>
                         <th>Email COnfirmation</th>
                         <th>Connection Errors</th>
-                        <th>Transactions</th>
+                        @{
+                            @if (User.IsInRole(RoleConsts.Superadmin))
+                            {
+                                <th>Transactions</th>
+                            }
+                        }
                     </tr>
                 </tfoot>
                 <tbody class="table-border-bottom-0">
@@ -50,10 +65,15 @@
                             <td>@user.Role</td>
                             <td>@(user.EmailConfirmed ? "Confirmed" : "Unconfirmed")</td>
                             <td>@user.AccessFailedCount</td>
-                            <td>
-                                <a class="btn btn-primary btn-sm" data-id="@user.Id" asp-area="Admin" asp-controller="User" asp-action="Update" asp-route-userId="@user.Id"><i class="bx bxs-edit"></i></a>
-                                <a class="btn btn-danger btn-sm" data-id="@user.Id" asp-area="Admin" asp-controller="User" asp-action="Delete" asp-route-userId="@user.Id"><i class="bx bx-minus-circle"></i></a>
-                            </td>
+                            @{
+                                @if (User.IsInRole(RoleConsts.Superadmin))
+                                {
+                                    <td>
+                                        <a class="btn btn-primary btn-sm" data-id="@user.Id" asp-area="Admin" asp-controller="User" asp-action="Update" asp-route-userId="@user.Id"><i class="bx bxs-edit"></i></a>
+                                        <a class="btn btn-danger btn-sm" data-id="@user.Id" asp-area="Admin" asp-controller="User" asp-action="Delete" asp-route-userId="@user.Id"><i class="bx bx-minus-circle"></i></a>
+                                    </td>
+                                }
+                            }
                         </tr>
                     }
                 </tbody>
