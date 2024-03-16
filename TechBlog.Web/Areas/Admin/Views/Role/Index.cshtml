@@ -1,0 +1,55 @@
+﻿@model List<RoleDto>
+
+@{
+    bool isDisabled = true;
+}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+
+    <h4 class="py-3 mb-4">
+        <span class="text-muted fw-light">Role Management /</span> Roles
+    </h4>
+
+    <!-- Basic Bootstrap Table -->
+    <div class="card">
+        <div class="table-responsive text-nowrap m-5">
+
+            <table class="table table-bordered" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Normalized Name</th>
+                        <th>Transactions</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>Name</th>
+                        <th>Normalized Name</th>
+                        <th>Transactions</th>
+                    </tr>
+                </tfoot>
+                <tbody class="table-border-bottom-0">
+                    @foreach (var role in Model)
+                    {
+                        <tr name="@role.Id">
+                            <td>@role.Name</td>
+                            <td>@role.NormalizedName</td>
+                            <td>
+                                <a class="btn btn-primary btn-sm @((isDisabled) ? "disabled" : "")" data-id="@role.Id" asp-route-roleId="@role.Id" asp-area="Admin" asp-controller="Role" asp-action="Update">
+                                    <i class="bx bxs-edit"></i>
+                                </a>
+                                <a class="btn btn-danger btn-sm @((isDisabled) ? "disabled" : "")" data-id="@role.Id" asp-route-roleId="@role.Id" asp-area="Admin" asp-controller="Role" asp-action="Delete">
+                                    <i class="bx bx-minus-circle"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+    <!--/ Basic Bootstrap Table -->
+
+</div>
