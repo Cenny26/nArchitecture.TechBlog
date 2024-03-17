@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Identity;
 using NToastNotify;
-using Serilog;
 using TechBlog.DataAccess.Context;
 using TechBlog.DataAccess.Extensions;
 using TechBlog.Entity.Entites;
@@ -14,7 +13,7 @@ var config = new ConfigurationBuilder()
     .Build();
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Host.UseSerilog();
+//builder.Host.UseSerilog();
 
 // Add services to the container.
 builder.Services.LoadServiceLayerExtensions(config);
