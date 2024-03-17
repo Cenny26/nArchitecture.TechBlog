@@ -1,14 +1,23 @@
 using Microsoft.AspNetCore.Identity;
 using NToastNotify;
+using Serilog;
 using TechBlog.DataAccess.Context;
 using TechBlog.DataAccess.Extensions;
 using TechBlog.Entity.Entites;
 using TechBlog.Service.Extensions;
 
+
+var config = new ConfigurationBuilder()
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json")
+    .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", true)
+    .Build();
+
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog();
 
 // Add services to the container.
-builder.Services.LoadServiceLayerExtensions();
+builder.Services.LoadServiceLayerExtensions(config);
 builder.Services.LoadDataLayerExtension(builder.Configuration);
 builder.Services.AddSession();
 

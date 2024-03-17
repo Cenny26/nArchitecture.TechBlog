@@ -1,6 +1,9 @@
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Serilog;
 using System.Reflection;
 using TechBlog.Service.FluentValidations.Articles;
 using TechBlog.Service.Helpers.Images.Abstractions;
@@ -13,7 +16,7 @@ namespace TechBlog.Service.Extensions;
 public static class ServiceLayerExtensions
 {
     [Obsolete]
-    public static IServiceCollection LoadServiceLayerExtensions(this IServiceCollection services)
+    public static IServiceCollection LoadServiceLayerExtensions(this IServiceCollection services, IConfiguration configuration)
     {
         var assembly = Assembly.GetExecutingAssembly();
 
@@ -22,12 +25,25 @@ public static class ServiceLayerExtensions
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<IImageHelper, ImageHelper>();
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
         services.AddAutoMapper(assembly);
+
         services.AddControllersWithViews().AddFluentValidation(opt =>
         {
             opt.RegisterValidatorsFromAssemblyContaining<ArticleValidator>();
             opt.DisableDataAnnotationsValidation = true;
             //opt.ValidatorOptions.LanguageManager.Culture = new System.Globalization.CultureInfo("az");
+        });
+
+        // Serilog configuration
+        Log.Logger = new LoggerConfiguration()
+            .ReadFrom.Configuration(configuration)
+            .CreateLogger();
+
+        services.AddLogging(loggingBuilder =>
+        {
+            loggingBuilder.ClearProviders();
+            loggingBuilder.AddSerilog(dispose: true);
         });
 
         return services;

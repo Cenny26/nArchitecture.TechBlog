@@ -19,6 +19,7 @@
       </PackageReference>
       <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.1" />
       <PackageReference Include="NToastNotify" Version="8.0.0" />
+      <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
     </ItemGroup>
 
     <ItemGroup>
