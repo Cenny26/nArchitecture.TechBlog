@@ -34,7 +34,7 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         [Authorize(Roles = $"{RoleConsts.Superadmin}, {RoleConsts.Admin}, {RoleConsts.User}")]
         public async Task<IActionResult> Index()
         {
-            var articles = await _articleService.GetAllArticlesWithCategoryNonDeletedAsync();
+            var articles = await _articleService.GetAllArticlesWithCategoriesNonDeletedAsync();
             return View(articles);
         }
 
@@ -42,7 +42,7 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         [Authorize(Roles = $"{RoleConsts.Superadmin}, {RoleConsts.Admin}")]
         public async Task<IActionResult> DeletedArticles()
         {
-            var articles = await _articleService.GetAllArticlesWithCategoryDeletedAsync();
+            var articles = await _articleService.GetAllArticlesWithCategoriesDeletedAsync();
             return View(articles);
         }
 

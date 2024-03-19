@@ -132,7 +132,7 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         [Authorize(Roles = $"{RoleConsts.Superadmin}, {RoleConsts.Admin}")]
         public async Task<IActionResult> UndoDelete(Guid categoryId)
         {
-            var name = await _categoryService.SafeDeleteCategoryAsync(categoryId);
+            var name = await _categoryService.UndoDeleteCategoryAsync(categoryId);
             _notification.AddSuccessToastMessage(ActionMessages.Category.UndoDelete(name), new ToastrOptions { Title = "Successful!" });
             return RedirectToAction("Index", "Category", new { Area = "Admin" });
         }

@@ -24,10 +24,10 @@ namespace TechBlog.Service.Services.Concretes
 
         public async Task<List<RoleDto>> GetAllRolesAsync()
         {
+            _logger.LogDebug(FormatLogMessages.EventDebug("GetAllRolesAsync", "called"));
+
             try
             {
-                _logger.LogDebug(FormatLogMessages.EventDebug("GetAllRolesAsync", "called"));
-
                 var roles = await _roleManager.Roles.ToListAsync();
                 var map = _mapper.Map<List<RoleDto>>(roles);
 

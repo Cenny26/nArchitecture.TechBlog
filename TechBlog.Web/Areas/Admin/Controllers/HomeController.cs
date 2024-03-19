@@ -18,7 +18,7 @@ public class HomeController : Controller
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        var articles = await _articleService.GetAllArticlesWithCategoryNonDeletedAsync();
+        var articles = await _articleService.GetAllArticlesWithCategoriesNonDeletedAsync();
         return View(articles);
     }
 }
