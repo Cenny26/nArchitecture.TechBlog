@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using System.Security.Claims;
 using TechBlog.DataAccess.UnitOfWorks;
 using TechBlog.Entity.DTOs.Categories;
 using TechBlog.Entity.Entites;
 using TechBlog.Service.Extensions;
+using TechBlog.Service.Helpers.Constants;
 using TechBlog.Service.Services.Abstractions;
 
 #nullable disable
@@ -16,94 +18,174 @@ namespace TechBlog.Service.Services.Concretes
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _accessor;
+        private readonly ILogger<CategoryService> _logger;
         private readonly ClaimsPrincipal _user;
 
-        public CategoryService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor Accessor)
+        public CategoryService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor accessor, ILogger<CategoryService> logger, ClaimsPrincipal user)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _accessor = Accessor;
-            _user = _accessor.HttpContext.User;
+            _accessor = accessor;
+            _logger = logger;
+            _user = user;
         }
 
         public async Task<List<CategoryDto>> GetAllCategoriesNonDeleted()
         {
-            var categories = await _unitOfWork.GetRepository<Category>().GetAllAsync(x => !x.IsDeleted);
-            var map = _mapper.Map<List<CategoryDto>>(categories);
+            try
+            {
+                _logger.LogDebug(FormatLogMessages.EventDebug("GetAllCategoriesNonDeleted", "called"));
 
-            return map;
+                var categories = await _unitOfWork.GetRepository<Category>().GetAllAsync(x => !x.IsDeleted);
+                var map = _mapper.Map<List<CategoryDto>>(categories);
+
+                _logger.LogDebug(FormatLogMessages.EventDebug("GetAllCategoriesNonDeleted", "completed"));
+                return map;
+            }
+            catch (Exception exc)
+            {
+                _logger.LogError(exc, FormatLogMessages.EventError("fetching", "the non deleted categories"));
+                throw;
+            }
         }
 
         public async Task CreateCategoryAsync(CategoryAddDto categoryAddDto)
         {
-            var userEmail = _user.GetLoggedInEmail();
+            try
+            {
+                _logger.LogDebug(FormatLogMessages.EventDebug("CreateCategoryAsync", "called"));
 
-            Category category = new Category(categoryAddDto.Name, userEmail);
+                var userEmail = _user.GetLoggedInEmail();
 
-            await _unitOfWork.GetRepository<Category>().AddAsync(category);
-            await _unitOfWork.SaveAsync();
+                Category category = new Category(categoryAddDto.Name, userEmail);
+
+                await _unitOfWork.GetRepository<Category>().AddAsync(category);
+                await _unitOfWork.SaveAsync();
+
+                _logger.LogDebug(FormatLogMessages.EventDebug("CreateCategoryAsync", "completed"));
+            }
+            catch (Exception exc)
+            {
+                _logger.LogError(exc, FormatLogMessages.EventError("creating", "a new category"));
+                throw;
+            }
         }
 
         public async Task<Category> GetCategoryByGuid(Guid categoryId)
         {
-            var category = await _unitOfWork.GetRepository<Category>().GetByGuidAsync(categoryId);
-            return category;
+            try
+            {
+                _logger.LogDebug(FormatLogMessages.EventDebug("GetCategoryByGuid", "called"));
+
+                var category = await _unitOfWork.GetRepository<Category>().GetByGuidAsync(categoryId);
+
+                _logger.LogDebug(FormatLogMessages.EventDebug("GetCategoryByGuid", "completed"));
+                return category;
+            }
+            catch (Exception exc)
+            {
+                _logger.LogError(exc, FormatLogMessages.EventError("fetching", "the category"));
+                throw;
+            }
         }
 
         public async Task<string> UpdateCategoryAsync(CategoryUpdateDto categoryUpdateDto)
         {
-            var userEmail = _user.GetLoggedInEmail();
+            try
+            {
+                _logger.LogDebug(FormatLogMessages.EventDebug("UpdateCategoryAsync", "called"));
 
-            var category = await _unitOfWork.GetRepository<Category>().GetAsync(x => !x.IsDeleted && x.Id ==  categoryUpdateDto.Id);
+                var userEmail = _user.GetLoggedInEmail();
 
-            category.Name = categoryUpdateDto.Name;
-            category.ModifiedBy = userEmail;
-            category.ModifiedDate = DateTime.Now;
+                var category = await _unitOfWork.GetRepository<Category>().GetAsync(x => !x.IsDeleted && x.Id == categoryUpdateDto.Id);
 
-            await _unitOfWork.GetRepository<Category>().UpdateAsync(category);
-            await _unitOfWork.SaveAsync();
+                category.Name = categoryUpdateDto.Name;
+                category.ModifiedBy = userEmail;
+                category.ModifiedDate = DateTime.Now;
 
-            return category.Name;
+                await _unitOfWork.GetRepository<Category>().UpdateAsync(category);
+                await _unitOfWork.SaveAsync();
+
+                _logger.LogDebug(FormatLogMessages.EventDebug("UpdateCategoryAsync", "completed"));
+                return category.Name;
+            }
+            catch (Exception exc)
+            {
+                _logger.LogError(exc, FormatLogMessages.EventError("updating", "the category"));
+                throw;
+            }
         }
 
         public async Task<string> SafeDeleteCategoryAsync(Guid categoryId)
         {
-            var userEmail = _user.GetLoggedInEmail();
+            try
+            {
+                _logger.LogDebug(FormatLogMessages.EventDebug("SafeDeleteCategoryAsync", "called"));
+                var userEmail = _user.GetLoggedInEmail();
 
-            var category = await _unitOfWork.GetRepository<Category>().GetByGuidAsync(categoryId);
+                var category = await _unitOfWork.GetRepository<Category>().GetByGuidAsync(categoryId);
 
-            category.IsDeleted = true;
-            category.DeletedBy = userEmail;
-            category.ModifiedDate= DateTime.Now;
+                category.IsDeleted = true;
+                category.DeletedBy = userEmail;
+                category.ModifiedDate = DateTime.Now;
 
-            await _unitOfWork.GetRepository<Category>().UpdateAsync(category);
-            await _unitOfWork.SaveAsync();
+                await _unitOfWork.GetRepository<Category>().UpdateAsync(category);
+                await _unitOfWork.SaveAsync();
 
-            return category.Name;
+                _logger.LogDebug(FormatLogMessages.EventDebug("SafeDeleteCategoryAsync", "completed"));
+                return category.Name;
+            }
+            catch (Exception exc)
+            {
+                _logger.LogError(exc, FormatLogMessages.EventError("safely deleting", "the category"));
+                throw;
+            }
         }
 
         public async Task<List<CategoryDto>> GetAllCategoriesDeleted()
         {
-            var categories = await _unitOfWork.GetRepository<Category>().GetAllAsync(x => x.IsDeleted);
-            var map = _mapper.Map<List<CategoryDto>>(categories);
+            try
+            {
+                _logger.LogDebug(FormatLogMessages.EventDebug("GetAllCategoriesDeleted", "called"));
 
-            return map;
+                var categories = await _unitOfWork.GetRepository<Category>().GetAllAsync(x => x.IsDeleted);
+                var map = _mapper.Map<List<CategoryDto>>(categories);
+
+                _logger.LogDebug(FormatLogMessages.EventDebug("GetAllCategoriesDeleted", "completed"));
+                return map;
+            }
+            catch (Exception exc)
+            {
+                _logger.LogError(exc, FormatLogMessages.EventError("fetching", "the deleted categories"));
+                throw;
+            }
         }
 
         public async Task<string> UndoDeleteCategoryAsync(Guid categoryId)
         {
-            var userEmail = _user.GetLoggedInEmail();
+            try
+            {
+                _logger.LogDebug(FormatLogMessages.EventDebug("UndoDeleteCategoryAsync", "called"));
 
-            var category = await _unitOfWork.GetRepository<Category>().GetByGuidAsync(categoryId);
+                var userEmail = _user.GetLoggedInEmail();
 
-            category.IsDeleted = false;
-            category.DeletedBy = null;
-            category.ModifiedDate = null;
+                var category = await _unitOfWork.GetRepository<Category>().GetByGuidAsync(categoryId);
 
-            await _unitOfWork.GetRepository<Category>().UpdateAsync(category);
-            await _unitOfWork.SaveAsync();
+                category.IsDeleted = false;
+                category.DeletedBy = null;
+                category.ModifiedDate = null;
 
-            return category.Name;
+                await _unitOfWork.GetRepository<Category>().UpdateAsync(category);
+                await _unitOfWork.SaveAsync();
+
+                _logger.LogDebug(FormatLogMessages.EventDebug("UndoDeleteCategoryAsync", "completed"));
+                return category.Name;
+            }
+            catch (Exception exc)
+            {
+                _logger.LogError(exc, FormatLogMessages.EventError("undoing", "the deleted category"));
+                throw;
+            }
         }
     }
 }
