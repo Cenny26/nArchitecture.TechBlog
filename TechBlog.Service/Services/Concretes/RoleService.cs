@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using TechBlog.Entity.DTOs.Roles;
 using TechBlog.Entity.Entites;
+using TechBlog.Service.Helpers.Constants;
 using TechBlog.Service.Services.Abstractions;
 
 namespace TechBlog.Service.Services.Concretes
@@ -25,19 +26,17 @@ namespace TechBlog.Service.Services.Concretes
         {
             try
             {
-                _logger.LogDebug("GetAllRolesAsync method called.");
+                _logger.LogDebug(FormatLogMessages.EventDebug("GetAllRolesAsync", "called"));
 
                 var roles = await _roleManager.Roles.ToListAsync();
                 var map = _mapper.Map<List<RoleDto>>(roles);
 
-                _logger.LogInformation("Retrieved roles from the database: {@Roles}", map);
-                _logger.LogDebug("GetAllRolesAsync method completed.");
-
+                _logger.LogDebug(FormatLogMessages.EventDebug("GetAllRolesAsync", "completed"));
                 return map;
             }
             catch (Exception exc)
             {
-                _logger.LogError(exc, "An error occurred while fetching roles.");
+                _logger.LogError(exc, FormatLogMessages.EventError("fetching", "the roles"));
                 throw;
             }
         }
