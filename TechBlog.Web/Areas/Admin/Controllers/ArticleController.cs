@@ -69,7 +69,7 @@ namespace TechBlog.Web.Areas.Admin.Controllers
             }
             else
             {
-                result.AddToModelState(this.ModelState);
+                result.AddingToModelState(this.ModelState);
             }
 
             var categories = await _categoryService.GetAllCategoriesNonDeleted();
@@ -106,7 +106,7 @@ namespace TechBlog.Web.Areas.Admin.Controllers
             }
             else
             {
-                result.AddToModelState(this.ModelState);
+                result.AddingToModelState(this.ModelState);
             }
 
             var categories = await _categoryService.GetAllCategoriesNonDeleted();

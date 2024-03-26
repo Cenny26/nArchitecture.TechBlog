@@ -4,13 +4,14 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using NToastNotify;
 using TechBlog.DataAccess.UnitOfWorks;
 using TechBlog.Entity.DTOs.Users;
 using TechBlog.Entity.Entites;
 using TechBlog.Entity.Enums;
+using TechBlog.Service.Extensions;
 using TechBlog.Service.Helpers.Images.Abstractions;
+using TechBlog.Service.Services.Abstractions;
 using TechBlog.Web.Constants.Roles;
 using TechBlog.Web.ResultMessages;
 
@@ -29,8 +30,9 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IImageHelper _imageHelper;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IUserService _userService;
 
-        public UserController(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, IMapper mapper, IToastNotification notification, IValidator<AppUser> validator, SignInManager<AppUser> signInManager, IImageHelper imageHelper, IUnitOfWork unitOfWork)
+        public UserController(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, IMapper mapper, IToastNotification notification, IValidator<AppUser> validator, SignInManager<AppUser> signInManager, IImageHelper imageHelper, IUnitOfWork unitOfWork, IUserService userService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -40,33 +42,22 @@ namespace TechBlog.Web.Areas.Admin.Controllers
             _signInManager = signInManager;
             _imageHelper = imageHelper;
             _unitOfWork = unitOfWork;
+            _userService = userService;
         }
 
         [HttpGet]
         [Authorize(Roles = $"{RoleConsts.Superadmin}, {RoleConsts.Admin}, {RoleConsts.User}")]
         public async Task<IActionResult> Index()
         {
-            var users = await _userManager.Users.ToListAsync();
-            var map = _mapper.Map<List<UserDto>>(users);
-
-            foreach (var item in map)
-            {
-                var findUser = await _userManager.FindByIdAsync(item.Id.ToString());
-                // We imagine that our user's have only and only one role on this app. For ex, superadmin's have a all roles like: user, admin, and superadmin. But on this situation we ignore that!
-                var role = string.Join("", await _userManager.GetRolesAsync(findUser));
-
-                item.Role = role;
-            }
-
-            return View(map);
+            var result = await _userService.GetAllUsersWithRolesAsync();
+            return View(result);
         }
 
         [HttpGet]
         [Authorize(Roles = $"{RoleConsts.Superadmin}")]
         public async Task<IActionResult> Add()
         {
-            var roles = await _roleManager.Roles.ToListAsync();
-
+            var roles = await _userService.GetAllRolesAsync();
             return View(new UserAddDto() { Roles = roles });
         }
 
@@ -76,28 +67,20 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         {
             var map = _mapper.Map<AppUser>(userAddDto);
             var validation = await _validator.ValidateAsync(map);
-            var roles = await _roleManager.Roles.ToListAsync();
+            var roles = await _userService.GetAllRolesAsync();
 
             if (ModelState.IsValid)
             {
-                map.UserName = userAddDto.Email;
-
-                var result = await _userManager.CreateAsync(map, string.IsNullOrEmpty(userAddDto.Password) ? "" : userAddDto.Password);
+                var result = await _userService.CreateUserAsync(userAddDto);
                 if (result.Succeeded)
                 {
-                    var findRole = await _roleManager.FindByIdAsync(userAddDto.RoleId.ToString());
-                    await _userManager.AddToRoleAsync(map, findRole.ToString());
-
                     _notification.AddSuccessToastMessage(ActionMessages.User.Add(userAddDto.Email), new ToastrOptions { Title = "Successful!" });
-
                     return RedirectToAction("Index", "User", new { Area = "Admin" });
                 }
                 else
                 {
-                    foreach (var error in result.Errors)
-                        ModelState.AddModelError("", error.Description);
-                    validation.AddToModelState(this.ModelState);
-
+                    result.AddingToIdentityModelState(this.ModelState);
+                    validation.AddingToModelState(this.ModelState);
                     return View(new UserAddDto() { Roles = roles });
                 }
             }
@@ -109,8 +92,9 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         [Authorize(Roles = $"{RoleConsts.Superadmin}")]
         public async Task<IActionResult> Update(Guid userId)
         {
-            var user = await _userManager.FindByIdAsync(userId.ToString());
-            var roles = await _roleManager.Roles.ToListAsync();
+            var user = await _userService.GetAppUserByIdAsync(userId);
+            var roles = await _userService.GetAllRolesAsync();
+
             var userRole = string.Join("", await _userManager.GetRolesAsync(user));
 
             var map = _mapper.Map<UserUpdateDto>(user);
@@ -124,11 +108,10 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         [Authorize(Roles = $"{RoleConsts.Superadmin}")]
         public async Task<IActionResult> Update(UserUpdateDto userUpdateDto)
         {
-            var user = await _userManager.FindByIdAsync(userUpdateDto.Id.ToString());
+            var user = await _userService.GetAppUserByIdAsync(userUpdateDto.Id);
             if (user != null)
             {
-                var userRole = string.Join("", await _userManager.GetRolesAsync(user));
-                var roles = await _roleManager.Roles.ToListAsync();
+                var roles = await _userService.GetAllRolesAsync();
                 if (ModelState.IsValid)
                 {
                     var map = _mapper.Map(userUpdateDto, user);
@@ -138,30 +121,21 @@ namespace TechBlog.Web.Areas.Admin.Controllers
                         user.UserName = userUpdateDto.Email;
                         user.SecurityStamp = Guid.NewGuid().ToString();
 
-                        var result = await _userManager.UpdateAsync(user);
+                        var result = await _userService.UpdateUserAsync(userUpdateDto);
                         if (result.Succeeded)
                         {
-                            await _userManager.RemoveFromRoleAsync(user, userRole);
-                            var findRole = await _roleManager.FindByIdAsync(userUpdateDto.RoleId.ToString());
-                            await _userManager.AddToRoleAsync(user, findRole.Name);
-
                             _notification.AddSuccessToastMessage(ActionMessages.User.Update(userUpdateDto.Email), new ToastrOptions { Title = "Successful!" });
-
                             return RedirectToAction("Index", "User", new { Area = "Admin" });
                         }
                         else
                         {
-                            foreach (var error in result.Errors)
-                                ModelState.AddModelError("", error.Description);
-                            validation.AddToModelState(this.ModelState);
-
+                            result.AddingToIdentityModelState(this.ModelState);
                             return View(new UserUpdateDto() { Roles = roles });
                         }
                     }
                     else
                     {
                         validation.AddToModelState(this.ModelState);
-
                         return View(new UserUpdateDto() { Roles = roles });
                     }
                 }
@@ -174,19 +148,15 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         [Authorize(Roles = $"{RoleConsts.Superadmin}")]
         public async Task<IActionResult> Delete(Guid userId)
         {
-            var user = await _userManager.FindByIdAsync(userId.ToString());
-
-            var result = await _userManager.DeleteAsync(user);
-            if (result.Succeeded)
+            var result = await _userService.DeleteUserAsync(userId);
+            if (result.identityResult.Succeeded)
             {
-                _notification.AddSuccessToastMessage(ActionMessages.User.Delete(user.Email), new ToastrOptions { Title = "Successful!" });
-
+                _notification.AddSuccessToastMessage(ActionMessages.User.Delete(result.email), new ToastrOptions { Title = "Successful!" });
                 return RedirectToAction("Index", "User", new { Area = "Admin" });
             }
             else
             {
-                foreach (var error in result.Errors)
-                    ModelState.AddModelError("", error.Description);
+                result.identityResult.AddingToIdentityModelState(this.ModelState);
             }
 
             return NotFound();

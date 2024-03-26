@@ -66,7 +66,7 @@ namespace TechBlog.Web.Areas.Admin.Controllers
                 return RedirectToAction("Index", "Category", new { Area = "Admin" });
             }
 
-            result.AddToModelState(this.ModelState);
+            result.AddingToModelState(this.ModelState);
             return View();
         }
 
@@ -115,7 +115,7 @@ namespace TechBlog.Web.Areas.Admin.Controllers
                 return RedirectToAction("Index", "Category", new { Area = "Admin" });
             }
 
-            result.AddToModelState(this.ModelState);
+            result.AddingToModelState(this.ModelState);
             return View();
         }
 
