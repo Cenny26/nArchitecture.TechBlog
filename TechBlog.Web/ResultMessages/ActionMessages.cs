@@ -57,5 +57,17 @@
                 return $"User with email: {userName} has been deleted successfully.";
             }
         }
+
+        public static class UserProfile
+        {
+            public static string SuccessfullyUpdate()
+            {
+                return "The profile update process has been completed successfully.";
+            }
+            public static string UnsuccessfullyUpdate()
+            {
+                return "An error occurred while updating the profile.";
+            }
+        }
     }
 }

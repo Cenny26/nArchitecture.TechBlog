@@ -11,7 +11,7 @@
         <div class="table-responsive text-nowrap m-5">
 
             @{
-                @if (User.IsInRole(RoleConsts.Superadmin))
+                @if (!User.IsInRole(RoleConsts.User))
                 {
                     <a class="btn btn-success mb-3" asp-area="Admin" asp-controller="User" asp-action="Add">
                         Add User <i class="bx bx-plus"></i>
@@ -30,7 +30,7 @@
                         <th>Email COnfirmation</th>
                         <th>Connection Errors</th>
                         @{
-                            @if (User.IsInRole(RoleConsts.Superadmin))
+                            @if (!User.IsInRole(RoleConsts.User))
                             {
                                 <th>Transactions</th>
                             }
@@ -47,7 +47,7 @@
                         <th>Email COnfirmation</th>
                         <th>Connection Errors</th>
                         @{
-                            @if (User.IsInRole(RoleConsts.Superadmin))
+                            @if (!User.IsInRole(RoleConsts.User))
                             {
                                 <th>Transactions</th>
                             }
@@ -66,7 +66,7 @@
                             <td>@(user.EmailConfirmed ? "Confirmed" : "Unconfirmed")</td>
                             <td>@user.AccessFailedCount</td>
                             @{
-                                @if (User.IsInRole(RoleConsts.Superadmin))
+                                @if (!User.IsInRole(RoleConsts.User))
                                 {
                                     <td>
                                         <a class="btn btn-primary btn-sm" data-id="@user.Id" asp-area="Admin" asp-controller="User" asp-action="Update" asp-route-userId="@user.Id"><i class="bx bxs-edit"></i></a>

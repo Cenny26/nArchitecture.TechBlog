@@ -2,15 +2,11 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
-using TechBlog.DataAccess.UnitOfWorks;
 using TechBlog.Entity.DTOs.Users;
 using TechBlog.Entity.Entites;
-using TechBlog.Entity.Enums;
 using TechBlog.Service.Extensions;
-using TechBlog.Service.Helpers.Images.Abstractions;
 using TechBlog.Service.Services.Abstractions;
 using TechBlog.Web.Constants.Roles;
 using TechBlog.Web.ResultMessages;
@@ -22,26 +18,16 @@ namespace TechBlog.Web.Areas.Admin.Controllers
     [Area("Admin")]
     public class UserController : Controller
     {
-        private readonly UserManager<AppUser> _userManager;
-        private readonly RoleManager<AppRole> _roleManager;
         private readonly IMapper _mapper;
         private readonly IToastNotification _notification;
         private readonly IValidator<AppUser> _validator;
-        private readonly SignInManager<AppUser> _signInManager;
-        private readonly IImageHelper _imageHelper;
-        private readonly IUnitOfWork _unitOfWork;
         private readonly IUserService _userService;
 
-        public UserController(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, IMapper mapper, IToastNotification notification, IValidator<AppUser> validator, SignInManager<AppUser> signInManager, IImageHelper imageHelper, IUnitOfWork unitOfWork, IUserService userService)
+        public UserController(IMapper mapper, IToastNotification notification, IValidator<AppUser> validator, IUserService userService)
         {
-            _userManager = userManager;
-            _roleManager = roleManager;
             _mapper = mapper;
             _notification = notification;
             _validator = validator;
-            _signInManager = signInManager;
-            _imageHelper = imageHelper;
-            _unitOfWork = unitOfWork;
             _userService = userService;
         }
 
@@ -54,7 +40,7 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = $"{RoleConsts.Superadmin}")]
+        [Authorize(Roles = $"{RoleConsts.Superadmin}, {RoleConsts.Admin}")]
         public async Task<IActionResult> Add()
         {
             var roles = await _userService.GetAllRolesAsync();
@@ -62,7 +48,7 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = $"{RoleConsts.Superadmin}")]
+        [Authorize(Roles = $"{RoleConsts.Superadmin}, {RoleConsts.Admin}")]
         public async Task<IActionResult> Add(UserAddDto userAddDto)
         {
             var map = _mapper.Map<AppUser>(userAddDto);
@@ -89,13 +75,13 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = $"{RoleConsts.Superadmin}")]
+        [Authorize(Roles = $"{RoleConsts.Superadmin}, {RoleConsts.Admin}")]
         public async Task<IActionResult> Update(Guid userId)
         {
             var user = await _userService.GetAppUserByIdAsync(userId);
             var roles = await _userService.GetAllRolesAsync();
 
-            var userRole = string.Join("", await _userManager.GetRolesAsync(user));
+            var userRole = await _userService.GetUserRoleAsync(user);
 
             var map = _mapper.Map<UserUpdateDto>(user);
             map.RoleId = roles.FirstOrDefault(r => r.Name == userRole).Id;
@@ -105,7 +91,7 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = $"{RoleConsts.Superadmin}")]
+        [Authorize(Roles = $"{RoleConsts.Superadmin}, {RoleConsts.Admin}")]
         public async Task<IActionResult> Update(UserUpdateDto userUpdateDto)
         {
             var user = await _userService.GetAppUserByIdAsync(userUpdateDto.Id);
@@ -163,82 +149,35 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = $"{RoleConsts.Superadmin}, {RoleConsts.Admin}, {RoleConsts.User}")]
         public async Task<IActionResult> Profile()
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            var getImage = await _unitOfWork.GetRepository<AppUser>().GetAsync(x => x.Id == user.Id, x => x.Image);
-            var map = _mapper.Map<UserProfileDto>(user);
-            map.Image.FileName = getImage.Image.FileName;
-
-            return View(map);
+            var profile = await _userService.GetUserProfileAsync();
+            return View(profile);
         }
 
         [HttpPost]
+        [Authorize(Roles = $"{RoleConsts.Superadmin}, {RoleConsts.Admin}, {RoleConsts.User}")]
         public async Task<IActionResult> Profile(UserProfileDto userProfileDto)
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
             if (ModelState.IsValid)
             {
-                var isVerified = await _userManager.CheckPasswordAsync(user, userProfileDto.CurrentPassword);
-                if (isVerified && userProfileDto.NewPassword != null && userProfileDto.Photo != null)
+                var result = await _userService.UpdateUserProfileAsync(userProfileDto);
+                if (result)
                 {
-                    var result = await _userManager.ChangePasswordAsync(user, userProfileDto.CurrentPassword, userProfileDto.NewPassword);
-                    if (result.Succeeded)
-                    {
-                        await _userManager.UpdateSecurityStampAsync(user);
-                        await _signInManager.SignOutAsync();
-                        await _signInManager.PasswordSignInAsync(user, userProfileDto.NewPassword, true, false);
-
-                        user.FirstName = userProfileDto.FirstName;
-                        user.LastName = userProfileDto.LastName;
-                        user.PhoneNumber = userProfileDto.PhoneNumber;
-
-                        var imageUpload = await _imageHelper.Upload($"{userProfileDto.FirstName}{userProfileDto.LastName}", userProfileDto.Photo, ImageType.User);
-                        Image image = new Image(imageUpload.FullName, userProfileDto.Photo.ContentType, user.Email);
-                        await _unitOfWork.GetRepository<Image>().AddAsync(image);
-
-                        user.ImageId = image.Id;
-
-                        await _userManager.UpdateAsync(user);
-                        await _unitOfWork.SaveAsync();
-
-                        _notification.AddSuccessToastMessage("Your password and information have been successfully updated.");
-                        return View();
-                    }
-                    else
-                    {
-                        //result.AddToIdentityModelState(ModelState);
-                        return View();
-                    }
-                }
-                else if (isVerified && userProfileDto.Photo != null)
-                {
-                    await _userManager.UpdateSecurityStampAsync(user);
-
-                    user.FirstName = userProfileDto.FirstName;
-                    user.LastName = userProfileDto.LastName;
-                    user.PhoneNumber = userProfileDto.PhoneNumber;
-
-                    var imageUpload = await _imageHelper.Upload($"{userProfileDto.FirstName}{userProfileDto.LastName}", userProfileDto.Photo, ImageType.User);
-                    Image image = new Image(imageUpload.FullName, userProfileDto.Photo.ContentType, user.Email);
-                    await _unitOfWork.GetRepository<Image>().AddAsync(image);
-
-                    user.ImageId = image.Id;
-
-                    await _userManager.UpdateAsync(user);
-                    await _unitOfWork.SaveAsync();
-
-                    _notification.AddSuccessToastMessage("Your information have been successfully updated.");
-                    return View();
+                    _notification.AddSuccessToastMessage(ActionMessages.UserProfile.SuccessfullyUpdate(), new ToastrOptions { Title = "Successful!" });
+                    return RedirectToAction("Index", "Home", new { Area = "Admin" });
                 }
                 else
                 {
-                    _notification.AddErrorToastMessage("An error occurred while updating your information.");
-                    return View();
+                    var profile = await _userService.GetUserProfileAsync();
+
+                    _notification.AddErrorToastMessage(ActionMessages.UserProfile.UnsuccessfullyUpdate(), new ToastrOptions { Title = "Unsuccessful!" });
+                    return View(profile);
                 }
             }
-
-            return View();
+            else
+                return NotFound();
         }
     }
 }

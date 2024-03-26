@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TechBlog.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class RestoredDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -252,9 +252,9 @@ namespace TechBlog.DataAccess.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("2f673fe9-4ad1-493c-ab04-b3619397deb5"), "817fe947-c2a7-4b5b-851d-88da9ccfb791", "Superadmin", "SUPERADMIN" },
-                    { new Guid("62c7c6fd-01d6-4410-9e4a-53490b59a3c7"), "d8123cf5-6b5c-422e-8a45-22680fa982d1", "Admin", "ADMIN" },
-                    { new Guid("bf78885c-c25e-4fa8-bc01-7b90eb93c840"), "f78ec356-1cb0-4870-b492-d38539f8315b", "User", "USER" }
+                    { new Guid("2f673fe9-4ad1-493c-ab04-b3619397deb5"), "9e788b03-6aaa-4495-b827-8790e7cc8698", "Superadmin", "SUPERADMIN" },
+                    { new Guid("62c7c6fd-01d6-4410-9e4a-53490b59a3c7"), "bd6e1ec4-89be-46f7-af55-942b331df56b", "Admin", "ADMIN" },
+                    { new Guid("bf78885c-c25e-4fa8-bc01-7b90eb93c840"), "0ca8921e-a996-4e28-8711-89783985a842", "User", "USER" }
                 });
 
             migrationBuilder.InsertData(
@@ -262,8 +262,8 @@ namespace TechBlog.DataAccess.Migrations
                 columns: new[] { "Id", "CreatedBy", "CreatedDate", "DeletedBy", "DeletedTime", "IsDeleted", "ModifiedBy", "ModifiedDate", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("11e3fba7-16ed-4a07-9cef-bdc1f03f3e04"), "Admin", new DateTime(2024, 2, 28, 14, 4, 12, 762, DateTimeKind.Local).AddTicks(842), null, null, false, null, null, "C#" },
-                    { new Guid("dc5c1e7e-74f3-4475-b766-a0c7d9381d25"), "Admin", new DateTime(2024, 2, 28, 14, 4, 12, 762, DateTimeKind.Local).AddTicks(835), null, null, false, null, null, "ASP.NET Core" }
+                    { new Guid("11e3fba7-16ed-4a07-9cef-bdc1f03f3e04"), "Admin", new DateTime(2024, 3, 26, 23, 26, 28, 633, DateTimeKind.Local).AddTicks(4142), null, null, false, null, null, "C#" },
+                    { new Guid("dc5c1e7e-74f3-4475-b766-a0c7d9381d25"), "Admin", new DateTime(2024, 3, 26, 23, 26, 28, 633, DateTimeKind.Local).AddTicks(4138), null, null, false, null, null, "ASP.NET Core" }
                 });
 
             migrationBuilder.InsertData(
@@ -271,8 +271,9 @@ namespace TechBlog.DataAccess.Migrations
                 columns: new[] { "Id", "CreatedBy", "CreatedDate", "DeletedBy", "DeletedTime", "FileName", "FileType", "IsDeleted", "ModifiedBy", "ModifiedDate" },
                 values: new object[,]
                 {
-                    { new Guid("3eb72197-9048-4826-ad10-cbca7094a4d1"), "Admin", new DateTime(2024, 2, 28, 14, 4, 12, 762, DateTimeKind.Local).AddTicks(2348), null, null, "images/test/csharp", "jpg", false, null, null },
-                    { new Guid("a8cb5130-8ebb-429b-a048-1c70b90212fb"), "Admin", new DateTime(2024, 2, 28, 14, 4, 12, 762, DateTimeKind.Local).AddTicks(2339), null, null, "images/test/aspnetcore", "jpg", false, null, null }
+                    { new Guid("3eb72197-9048-4826-ad10-cbca7094a4d1"), "Admin", new DateTime(2024, 3, 26, 23, 26, 28, 633, DateTimeKind.Local).AddTicks(5256), null, null, "images/test/meanproduct", "jpg", false, null, null },
+                    { new Guid("a8cb5130-8ebb-429b-a048-1c70b90212fb"), "Admin", new DateTime(2024, 3, 26, 23, 26, 28, 633, DateTimeKind.Local).AddTicks(5246), null, null, "images/test/meaninuser", "png", false, null, null },
+                    { new Guid("adb79c2d-b859-4ee6-acfa-8a81bf83fd68"), "Admin", new DateTime(2024, 3, 26, 23, 26, 28, 633, DateTimeKind.Local).AddTicks(5254), null, null, "images/test/meanoutuser", "png", false, null, null }
                 });
 
             migrationBuilder.InsertData(
@@ -280,8 +281,8 @@ namespace TechBlog.DataAccess.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "ImageId", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { new Guid("2ef9cdda-913e-4e51-a905-54cbb8eb75c5"), 0, "c85195b1-ac3c-4ea8-a7de-e4ed8cf761a9", "superadmin@gmail.com", true, "Kanan", new Guid("a8cb5130-8ebb-429b-a048-1c70b90212fb"), "Huseynov", false, null, "SUPERADMIN@GMAIL.COM", "SUPERADMIN@GMAIL.COM", "AQAAAAIAAYagAAAAEAg5+NFYWmlTiwg6DUwAgDB83c9ZLdfpCZX8s0zSOubmbLEDs4lEAqkxg3SRague1w==", "+994515268342", true, "78dfd8d3-fec6-4763-8710-f58d6eed92d0", false, "superadmin@gmail.com" },
-                    { new Guid("8bfa84a0-7e9e-44cb-b703-9a817212eaee"), 0, "54d94caf-a3c5-4b49-b96a-8a754c125db5", "admin@gmail.com", true, "Kanan", new Guid("3eb72197-9048-4826-ad10-cbca7094a4d1"), "Huseynov", false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAIAAYagAAAAEI+Rg5VnQwxrcfbg8XjCgSNrdvX1APWbvtvMnzhgpjD6W/zT0RpmNf3NALUo+lwhqg==", "+994515268342", false, "05a57a43-e906-4ff4-a007-4cfb7dcb77f6", false, "admin@gmail.com" }
+                    { new Guid("2ef9cdda-913e-4e51-a905-54cbb8eb75c5"), 0, "05763aff-ab49-4332-bfe4-184922dee03a", "superadmin@gmail.com", true, "Kanan", new Guid("a8cb5130-8ebb-429b-a048-1c70b90212fb"), "Huseynov", false, null, "SUPERADMIN@GMAIL.COM", "SUPERADMIN@GMAIL.COM", "AQAAAAIAAYagAAAAEB2DOBiBI8dMz5bEs54em/eDw/yTA/ggnWG9xqnCnMEQes8oSx3rrJ29HRI5ZbKKHQ==", "+994515268342", true, "1d9f8db0-73fa-4af8-98e7-f8f3379fb297", false, "superadmin@gmail.com" },
+                    { new Guid("8bfa84a0-7e9e-44cb-b703-9a817212eaee"), 0, "f45f0866-d090-442a-9dba-3a1f6eccfc1a", "admin@gmail.com", true, "Kanan", new Guid("adb79c2d-b859-4ee6-acfa-8a81bf83fd68"), "Huseynov", false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAIAAYagAAAAEJQA/OKqJ3PAam14E8n3uaND7MQAHTI34ihIo1PI5+GeyV6fbTL/ZnnNzCMcjJv5OA==", "+994515268342", false, "f7c87ba7-b285-41b5-b75b-e0f17cf16527", false, "admin@gmail.com" }
                 });
 
             migrationBuilder.InsertData(
@@ -289,8 +290,8 @@ namespace TechBlog.DataAccess.Migrations
                 columns: new[] { "Id", "CategoryId", "Content", "CreatedBy", "CreatedDate", "DeletedBy", "DeletedTime", "ImageId", "IsDeleted", "ModifiedBy", "ModifiedDate", "Title", "UserId", "ViewCount" },
                 values: new object[,]
                 {
-                    { new Guid("3728c8fc-ad9e-4650-b571-14b1a2677865"), new Guid("11e3fba7-16ed-4a07-9cef-bdc1f03f3e04"), "C# is a powerful programming language developed by Microsoft. It is widely used for building various types of applications, including desktop, web, and mobile apps. C# is known for its simplicity and ease of use, making it a popular choice among developers. It offers strong typing, object-oriented programming features, and support for modern programming paradigms. With C#, developers can write efficient and maintainable code for their projects. The language is continuously evolving, with new features and improvements being introduced regularly. Overall, C# is a fundamental tool for software development in the Microsoft ecosystem.", "Admin", new DateTime(2024, 2, 28, 14, 4, 12, 761, DateTimeKind.Local).AddTicks(8090), null, null, new Guid("3eb72197-9048-4826-ad10-cbca7094a4d1"), false, null, null, "C# test blog", new Guid("8bfa84a0-7e9e-44cb-b703-9a817212eaee"), 25 },
-                    { new Guid("a90f53fb-17b7-4b5f-9e87-94d43dda4cfe"), new Guid("dc5c1e7e-74f3-4475-b766-a0c7d9381d25"), "ASP.NET Core is a cross-platform framework for building modern web applications. Developed by Microsoft, it provides developers with a powerful set of tools for creating scalable and high-performance web applications. ASP.NET Core is built on top of the .NET Core runtime, offering improved performance and flexibility compared to its predecessor. It supports various programming languages, including C#, F#, and Visual Basic, allowing developers to choose the language they are most comfortable with. ASP.NET Core follows a modular and lightweight architecture, enabling developers to optimize their applications for different deployment scenarios. With features like dependency injection, middleware pipeline, and built-in security mechanisms, ASP.NET Core simplifies the development process and promotes best practices in web development. Overall, ASP.NET Core is a modern and versatile framework for building next-generation web applications.", "Admin", new DateTime(2024, 2, 28, 14, 4, 12, 761, DateTimeKind.Local).AddTicks(8067), null, null, new Guid("a8cb5130-8ebb-429b-a048-1c70b90212fb"), false, null, null, "ASP.NET Core test blog", new Guid("2ef9cdda-913e-4e51-a905-54cbb8eb75c5"), 10 }
+                    { new Guid("a44b42f6-6fcf-43c6-8a11-cbda403753a5"), new Guid("dc5c1e7e-74f3-4475-b766-a0c7d9381d25"), "ASP.NET Core is a cross-platform framework for building modern web applications. Developed by Microsoft, it provides developers with a powerful set of tools for creating scalable and high-performance web applications. ASP.NET Core is built on top of the .NET Core runtime, offering improved performance and flexibility compared to its predecessor. It supports various programming languages, including C#, F#, and Visual Basic, allowing developers to choose the language they are most comfortable with. ASP.NET Core follows a modular and lightweight architecture, enabling developers to optimize their applications for different deployment scenarios. With features like dependency injection, middleware pipeline, and built-in security mechanisms, ASP.NET Core simplifies the development process and promotes best practices in web development. Overall, ASP.NET Core is a modern and versatile framework for building next-generation web applications.", "Admin", new DateTime(2024, 3, 26, 23, 26, 28, 633, DateTimeKind.Local).AddTicks(2605), null, null, new Guid("a8cb5130-8ebb-429b-a048-1c70b90212fb"), false, null, null, "ASP.NET Core test blog", new Guid("2ef9cdda-913e-4e51-a905-54cbb8eb75c5"), 10 },
+                    { new Guid("bbc4e44c-1577-463f-8523-b1cfddf0606a"), new Guid("11e3fba7-16ed-4a07-9cef-bdc1f03f3e04"), "C# is a powerful programming language developed by Microsoft. It is widely used for building various types of applications, including desktop, web, and mobile apps. C# is known for its simplicity and ease of use, making it a popular choice among developers. It offers strong typing, object-oriented programming features, and support for modern programming paradigms. With C#, developers can write efficient and maintainable code for their projects. The language is continuously evolving, with new features and improvements being introduced regularly. Overall, C# is a fundamental tool for software development in the Microsoft ecosystem.", "Admin", new DateTime(2024, 3, 26, 23, 26, 28, 633, DateTimeKind.Local).AddTicks(2614), null, null, new Guid("3eb72197-9048-4826-ad10-cbca7094a4d1"), false, null, null, "C# test blog", new Guid("8bfa84a0-7e9e-44cb-b703-9a817212eaee"), 25 }
                 });
 
             migrationBuilder.InsertData(

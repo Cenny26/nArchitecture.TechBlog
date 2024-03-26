@@ -1,9 +1,14 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using TechBlog.DataAccess.UnitOfWorks;
 using TechBlog.Entity.DTOs.Users;
 using TechBlog.Entity.Entites;
+using TechBlog.Entity.Enums;
+using TechBlog.Service.Extensions;
+using TechBlog.Service.Helpers.Images.Abstractions;
 using TechBlog.Service.Services.Abstractions;
 
 namespace TechBlog.Service.Services.Concretes
@@ -14,13 +19,21 @@ namespace TechBlog.Service.Services.Concretes
         private readonly IMapper _mapper;
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<AppRole> _roleManager;
+        private readonly IHttpContextAccessor _accessor;
+        private readonly SignInManager<AppUser> _signInManager;
+        private readonly IImageHelper _imageHelper;
+        private readonly ClaimsPrincipal _user;
 
-        public UserService(IUnitOfWork unitOfWork, IMapper mapper, UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
+        public UserService(IUnitOfWork unitOfWork, IMapper mapper, UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, IHttpContextAccessor accessor, SignInManager<AppUser> signInManager, IImageHelper imageHelper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _userManager = userManager;
             _roleManager = roleManager;
+            _accessor = accessor;
+            _signInManager = signInManager;
+            _imageHelper = imageHelper;
+            _user = _accessor.HttpContext.User;
         }
 
         public async Task<IdentityResult> CreateUserAsync(UserAddDto userAddDto)
@@ -77,6 +90,17 @@ namespace TechBlog.Service.Services.Concretes
             return await _userManager.FindByIdAsync(userId.ToString());
         }
 
+        public async Task<UserProfileDto> GetUserProfileAsync()
+        {
+            var userId = _user.GetLoggedInUserId();
+            var getUserWithImage = await _unitOfWork.GetRepository<AppUser>().GetAsync(x => x.Id == userId, x => x.Image);
+
+            var map = _mapper.Map<UserProfileDto>(getUserWithImage);
+            map.Image.FileName = getUserWithImage.Image.FileName;
+
+            return map;
+        }
+
         public async Task<string> GetUserRoleAsync(AppUser user)
         {
             return string.Join("", await _userManager.GetRolesAsync(user));
@@ -99,6 +123,63 @@ namespace TechBlog.Service.Services.Concretes
             }
             else
                 return result;
+        }
+
+        public async Task<bool> UpdateUserProfileAsync(UserProfileDto userProfileDto)
+        {
+            var userId = _user.GetLoggedInUserId();
+            var user = await GetAppUserByIdAsync(userId);
+
+            var isVerified = await _userManager.CheckPasswordAsync(user, userProfileDto.CurrentPassword);
+            if (isVerified && userProfileDto.NewPassword != null)
+            {
+                var result = await _userManager.ChangePasswordAsync(user, userProfileDto.CurrentPassword, userProfileDto.NewPassword);
+                if (result.Succeeded)
+                {
+                    await _userManager.UpdateSecurityStampAsync(user);
+                    await _signInManager.SignOutAsync();
+                    await _signInManager.PasswordSignInAsync(user, userProfileDto.NewPassword, true, false);
+
+                    _mapper.Map(userProfileDto, user);
+
+                    if (userProfileDto.Photo != null)
+                        user.ImageId = await UploadImageForUser(userProfileDto);
+
+                    await _userManager.UpdateAsync(user);
+                    await _unitOfWork.SaveAsync();
+
+                    return true;
+                }
+                else
+                    return false;
+            }
+            else if (isVerified)
+            {
+                await _userManager.UpdateSecurityStampAsync(user);
+
+                _mapper.Map(userProfileDto, user);
+
+                if (userProfileDto.Photo != null)
+                    user.ImageId = await UploadImageForUser(userProfileDto);
+
+                await _userManager.UpdateAsync(user);
+                await _unitOfWork.SaveAsync();
+
+                return true;
+            }
+            else
+                return false;
+        }
+
+        private async Task<Guid> UploadImageForUser(UserProfileDto userProfileDto)
+        {
+            var userEmail = _user.GetLoggedInEmail();
+
+            var imageUpload = await _imageHelper.Upload($"{userProfileDto.FirstName}{userProfileDto.LastName}", userProfileDto.Photo, ImageType.User);
+            Image image = new Image(imageUpload.FullName, userProfileDto.Photo.ContentType, userEmail);
+            await _unitOfWork.GetRepository<Image>().AddAsync(image);
+
+            return image.Id;
         }
     }
 }

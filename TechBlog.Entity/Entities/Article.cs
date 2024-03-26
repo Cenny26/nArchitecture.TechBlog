@@ -25,7 +25,7 @@ public class Article : EntityBase
     public Guid CategoryId { get; set; }
     public Category Category { get; set; }
 
-    public Guid? ImageId { get; set; }
+    public Guid? ImageId { get; set; } = Guid.Parse("3EB72197-9048-4826-AD10-CBCA7094A4D1");
     public Image Image { get; set; }
     
     public Guid UserId { get; set; }

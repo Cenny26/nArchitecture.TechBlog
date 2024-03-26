@@ -73,7 +73,7 @@ public class UserMap : IEntityTypeConfiguration<AppUser>
             NormalizedEmail = "ADMIN@GMAIL.COM",
             EmailConfirmed = true,
             SecurityStamp = Guid.NewGuid().ToString(),
-            ImageId = Guid.Parse("3EB72197-9048-4826-AD10-CBCA7094A4D1")
+            ImageId = Guid.Parse("ADB79C2D-B859-4EE6-ACFA-8A81BF83FD68")
         };
         admin.PasswordHash = CreatePasswordHash(admin, "123456");
 
