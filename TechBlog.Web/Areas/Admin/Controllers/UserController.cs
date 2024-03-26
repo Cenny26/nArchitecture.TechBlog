@@ -6,8 +6,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NToastNotify;
+using TechBlog.DataAccess.UnitOfWorks;
 using TechBlog.Entity.DTOs.Users;
 using TechBlog.Entity.Entites;
+using TechBlog.Entity.Enums;
+using TechBlog.Service.Helpers.Images.Abstractions;
 using TechBlog.Web.Constants.Roles;
 using TechBlog.Web.ResultMessages;
 
@@ -23,14 +26,20 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         private readonly IMapper _mapper;
         private readonly IToastNotification _notification;
         private readonly IValidator<AppUser> _validator;
+        private readonly SignInManager<AppUser> _signInManager;
+        private readonly IImageHelper _imageHelper;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public UserController(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, IMapper mapper, IToastNotification notification, IValidator<AppUser> validator)
+        public UserController(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, IMapper mapper, IToastNotification notification, IValidator<AppUser> validator, SignInManager<AppUser> signInManager, IImageHelper imageHelper, IUnitOfWork unitOfWork)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _mapper = mapper;
             _notification = notification;
             _validator = validator;
+            _signInManager = signInManager;
+            _imageHelper = imageHelper;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpGet]
@@ -181,6 +190,85 @@ namespace TechBlog.Web.Areas.Admin.Controllers
             }
 
             return NotFound();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Profile()
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var getImage = await _unitOfWork.GetRepository<AppUser>().GetAsync(x => x.Id == user.Id, x => x.Image);
+            var map = _mapper.Map<UserProfileDto>(user);
+            map.Image.FileName = getImage.Image.FileName;
+
+            return View(map);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Profile(UserProfileDto userProfileDto)
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (ModelState.IsValid)
+            {
+                var isVerified = await _userManager.CheckPasswordAsync(user, userProfileDto.CurrentPassword);
+                if (isVerified && userProfileDto.NewPassword != null && userProfileDto.Photo != null)
+                {
+                    var result = await _userManager.ChangePasswordAsync(user, userProfileDto.CurrentPassword, userProfileDto.NewPassword);
+                    if (result.Succeeded)
+                    {
+                        await _userManager.UpdateSecurityStampAsync(user);
+                        await _signInManager.SignOutAsync();
+                        await _signInManager.PasswordSignInAsync(user, userProfileDto.NewPassword, true, false);
+
+                        user.FirstName = userProfileDto.FirstName;
+                        user.LastName = userProfileDto.LastName;
+                        user.PhoneNumber = userProfileDto.PhoneNumber;
+
+                        var imageUpload = await _imageHelper.Upload($"{userProfileDto.FirstName}{userProfileDto.LastName}", userProfileDto.Photo, ImageType.User);
+                        Image image = new Image(imageUpload.FullName, userProfileDto.Photo.ContentType, user.Email);
+                        await _unitOfWork.GetRepository<Image>().AddAsync(image);
+
+                        user.ImageId = image.Id;
+
+                        await _userManager.UpdateAsync(user);
+                        await _unitOfWork.SaveAsync();
+
+                        _notification.AddSuccessToastMessage("Your password and information have been successfully updated.");
+                        return View();
+                    }
+                    else
+                    {
+                        //result.AddToIdentityModelState(ModelState);
+                        return View();
+                    }
+                }
+                else if (isVerified && userProfileDto.Photo != null)
+                {
+                    await _userManager.UpdateSecurityStampAsync(user);
+
+                    user.FirstName = userProfileDto.FirstName;
+                    user.LastName = userProfileDto.LastName;
+                    user.PhoneNumber = userProfileDto.PhoneNumber;
+
+                    var imageUpload = await _imageHelper.Upload($"{userProfileDto.FirstName}{userProfileDto.LastName}", userProfileDto.Photo, ImageType.User);
+                    Image image = new Image(imageUpload.FullName, userProfileDto.Photo.ContentType, user.Email);
+                    await _unitOfWork.GetRepository<Image>().AddAsync(image);
+
+                    user.ImageId = image.Id;
+
+                    await _userManager.UpdateAsync(user);
+                    await _unitOfWork.SaveAsync();
+
+                    _notification.AddSuccessToastMessage("Your information have been successfully updated.");
+                    return View();
+                }
+                else
+                {
+                    _notification.AddErrorToastMessage("An error occurred while updating your information.");
+                    return View();
+                }
+            }
+
+            return View();
         }
     }
 }
