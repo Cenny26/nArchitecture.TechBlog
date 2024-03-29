@@ -24,6 +24,7 @@ public static class ServiceLayerExtensions
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IDashboardService, DashboardService>();
         services.AddScoped<IImageHelper, ImageHelper>();
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
