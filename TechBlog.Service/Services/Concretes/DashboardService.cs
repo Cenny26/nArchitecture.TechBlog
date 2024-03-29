@@ -31,5 +31,17 @@ namespace TechBlog.Service.Services.Concretes
 
             return datas;
         }
+
+        public async Task<int> GetTotalArticlesCount()
+        {
+            var articlesCount = await _unitOfWork.GetRepository<Article>().CountAsync();
+            return articlesCount;
+        }
+
+        public async Task<int> GetTotalCategoriesCount()
+        {
+            var categoriesCount = await _unitOfWork.GetRepository<Category>().CountAsync();
+            return categoriesCount;
+        }
     }
 }

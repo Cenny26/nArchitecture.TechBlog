@@ -17,7 +17,7 @@ public class Repository<T> : IRepository<T> where T : class, IEntityBase, new()
 
     private DbSet<T> Table => _dbContext.Set<T>();
 
-    public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>> predicate = null,
+    public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? predicate = null,
         params Expression<Func<T, object>>[] includeProperties)
     {
         IQueryable<T> query = Table;
@@ -68,8 +68,10 @@ public class Repository<T> : IRepository<T> where T : class, IEntityBase, new()
         return await Table.AnyAsync(predicate);
     }
 
-    public async Task<int> CountAsync(Expression<Func<T, bool>> predicate = null)
+    public async Task<int> CountAsync(Expression<Func<T, bool>>? predicate = null)
     {
-        return await Table.CountAsync(predicate);
+        if (predicate is not null)
+            return await Table.CountAsync(predicate);
+        return await Table.CountAsync();
     }
 }

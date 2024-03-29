@@ -31,4 +31,18 @@ public class HomeController : Controller
         var count = await _dashboardService.GetYearlyArticleCounts();
         return Json(JsonConvert.SerializeObject(count));
     }
+
+    [HttpGet]
+    public async Task<IActionResult> TotalArticleCount()
+    {
+        var count = await _dashboardService.GetTotalArticlesCount();
+        return Json(count);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> TotalCategoryCount()
+    {
+        var count = await _dashboardService.GetTotalCategoriesCount();
+        return Json(count);
+    }
 }
