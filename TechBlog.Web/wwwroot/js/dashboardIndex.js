@@ -16,28 +16,6 @@
     });
     $.ajax({
         type: "GET",
-        url: totalDeletedArticleCountUrl,
-        dataType: "json",
-        success: function (data) {
-            $("h3#totalDeletedArticleCount").append(data);
-        },
-        error: function () {
-            toastr.error("An error occurred while getting the article data", "Error");
-        }
-    });
-    $.ajax({
-        type: "GET",
-        url: totalNonDeletedArticleCountUrl,
-        dataType: "json",
-        success: function (data) {
-            $("h3#totalNonDeletedArticleCount").append(data);
-        },
-        error: function () {
-            toastr.error("An error occurred while getting the article data", "Error");
-        }
-    });
-    $.ajax({
-        type: "GET",
         url: totalCategoryCountUrl,
         dataType: "json",
         success: function (data) {
