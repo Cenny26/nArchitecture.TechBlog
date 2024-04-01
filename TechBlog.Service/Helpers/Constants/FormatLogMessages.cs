@@ -4,7 +4,7 @@
     {
         public static string EventDebug(string methodName, string methodEvent)
         {
-            return $"{methodName} method {methodEvent}.";
+            return $"{methodName} service {methodEvent}.";
         }
         public static string EventError(string methodEvent, string typeModel)
         {

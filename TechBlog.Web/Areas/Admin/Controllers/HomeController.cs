@@ -33,9 +33,30 @@ public class HomeController : Controller
     }
 
     [HttpGet]
+    public async Task<IActionResult> YearlyCategoryCounts()
+    {
+        var count = await _dashboardService.GetYearlyCategoryCounts();
+        return Json(JsonConvert.SerializeObject(count));
+    }
+
+    [HttpGet]
     public async Task<IActionResult> TotalArticleCount()
     {
         var count = await _dashboardService.GetTotalArticlesCount();
+        return Json(count);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> TotalNonDeletedArticleCount()
+    {
+        var count = await _dashboardService.GetTotalNonDeletedArticlesCount();
+        return Json(count);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> TotalDeletedArticleCount()
+    {
+        var count = await _dashboardService.GetTotalDeletedArticlesCount();
         return Json(count);
     }
 
