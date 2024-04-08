@@ -7,6 +7,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Content Remove="Views\Home\Search.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
       <ProjectReference Include="..\TechBlog.DataAccess\TechBlog.DataAccess.csproj" />
       <ProjectReference Include="..\TechBlog.Service\TechBlog.Service.csproj" />
     </ItemGroup>
@@ -27,6 +31,18 @@
 
     <ItemGroup>
       <AdditionalFiles Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <UpToDateCheckInput Remove="Views\Home\Search.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Views\Home\Search.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="Views\Home\Search.cshtml" />
     </ItemGroup>
 
 </Project>

@@ -9,13 +9,13 @@
                         <div class="col-lg-12">
                             @foreach (var item in Model.Articles)
                             {
-                                <input type="hidden" id="keyword" value="@Model.CurrentPage" />
+
                                 <div class="blog-post">
                                     <div class="blog-thumb">
                                         <img src="~/stand-blog/assets/images/blog-post-01.jpg" alt="">
                                     </div>
                                     <div class="down-content">
-                                        <a asp-controller="Home" asp-action="Detail" asp-route-id="@item.Id"><h4>@item.Title</h4></a>
+                                        <a href="post-details.html"><h4>@item.Title</h4></a>
                                         <ul class="post-info">
                                             <li>@item.User.FirstName @item.User.LastName</li>
                                             <li>@item.CreatedDate.ToString("dd/MM/yyyy")</li>
@@ -35,7 +35,7 @@
                                                 <div class="col-6">
                                                     <ul class="post-share">
                                                         <li><i class="fa fa-link"></i></li>
-                                                        <li><a asp-controller="Home" asp-action="Detail" asp-route-id="@item.Id">[Read more]</a></li>
+                                                        <li><a href="#">[Read more]</a></li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -46,7 +46,6 @@
                         </div>
                         <div class="col-lg-12">
                             <ul class="pagination justify-content-center mb-4 mt-4 btn-block">
-
                                 @if (Model.ShowPrevious)
                                 {
                                     <li class="page-item">
@@ -66,7 +65,6 @@
                                         <a class="page-link" asp-route-currentPage="@(Model.CurrentPage + 1)" asp-route-pageSize="@Model.PageSize"> Next </a>
                                     </li>
                                 }
-
                             </ul>
                         </div>
                     </div>

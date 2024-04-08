@@ -47,7 +47,14 @@ namespace TechBlog.Service.Services.Concretes
                 _logger.LogError(exc, FormatLogMessages.EventError("fetching", "the non deleted categories"));
                 throw;
             }
+        }
 
+        public async Task<List<CategoryDto>> GetAllCategoriesNonDeletedTake24()
+        {
+            var categories = await _unitOfWork.GetRepository<Category>().GetAllAsync(x => !x.IsDeleted);
+            var map = _mapper.Map<List<CategoryDto>>(categories);
+
+            return map.Take(24).ToList();
         }
 
         public async Task CreateCategoryAsync(CategoryAddDto categoryAddDto)
@@ -70,7 +77,6 @@ namespace TechBlog.Service.Services.Concretes
                 _logger.LogError(exc, FormatLogMessages.EventError("creating", "a new category"));
                 throw;
             }
-
         }
 
         public async Task<Category> GetCategoryByGuid(Guid categoryId)
@@ -89,7 +95,6 @@ namespace TechBlog.Service.Services.Concretes
                 _logger.LogError(exc, FormatLogMessages.EventError("fetching", "the category"));
                 throw;
             }
-
         }
 
         public async Task<string> UpdateCategoryAsync(CategoryUpdateDto categoryUpdateDto)
@@ -117,7 +122,6 @@ namespace TechBlog.Service.Services.Concretes
                 _logger.LogError(exc, FormatLogMessages.EventError("updating", "the category"));
                 throw;
             }
-
         }
 
         public async Task<string> SafeDeleteCategoryAsync(Guid categoryId)
@@ -145,7 +149,6 @@ namespace TechBlog.Service.Services.Concretes
                 _logger.LogError(exc, FormatLogMessages.EventError("safely deleting", "the category"));
                 throw;
             }
-
         }
 
         public async Task<List<CategoryDto>> GetAllCategoriesDeleted()
@@ -165,7 +168,6 @@ namespace TechBlog.Service.Services.Concretes
                 _logger.LogError(exc, FormatLogMessages.EventError("fetching", "the deleted categories"));
                 throw;
             }
-
         }
 
         public async Task<string> UndoDeleteCategoryAsync(Guid categoryId)
@@ -191,7 +193,6 @@ namespace TechBlog.Service.Services.Concretes
                 _logger.LogError(exc, FormatLogMessages.EventError("undoing", "the deleted category"));
                 throw;
             }
-
         }
     }
 }
