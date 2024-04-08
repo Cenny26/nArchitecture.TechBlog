@@ -214,4 +214,27 @@ public class ArticleService : IArticleService
             throw;
         }
     }
+
+    public async Task<ArticleListDto> GetAllByPagingAsync(Guid? categoryId, int currentPage = 1, int pageSize = 3, bool isAscending = false)
+    {
+        pageSize = pageSize > 20 ? 20 : pageSize;
+
+        var articles = categoryId == null
+            ? await _unitOfWork.GetRepository<Article>().GetAllAsync(a => !a.IsDeleted, a => a.Category, i => i.Image)
+            : await _unitOfWork.GetRepository<Article>().GetAllAsync(a => a.CategoryId == categoryId && !a.IsDeleted, x => x.Category, i => i.Image);
+
+        var sortedArticles = isAscending
+            ? articles.OrderBy(x => x.CreatedBy).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList()
+            : articles.OrderByDescending(x => x.CreatedBy).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+
+        return new ArticleListDto
+        {
+            Articles = sortedArticles,
+            CategoryId = categoryId == null ? null : categoryId.Value,
+            CurrentPage = currentPage,
+            PageSize = pageSize,
+            TotalCount = articles.Count,
+            IsAscending = isAscending
+        };
+    }
 }
