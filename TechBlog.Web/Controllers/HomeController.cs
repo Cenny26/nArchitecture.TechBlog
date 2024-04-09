@@ -21,7 +21,6 @@ public class HomeController : Controller
     public async Task<IActionResult> Index(Guid? categoryId, int currentPage = 1, int pageSize = 3, bool isAscending = false)
     {
         var articles = await _articleService.GetAllByPagingAsync(categoryId, currentPage, pageSize, isAscending);
-
         return View(articles);
     }
 
@@ -30,6 +29,13 @@ public class HomeController : Controller
     {
         var articles = await _articleService.SearchAsync(keyword, currentPage, pageSize, isAscending);
         return View(articles);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Detail(Guid articleId)
+    {
+        var article = await _articleService.GetArticleWithCategoryNonDeletedAsync(articleId);
+        return View(article);
     }
 
     public IActionResult Privacy()

@@ -79,7 +79,6 @@ public class ArticleService : IArticleService
             _logger.LogError(exc, FormatLogMessages.EventError("fetching", "the non deleted articles with categories"));
             throw;
         }
-
     }
 
     public async Task<ArticleDto> GetArticleWithCategoryNonDeletedAsync(Guid articleId)
@@ -88,7 +87,7 @@ public class ArticleService : IArticleService
 
         try
         {
-            var article = await _unitOfWork.GetRepository<Article>().GetAsync(x => !x.IsDeleted && x.Id == articleId, x => x.Category, i => i.Image);
+            var article = await _unitOfWork.GetRepository<Article>().GetAsync(x => !x.IsDeleted && x.Id == articleId, x => x.Category, i => i.Image, u => u.User);
             var map = _mapper.Map<ArticleDto>(article);
 
             _logger.LogDebug(FormatLogMessages.EventDebug("GetArticleWithCategoryNonDeletedAsync", "completed"));
@@ -99,7 +98,6 @@ public class ArticleService : IArticleService
             _logger.LogError(exc, FormatLogMessages.EventError("fetching", "the non deleted article with category"));
             throw;
         }
-
     }
 
     public async Task<string> UpdateArticleAsync(ArticleUpdateDto articleUpdateDto)
@@ -217,44 +215,66 @@ public class ArticleService : IArticleService
 
     public async Task<ArticleListDto> GetAllByPagingAsync(Guid? categoryId, int currentPage = 1, int pageSize = 3, bool isAscending = false)
     {
-        pageSize = pageSize > 20 ? 20 : pageSize;
+        _logger.LogDebug(FormatLogMessages.EventDebug("GetAllByPagingAsync", "called"));
 
-        var articles = categoryId == null
-                ? await _unitOfWork.GetRepository<Article>().GetAllAsync(a => !a.IsDeleted, a => a.Category, i => i.Image, u => u.User)
-                : await _unitOfWork.GetRepository<Article>().GetAllAsync(a => a.CategoryId == categoryId && !a.IsDeleted,
-                    a => a.Category, i => i.Image, u => u.User);
-        var sortedArticles = isAscending
-            ? articles.OrderBy(a => a.CreatedDate).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList()
-            : articles.OrderByDescending(a => a.CreatedDate).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
-
-        return new ArticleListDto
+        try
         {
-            Articles = sortedArticles,
-            CategoryId = categoryId == null ? null : categoryId.Value,
-            CurrentPage = currentPage,
-            PageSize = pageSize,
-            TotalCount = articles.Count,
-            IsAscending = isAscending
-        };
+            pageSize = pageSize > 20 ? 20 : pageSize;
+
+            var articles = categoryId == null
+                    ? await _unitOfWork.GetRepository<Article>().GetAllAsync(a => !a.IsDeleted, a => a.Category, i => i.Image, u => u.User)
+                    : await _unitOfWork.GetRepository<Article>().GetAllAsync(a => a.CategoryId == categoryId && !a.IsDeleted,
+                        a => a.Category, i => i.Image, u => u.User);
+            var sortedArticles = isAscending
+                ? articles.OrderBy(a => a.CreatedDate).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList()
+                : articles.OrderByDescending(a => a.CreatedDate).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+
+            _logger.LogDebug(FormatLogMessages.EventDebug("GetAllByPagingAsync", "completed"));
+            return new ArticleListDto
+            {
+                Articles = sortedArticles,
+                CategoryId = categoryId == null ? null : categoryId.Value,
+                CurrentPage = currentPage,
+                PageSize = pageSize,
+                TotalCount = articles.Count,
+                IsAscending = isAscending
+            };
+        }
+        catch (Exception exc)
+        {
+            _logger.LogError(exc, FormatLogMessages.EventError("fetching", "the all articles by paging"));
+            throw;
+        }
     }
 
     public async Task<ArticleListDto> SearchAsync(string keyword, int currentPage = 1, int pageSize = 3, bool isAscending = false)
     {
-        pageSize = pageSize > 20 ? 20 : pageSize;
+        _logger.LogDebug(FormatLogMessages.EventDebug("SearchAsync", "called"));
 
-        var articles = await _unitOfWork.GetRepository<Article>().GetAllAsync(a => !a.IsDeleted && (a.Title.Contains(keyword) || a.Content.Contains(keyword) || a.Category.Name.Contains(keyword)), a => a.Category, i => i.Image, u => u.User);
-
-        var sortedArticles = isAscending
-            ? articles.OrderBy(a => a.CreatedDate).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList()
-            : articles.OrderByDescending(a => a.CreatedDate).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
-
-        return new ArticleListDto
+        try
         {
-            Articles = sortedArticles,
-            CurrentPage = currentPage,
-            PageSize = pageSize,
-            TotalCount = articles.Count,
-            IsAscending = isAscending
-        };
+            pageSize = pageSize > 20 ? 20 : pageSize;
+
+            var articles = await _unitOfWork.GetRepository<Article>().GetAllAsync(a => !a.IsDeleted && (a.Title.Contains(keyword) || a.Content.Contains(keyword) || a.Category.Name.Contains(keyword)), a => a.Category, i => i.Image, u => u.User);
+
+            var sortedArticles = isAscending
+                ? articles.OrderBy(a => a.CreatedDate).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList()
+                : articles.OrderByDescending(a => a.CreatedDate).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+
+            _logger.LogDebug(FormatLogMessages.EventDebug("SearchAsync", "completed"));
+            return new ArticleListDto
+            {
+                Articles = sortedArticles,
+                CurrentPage = currentPage,
+                PageSize = pageSize,
+                TotalCount = articles.Count,
+                IsAscending = isAscending
+            };
+        }
+        catch (Exception exc)
+        {
+            _logger.LogError(exc, FormatLogMessages.EventError("fetching", "the searched article"));
+            throw;
+        }
     }
 }

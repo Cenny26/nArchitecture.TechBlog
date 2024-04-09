@@ -15,7 +15,7 @@
                                         <img src="~/stand-blog/assets/images/blog-post-01.jpg" alt="">
                                     </div>
                                     <div class="down-content">
-                                        <a asp-controller="Home" asp-action="Detail" asp-route-id="@item.Id"><h4>@item.Title</h4></a>
+                                        <a asp-controller="Home" asp-action="Detail" asp-route-articleId="@item.Id"><h4>@item.Title</h4></a>
                                         <ul class="post-info">
                                             <li>@item.User.FirstName @item.User.LastName</li>
                                             <li>@item.CreatedDate.ToString("dd/MM/yyyy")</li>
@@ -35,7 +35,7 @@
                                                 <div class="col-6">
                                                     <ul class="post-share">
                                                         <li><i class="fa fa-link"></i></li>
-                                                        <li><a asp-controller="Home" asp-action="Detail" asp-route-id="@item.Id">[Read more]</a></li>
+                                                        <li><a asp-controller="Home" asp-action="Detail" asp-route-articleId="@item.Id">[Read more]</a></li>
                                                     </ul>
                                                 </div>
                                             </div>

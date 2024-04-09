@@ -51,10 +51,21 @@ namespace TechBlog.Service.Services.Concretes
 
         public async Task<List<CategoryDto>> GetAllCategoriesNonDeletedTake24()
         {
-            var categories = await _unitOfWork.GetRepository<Category>().GetAllAsync(x => !x.IsDeleted);
-            var map = _mapper.Map<List<CategoryDto>>(categories);
+            _logger.LogDebug(FormatLogMessages.EventDebug("GetAllCategoriesNonDeletedTake24", "called"));
 
-            return map.Take(24).ToList();
+            try
+            {
+                var categories = await _unitOfWork.GetRepository<Category>().GetAllAsync(x => !x.IsDeleted);
+                var map = _mapper.Map<List<CategoryDto>>(categories);
+
+                _logger.LogDebug(FormatLogMessages.EventDebug("GetAllCategoriesNonDeletedTake24", "completed"));
+                return map.Take(24).ToList();
+            }
+            catch (Exception exc)
+            {
+                _logger.LogError(exc, FormatLogMessages.EventError("fetching", "the non deleted categories - 24 item"));
+                throw;
+            }
         }
 
         public async Task CreateCategoryAsync(CategoryAddDto categoryAddDto)
