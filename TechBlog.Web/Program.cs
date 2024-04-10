@@ -4,7 +4,7 @@ using TechBlog.DataAccess.Context;
 using TechBlog.DataAccess.Extensions;
 using TechBlog.Entity.Entites;
 using TechBlog.Service.Extensions;
-
+using TechBlog.Web.Filters.ArticleVisitors;
 
 var config = new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())
@@ -20,7 +20,10 @@ builder.Services.LoadServiceLayerExtensions(config);
 builder.Services.LoadDataLayerExtension(builder.Configuration);
 builder.Services.AddSession();
 
-builder.Services.AddControllersWithViews()
+builder.Services.AddControllersWithViews(opt =>
+{
+    opt.Filters.Add<ArticleVisitorFilter>();
+})
     .AddNToastNotifyToastr(new ToastrOptions()
     {
         PositionClass = ToastPositions.TopRight,

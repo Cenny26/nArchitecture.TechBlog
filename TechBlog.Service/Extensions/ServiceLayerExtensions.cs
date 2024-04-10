@@ -26,6 +26,7 @@ public static class ServiceLayerExtensions
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IDashboardService, DashboardService>();
         services.AddScoped<IImageHelper, ImageHelper>();
+        services.AddScoped<IVisitorService, VisitorService>();
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
         services.AddAutoMapper(assembly);
