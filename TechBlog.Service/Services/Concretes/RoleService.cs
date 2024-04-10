@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using TechBlog.Entity.DTOs.Roles;
-using TechBlog.Entity.Entites;
+using TechBlog.Entity.Entities;
 using TechBlog.Service.Helpers.Constants;
 using TechBlog.Service.Services.Abstractions;
 

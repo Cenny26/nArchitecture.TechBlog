@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using System.Security.Claims;
 using TechBlog.DataAccess.UnitOfWorks;
 using TechBlog.Entity.DTOs.Articles;
-using TechBlog.Entity.Entites;
+using TechBlog.Entity.Entities;
 using TechBlog.Entity.Enums;
 using TechBlog.Service.Extensions;
 using TechBlog.Service.Helpers.Constants;
@@ -58,6 +58,24 @@ public class ArticleService : IArticleService
         catch (Exception exc)
         {
             _logger.LogError(exc, FormatLogMessages.EventError("creating", "a new article"));
+            throw;
+        }
+    }
+
+    public async Task<Article> GetArticleForVisitorAsync(Guid articleId)
+    {
+        _logger.LogDebug(FormatLogMessages.EventDebug("GetArticleForVisitorAsync", "called"));
+
+        try
+        {
+            var article = await _unitOfWork.GetRepository<Article>().GetAsync(x => x.Id == articleId);
+
+            _logger.LogDebug(FormatLogMessages.EventDebug("GetArticleForVisitorAsync", "completed"));
+            return article;
+        }
+        catch (Exception exc)
+        {
+            _logger.LogError(exc, FormatLogMessages.EventError("fetching", "the article"));
             throw;
         }
     }
@@ -136,6 +154,24 @@ public class ArticleService : IArticleService
         catch (Exception exc)
         {
             _logger.LogError(exc, FormatLogMessages.EventError("updating", "the article"));
+            throw;
+        }
+    }
+
+    public async Task UpdateArticleViewCountForVisitorIpAddress(Article article)
+    {
+        _logger.LogDebug(FormatLogMessages.EventDebug("UpdateArticleViewCountForVisitorIpAddress", "called"));
+
+        try
+        {
+            await _unitOfWork.GetRepository<Article>().UpdateAsync(article);
+            await _unitOfWork.SaveAsync();
+
+            _logger.LogDebug(FormatLogMessages.EventDebug("UpdateArticleViewCountForVisitorIpAddress", "completed"));
+        }
+        catch (Exception exc)
+        {
+            _logger.LogError(exc, FormatLogMessages.EventError("updating", "the article's view count"));
             throw;
         }
     }

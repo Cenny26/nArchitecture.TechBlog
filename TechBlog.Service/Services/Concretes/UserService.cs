@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using TechBlog.DataAccess.UnitOfWorks;
 using TechBlog.Entity.DTOs.Users;
-using TechBlog.Entity.Entites;
+using TechBlog.Entity.Entities;
 using TechBlog.Entity.Enums;
 using TechBlog.Service.Extensions;
 using TechBlog.Service.Helpers.Images.Abstractions;

@@ -1,7 +1,7 @@
 using TechBlog.Core.Entities;
 using TechBlog.Entity.Entities;
 
-namespace TechBlog.Entity.Entites;
+namespace TechBlog.Entity.Entities;
 
 public class Article : EntityBase
 {

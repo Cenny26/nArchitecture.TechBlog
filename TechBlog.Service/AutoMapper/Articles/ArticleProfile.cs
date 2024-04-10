@@ -1,6 +1,6 @@
 using AutoMapper;
 using TechBlog.Entity.DTOs.Articles;
-using TechBlog.Entity.Entites;
+using TechBlog.Entity.Entities;
 
 namespace TechBlog.Service.AutoMapper.Articles;
 

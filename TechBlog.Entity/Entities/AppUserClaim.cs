@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace TechBlog.Entity.Entites;
+namespace TechBlog.Entity.Entities;
 
 public class AppUserClaim : IdentityUserClaim<Guid>
 {

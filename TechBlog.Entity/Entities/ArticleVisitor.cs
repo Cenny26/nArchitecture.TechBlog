@@ -1,5 +1,5 @@
 ﻿using TechBlog.Core.Entities;
-using TechBlog.Entity.Entites;
+using TechBlog.Entity.Entities;
 
 namespace TechBlog.Entity.Entities
 {

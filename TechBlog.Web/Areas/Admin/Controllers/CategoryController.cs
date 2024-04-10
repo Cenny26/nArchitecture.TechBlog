@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
 using TechBlog.Entity.DTOs.Categories;
-using TechBlog.Entity.Entites;
+using TechBlog.Entity.Entities;
 using TechBlog.Service.Extensions;
 using TechBlog.Service.Services.Abstractions;
 using TechBlog.Web.Constants.Roles;

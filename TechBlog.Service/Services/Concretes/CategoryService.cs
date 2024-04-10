@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using System.Security.Claims;
 using TechBlog.DataAccess.UnitOfWorks;
 using TechBlog.Entity.DTOs.Categories;
-using TechBlog.Entity.Entites;
+using TechBlog.Entity.Entities;
 using TechBlog.Service.Extensions;
 using TechBlog.Service.Helpers.Constants;
 using TechBlog.Service.Services.Abstractions;

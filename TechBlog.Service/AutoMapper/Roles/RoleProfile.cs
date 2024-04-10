@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using TechBlog.Entity.DTOs.Roles;
-using TechBlog.Entity.Entites;
+using TechBlog.Entity.Entities;
 
 namespace TechBlog.Service.AutoMapper.Roles
 {

@@ -1,6 +1,6 @@
 using TechBlog.Core.Entities;
 
-namespace TechBlog.Entity.Entites;
+namespace TechBlog.Entity.Entities;
 
 public class Category : EntityBase
 {

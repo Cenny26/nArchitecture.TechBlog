@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using NToastNotify;
 using TechBlog.DataAccess.Context;
 using TechBlog.DataAccess.Extensions;
-using TechBlog.Entity.Entites;
+using TechBlog.Entity.Entities;
 using TechBlog.Service.Extensions;
 using TechBlog.Web.Filters.ArticleVisitors;
 

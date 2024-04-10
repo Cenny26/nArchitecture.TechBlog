@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using TechBlog.Entity.Entites;
+using TechBlog.Entity.Entities;
 
 namespace TechBlog.Service.FluentValidations.Articles
 {

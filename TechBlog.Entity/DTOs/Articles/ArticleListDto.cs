@@ -1,4 +1,4 @@
-﻿using TechBlog.Entity.Entites;
+﻿using TechBlog.Entity.Entities;
 
 namespace TechBlog.Entity.DTOs.Articles
 {

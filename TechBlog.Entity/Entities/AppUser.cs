@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using TechBlog.Core.Entities;
 
-namespace TechBlog.Entity.Entites;
+namespace TechBlog.Entity.Entities;
 
 public class AppUser : IdentityUser<Guid>, IEntityBase
 {

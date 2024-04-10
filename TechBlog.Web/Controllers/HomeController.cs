@@ -22,8 +22,12 @@ public class HomeController : Controller
     [HttpGet]
     public async Task<IActionResult> Index(Guid? categoryId, int currentPage = 1, int pageSize = 3, bool isAscending = false)
     {
-        var articles = await _articleService.GetAllByPagingAsync(categoryId, currentPage, pageSize, isAscending);
-        return View(articles);
+        var list = await _articleService.GetAllByPagingAsync(categoryId, currentPage, pageSize, isAscending);
+
+        if (list.Articles.Count > 0)
+            return View(list);
+
+        return View("ComingSoon");
     }
 
     [HttpGet]
@@ -41,7 +45,7 @@ public class HomeController : Controller
         var ipAddress = _httpContextAccessor.HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
 
         var articleVisitors = await _visitorService.GetAllArticleVisitorsAsync();
-        var article = await _visitorService.GetArticleForVisitorAsync(articleId);
+        var article = await _articleService.GetArticleForVisitorAsync(articleId);
 
         var visitor = await _visitorService.GetVisitorAsync(ipAddress);
         var addArticleVisitor = new ArticleVisitor(article.Id, visitor.Id);
@@ -53,7 +57,7 @@ public class HomeController : Controller
             await _visitorService.CreateArticleVisitorAsync(addArticleVisitor);
 
             article.ViewCount += 1;
-            await _visitorService.UpdateArticleViewCountForVisitorIpAddress(article);
+            await _articleService.UpdateArticleViewCountForVisitorIpAddress(article);
         }
 
         return View(detailedArticle);

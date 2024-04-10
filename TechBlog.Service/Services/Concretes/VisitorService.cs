@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using TechBlog.DataAccess.UnitOfWorks;
-using TechBlog.Entity.Entites;
+using TechBlog.Entity.Entities;
 using TechBlog.Entity.Entities;
 using TechBlog.Service.Helpers.Constants;
 using TechBlog.Service.Services.Abstractions;
@@ -72,25 +72,6 @@ namespace TechBlog.Service.Services.Concretes
             }
         }
 
-        public async Task<Article> GetArticleForVisitorAsync(Guid articleId)
-        {
-            _logger.LogDebug(FormatLogMessages.EventDebug("GetArticleForVisitorAsync", "called"));
-
-            try
-            {
-                var article = await _unitOfWork.GetRepository<Article>().GetAsync(x => x.Id == articleId);
-
-                _logger.LogDebug(FormatLogMessages.EventDebug("GetArticleForVisitorAsync", "completed"));
-                return article;
-            }
-            catch (Exception exc)
-            {
-                _logger.LogError(exc, FormatLogMessages.EventError("fetching", "the article"));
-                throw;
-            }
-
-        }
-
         public async Task CreateVisitorAsync(Visitor visitor)
         {
             _logger.LogDebug(FormatLogMessages.EventDebug("CreateVisitorAsync", "called"));
@@ -105,26 +86,6 @@ namespace TechBlog.Service.Services.Concretes
             catch (Exception exc)
             {
                 _logger.LogError(exc, FormatLogMessages.EventError("creating", "the new visitor"));
-                throw;
-            }
-
-
-        }
-
-        public async Task UpdateArticleViewCountForVisitorIpAddress(Article article)
-        {
-            _logger.LogDebug(FormatLogMessages.EventDebug("UpdateArticleViewCountForVisitorIpAddress", "called"));
-
-            try
-            {
-                await _unitOfWork.GetRepository<Article>().UpdateAsync(article);
-                await _unitOfWork.SaveAsync();
-
-                _logger.LogDebug(FormatLogMessages.EventDebug("UpdateArticleViewCountForVisitorIpAddress", "completed"));
-            }
-            catch (Exception exc)
-            {
-                _logger.LogError(exc, FormatLogMessages.EventError("updating", "the article's view count"));
                 throw;
             }
         }

@@ -1,5 +1,5 @@
 using TechBlog.Entity.DTOs.Categories;
-using TechBlog.Entity.Entites;
+using TechBlog.Entity.Entities;
 
 namespace TechBlog.Entity.DTOs.Articles;
 
