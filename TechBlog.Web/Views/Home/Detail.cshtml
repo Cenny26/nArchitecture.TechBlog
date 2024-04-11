@@ -9,7 +9,13 @@
                         <div class="col-lg-12">
                             <div class="blog-post">
                                 <div class="blog-thumb">
-                                    <img src="~/stand-blog/assets/images/blog-post-01.jpg" alt="">
+                                    @{
+                                        if (Model.Image is null)
+                                        {
+                                            <img src="~/stand-blog/assets/images/blog-post-01.jpg" alt="@Model.Title">
+                                        }
+                                        <img src="~/images/@Model.Image.FileName" alt="@Model.Title">
+                                    }
                                 </div>
                                 <div class="down-content">
                                     <a href="#"><h4>@Model.Title</h4></a>
@@ -26,7 +32,7 @@
                                             <div class="col-6">
                                                 <ul class="post-tags">
                                                     <li><i class="fa fa-tags"></i></li>
-                                                    <li><a href="#">@Model.Category.Name</a></li>
+                                                    <li><a asp-controller="Home" asp-action="Index" asp-route-categoryId="@Model.Category.Id">@Model.Category.Name</a></li>
                                                 </ul>
                                             </div>
                                         </div>

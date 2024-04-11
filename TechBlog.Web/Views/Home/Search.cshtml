@@ -12,7 +12,13 @@
 
                                 <div class="blog-post">
                                     <div class="blog-thumb">
-                                        <img src="~/stand-blog/assets/images/blog-post-01.jpg" alt="">
+                                        @{
+                                            if (item.Image is null)
+                                            {
+                                                <img src="~/stand-blog/assets/images/blog-post-01.jpg" alt="@item.Title">
+                                            }
+                                            <img src="~/images/@item.Image.FileName" alt="@item.Title">
+                                        }
                                     </div>
                                     <div class="down-content">
                                         <a href="post-details.html"><h4>@item.Title</h4></a>
@@ -29,13 +35,13 @@
                                                 <div class="col-6">
                                                     <ul class="post-tags">
                                                         <li><i class="fa fa-tags"></i></li>
-                                                        <li><a href="#">@item.Category.Name</a></li>
+                                                        <li><a asp-controller="Home" asp-action="Index" asp-route-categoryId="@item.Category.Id">@item.Category.Name</a></li>
                                                     </ul>
                                                 </div>
                                                 <div class="col-6">
                                                     <ul class="post-share">
                                                         <li><i class="fa fa-link"></i></li>
-                                                        <li><a href="#">[Read more]</a></li>
+                                                        <li><a asp-controller="Home" asp-action="Detail" asp-route-articleId="@item.Id">[Read more]</a></li>
                                                     </ul>
                                                 </div>
                                             </div>

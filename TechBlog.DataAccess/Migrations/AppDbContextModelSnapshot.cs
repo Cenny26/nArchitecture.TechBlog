@@ -22,7 +22,7 @@ namespace TechBlog.DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("TechBlog.Entity.Entites.AppRole", b =>
+            modelBuilder.Entity("TechBlog.Entity.Entities.AppRole", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -53,27 +53,27 @@ namespace TechBlog.DataAccess.Migrations
                         new
                         {
                             Id = new Guid("2f673fe9-4ad1-493c-ab04-b3619397deb5"),
-                            ConcurrencyStamp = "9f8e09ea-952b-481c-8f9c-f5a6d9cf8cb7",
+                            ConcurrencyStamp = "591460c4-64ee-4472-a24e-d2a043c8399b",
                             Name = "Superadmin",
                             NormalizedName = "SUPERADMIN"
                         },
                         new
                         {
                             Id = new Guid("62c7c6fd-01d6-4410-9e4a-53490b59a3c7"),
-                            ConcurrencyStamp = "e37b29c2-c9f1-40de-a584-19548ca8eef5",
+                            ConcurrencyStamp = "f9fd7b63-f75e-413f-a1ab-25efba2040e2",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = new Guid("bf78885c-c25e-4fa8-bc01-7b90eb93c840"),
-                            ConcurrencyStamp = "690ac33c-476b-4ced-aee0-3593ad92c00b",
+                            ConcurrencyStamp = "4978d896-c7df-422b-a5a8-fb86febbd177",
                             Name = "User",
                             NormalizedName = "USER"
                         });
                 });
 
-            modelBuilder.Entity("TechBlog.Entity.Entites.AppRoleClaim", b =>
+            modelBuilder.Entity("TechBlog.Entity.Entities.AppRoleClaim", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -97,7 +97,7 @@ namespace TechBlog.DataAccess.Migrations
                     b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
-            modelBuilder.Entity("TechBlog.Entity.Entites.AppUser", b =>
+            modelBuilder.Entity("TechBlog.Entity.Entities.AppUser", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -180,7 +180,7 @@ namespace TechBlog.DataAccess.Migrations
                         {
                             Id = new Guid("2ef9cdda-913e-4e51-a905-54cbb8eb75c5"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "13d02ca2-8fb1-41bb-a4f0-9c32a0723147",
+                            ConcurrencyStamp = "a32b68b9-6c63-4de6-85d4-151932a9c331",
                             Email = "superadmin@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Kanan",
@@ -189,10 +189,10 @@ namespace TechBlog.DataAccess.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "SUPERADMIN@GMAIL.COM",
                             NormalizedUserName = "SUPERADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAELCbzG3BwBWFR/2O0dxAgO0GcQ06Tmk8ww9IBBqjwpGtKr8dNN7PhVqyjTphi3MAWw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEGaQ3QByvsw3iXEjVmoi3A4GrUj2aCHoMmuKd6MJxjD4LVxSouSjCI1va6/qi4k08w==",
                             PhoneNumber = "+994515268342",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "96d288b4-ef66-4e5b-9da7-d2fc95896b10",
+                            SecurityStamp = "0e97b976-9e0c-46f9-ab90-c5e934cfe509",
                             TwoFactorEnabled = false,
                             UserName = "superadmin@gmail.com"
                         },
@@ -200,7 +200,7 @@ namespace TechBlog.DataAccess.Migrations
                         {
                             Id = new Guid("8bfa84a0-7e9e-44cb-b703-9a817212eaee"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a8cba7d9-0a11-49a7-bc42-1dde8a5fccf0",
+                            ConcurrencyStamp = "7113c9dc-7b93-4c7a-99dc-0bb9cb879b27",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Kanan",
@@ -209,16 +209,16 @@ namespace TechBlog.DataAccess.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEKbu813werf6muxbl7JW48MTBLft/xKAIDDB8mzTX0Xtdy30qQP+i1lbm4NGDZMO/Q==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEDZq4vGjDUglTOltrzlDws3cs382kV4Z56ayZf8P7rwyczK11h9mXigf1zNrcVsB2w==",
                             PhoneNumber = "+994515268342",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "8f4e8fad-4bc2-4aaf-997a-22c776939b6a",
+                            SecurityStamp = "84c1e52b-8ea9-43ab-b590-72e4265e140d",
                             TwoFactorEnabled = false,
                             UserName = "admin@gmail.com"
                         });
                 });
 
-            modelBuilder.Entity("TechBlog.Entity.Entites.AppUserClaim", b =>
+            modelBuilder.Entity("TechBlog.Entity.Entities.AppUserClaim", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -242,7 +242,7 @@ namespace TechBlog.DataAccess.Migrations
                     b.ToTable("AspNetUserClaims", (string)null);
                 });
 
-            modelBuilder.Entity("TechBlog.Entity.Entites.AppUserLogin", b =>
+            modelBuilder.Entity("TechBlog.Entity.Entities.AppUserLogin", b =>
                 {
                     b.Property<string>("LoginProvider")
                         .HasMaxLength(128)
@@ -265,7 +265,7 @@ namespace TechBlog.DataAccess.Migrations
                     b.ToTable("AspNetUserLogins", (string)null);
                 });
 
-            modelBuilder.Entity("TechBlog.Entity.Entites.AppUserRole", b =>
+            modelBuilder.Entity("TechBlog.Entity.Entities.AppUserRole", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -292,7 +292,7 @@ namespace TechBlog.DataAccess.Migrations
                         });
                 });
 
-            modelBuilder.Entity("TechBlog.Entity.Entites.AppUserToken", b =>
+            modelBuilder.Entity("TechBlog.Entity.Entities.AppUserToken", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -311,7 +311,7 @@ namespace TechBlog.DataAccess.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("TechBlog.Entity.Entites.Article", b =>
+            modelBuilder.Entity("TechBlog.Entity.Entities.Article", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -368,37 +368,24 @@ namespace TechBlog.DataAccess.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Articles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("4b2d98ff-3659-4b4e-9cd1-50c689f06ad2"),
-                            CategoryId = new Guid("dc5c1e7e-74f3-4475-b766-a0c7d9381d25"),
-                            Content = "ASP.NET Core is a cross-platform framework for building modern web applications. Developed by Microsoft, it provides developers with a powerful set of tools for creating scalable and high-performance web applications. ASP.NET Core is built on top of the .NET Core runtime, offering improved performance and flexibility compared to its predecessor. It supports various programming languages, including C#, F#, and Visual Basic, allowing developers to choose the language they are most comfortable with. ASP.NET Core follows a modular and lightweight architecture, enabling developers to optimize their applications for different deployment scenarios. With features like dependency injection, middleware pipeline, and built-in security mechanisms, ASP.NET Core simplifies the development process and promotes best practices in web development. Overall, ASP.NET Core is a modern and versatile framework for building next-generation web applications.",
-                            CreatedBy = "Admin",
-                            CreatedDate = new DateTime(2024, 4, 9, 22, 54, 54, 819, DateTimeKind.Local).AddTicks(7549),
-                            ImageId = new Guid("a8cb5130-8ebb-429b-a048-1c70b90212fb"),
-                            IsDeleted = false,
-                            Title = "ASP.NET Core test blog",
-                            UserId = new Guid("2ef9cdda-913e-4e51-a905-54cbb8eb75c5"),
-                            ViewCount = 10
-                        },
-                        new
-                        {
-                            Id = new Guid("d53bdc9d-c131-4f1c-b4f2-3c8c44e6164f"),
-                            CategoryId = new Guid("11e3fba7-16ed-4a07-9cef-bdc1f03f3e04"),
-                            Content = "C# is a powerful programming language developed by Microsoft. It is widely used for building various types of applications, including desktop, web, and mobile apps. C# is known for its simplicity and ease of use, making it a popular choice among developers. It offers strong typing, object-oriented programming features, and support for modern programming paradigms. With C#, developers can write efficient and maintainable code for their projects. The language is continuously evolving, with new features and improvements being introduced regularly. Overall, C# is a fundamental tool for software development in the Microsoft ecosystem.",
-                            CreatedBy = "Admin",
-                            CreatedDate = new DateTime(2024, 4, 9, 22, 54, 54, 819, DateTimeKind.Local).AddTicks(7582),
-                            ImageId = new Guid("3eb72197-9048-4826-ad10-cbca7094a4d1"),
-                            IsDeleted = false,
-                            Title = "C# test blog",
-                            UserId = new Guid("8bfa84a0-7e9e-44cb-b703-9a817212eaee"),
-                            ViewCount = 25
-                        });
                 });
 
-            modelBuilder.Entity("TechBlog.Entity.Entites.Category", b =>
+            modelBuilder.Entity("TechBlog.Entity.Entities.ArticleVisitor", b =>
+                {
+                    b.Property<Guid>("ArticleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("VisitorId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ArticleId", "VisitorId");
+
+                    b.HasIndex("VisitorId");
+
+                    b.ToTable("ArticleVisitors");
+                });
+
+            modelBuilder.Entity("TechBlog.Entity.Entities.Category", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -433,27 +420,9 @@ namespace TechBlog.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("dc5c1e7e-74f3-4475-b766-a0c7d9381d25"),
-                            CreatedBy = "Admin",
-                            CreatedDate = new DateTime(2024, 4, 9, 22, 54, 54, 820, DateTimeKind.Local).AddTicks(6183),
-                            IsDeleted = false,
-                            Name = "ASP.NET Core"
-                        },
-                        new
-                        {
-                            Id = new Guid("11e3fba7-16ed-4a07-9cef-bdc1f03f3e04"),
-                            CreatedBy = "Admin",
-                            CreatedDate = new DateTime(2024, 4, 9, 22, 54, 54, 820, DateTimeKind.Local).AddTicks(6189),
-                            IsDeleted = false,
-                            Name = "C#"
-                        });
                 });
 
-            modelBuilder.Entity("TechBlog.Entity.Entites.Image", b =>
+            modelBuilder.Entity("TechBlog.Entity.Entities.Image", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -498,44 +467,29 @@ namespace TechBlog.DataAccess.Migrations
                         {
                             Id = new Guid("a8cb5130-8ebb-429b-a048-1c70b90212fb"),
                             CreatedBy = "Admin",
-                            CreatedDate = new DateTime(2024, 4, 9, 22, 54, 54, 820, DateTimeKind.Local).AddTicks(8108),
-                            FileName = "images/test/meaninuser",
-                            FileType = "png",
+                            CreatedDate = new DateTime(2024, 4, 11, 12, 50, 50, 45, DateTimeKind.Local).AddTicks(1539),
+                            FileName = "test/meaninuser",
+                            FileType = "images/png",
                             IsDeleted = false
                         },
                         new
                         {
                             Id = new Guid("adb79c2d-b859-4ee6-acfa-8a81bf83fd68"),
                             CreatedBy = "Admin",
-                            CreatedDate = new DateTime(2024, 4, 9, 22, 54, 54, 820, DateTimeKind.Local).AddTicks(8128),
-                            FileName = "images/test/meanoutuser",
-                            FileType = "png",
+                            CreatedDate = new DateTime(2024, 4, 11, 12, 50, 50, 45, DateTimeKind.Local).AddTicks(1569),
+                            FileName = "test/meanoutuser",
+                            FileType = "images/png",
                             IsDeleted = false
                         },
                         new
                         {
                             Id = new Guid("3eb72197-9048-4826-ad10-cbca7094a4d1"),
                             CreatedBy = "Admin",
-                            CreatedDate = new DateTime(2024, 4, 9, 22, 54, 54, 820, DateTimeKind.Local).AddTicks(8134),
-                            FileName = "images/test/meanproduct",
-                            FileType = "jpg",
+                            CreatedDate = new DateTime(2024, 4, 11, 12, 50, 50, 45, DateTimeKind.Local).AddTicks(1572),
+                            FileName = "test/meanproduct",
+                            FileType = "images/jpg",
                             IsDeleted = false
                         });
-                });
-
-            modelBuilder.Entity("TechBlog.Entity.Entities.ArticleVisitor", b =>
-                {
-                    b.Property<Guid>("ArticleId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("VisitorId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ArticleId", "VisitorId");
-
-                    b.HasIndex("VisitorId");
-
-                    b.ToTable("ArticleVisitors");
                 });
 
             modelBuilder.Entity("TechBlog.Entity.Entities.Visitor", b =>
@@ -562,18 +516,18 @@ namespace TechBlog.DataAccess.Migrations
                     b.ToTable("Visitors");
                 });
 
-            modelBuilder.Entity("TechBlog.Entity.Entites.AppRoleClaim", b =>
+            modelBuilder.Entity("TechBlog.Entity.Entities.AppRoleClaim", b =>
                 {
-                    b.HasOne("TechBlog.Entity.Entites.AppRole", null)
+                    b.HasOne("TechBlog.Entity.Entities.AppRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TechBlog.Entity.Entites.AppUser", b =>
+            modelBuilder.Entity("TechBlog.Entity.Entities.AppUser", b =>
                 {
-                    b.HasOne("TechBlog.Entity.Entites.Image", "Image")
+                    b.HasOne("TechBlog.Entity.Entities.Image", "Image")
                         .WithMany("Users")
                         .HasForeignKey("ImageId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -582,61 +536,61 @@ namespace TechBlog.DataAccess.Migrations
                     b.Navigation("Image");
                 });
 
-            modelBuilder.Entity("TechBlog.Entity.Entites.AppUserClaim", b =>
+            modelBuilder.Entity("TechBlog.Entity.Entities.AppUserClaim", b =>
                 {
-                    b.HasOne("TechBlog.Entity.Entites.AppUser", null)
+                    b.HasOne("TechBlog.Entity.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TechBlog.Entity.Entites.AppUserLogin", b =>
+            modelBuilder.Entity("TechBlog.Entity.Entities.AppUserLogin", b =>
                 {
-                    b.HasOne("TechBlog.Entity.Entites.AppUser", null)
+                    b.HasOne("TechBlog.Entity.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TechBlog.Entity.Entites.AppUserRole", b =>
+            modelBuilder.Entity("TechBlog.Entity.Entities.AppUserRole", b =>
                 {
-                    b.HasOne("TechBlog.Entity.Entites.AppRole", null)
+                    b.HasOne("TechBlog.Entity.Entities.AppRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TechBlog.Entity.Entites.AppUser", null)
+                    b.HasOne("TechBlog.Entity.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TechBlog.Entity.Entites.AppUserToken", b =>
+            modelBuilder.Entity("TechBlog.Entity.Entities.AppUserToken", b =>
                 {
-                    b.HasOne("TechBlog.Entity.Entites.AppUser", null)
+                    b.HasOne("TechBlog.Entity.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TechBlog.Entity.Entites.Article", b =>
+            modelBuilder.Entity("TechBlog.Entity.Entities.Article", b =>
                 {
-                    b.HasOne("TechBlog.Entity.Entites.Category", "Category")
+                    b.HasOne("TechBlog.Entity.Entities.Category", "Category")
                         .WithMany("Articles")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TechBlog.Entity.Entites.Image", "Image")
+                    b.HasOne("TechBlog.Entity.Entities.Image", "Image")
                         .WithMany("Articles")
                         .HasForeignKey("ImageId");
 
-                    b.HasOne("TechBlog.Entity.Entites.AppUser", "User")
+                    b.HasOne("TechBlog.Entity.Entities.AppUser", "User")
                         .WithMany("Articles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -651,7 +605,7 @@ namespace TechBlog.DataAccess.Migrations
 
             modelBuilder.Entity("TechBlog.Entity.Entities.ArticleVisitor", b =>
                 {
-                    b.HasOne("TechBlog.Entity.Entites.Article", "Article")
+                    b.HasOne("TechBlog.Entity.Entities.Article", "Article")
                         .WithMany("ArticleVisitors")
                         .HasForeignKey("ArticleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -668,22 +622,22 @@ namespace TechBlog.DataAccess.Migrations
                     b.Navigation("Visitor");
                 });
 
-            modelBuilder.Entity("TechBlog.Entity.Entites.AppUser", b =>
+            modelBuilder.Entity("TechBlog.Entity.Entities.AppUser", b =>
                 {
                     b.Navigation("Articles");
                 });
 
-            modelBuilder.Entity("TechBlog.Entity.Entites.Article", b =>
+            modelBuilder.Entity("TechBlog.Entity.Entities.Article", b =>
                 {
                     b.Navigation("ArticleVisitors");
                 });
 
-            modelBuilder.Entity("TechBlog.Entity.Entites.Category", b =>
+            modelBuilder.Entity("TechBlog.Entity.Entities.Category", b =>
                 {
                     b.Navigation("Articles");
                 });
 
-            modelBuilder.Entity("TechBlog.Entity.Entites.Image", b =>
+            modelBuilder.Entity("TechBlog.Entity.Entities.Image", b =>
                 {
                     b.Navigation("Articles");
 
