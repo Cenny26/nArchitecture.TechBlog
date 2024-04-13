@@ -1,0 +1,20 @@
+﻿@model List<RecommendedArticleDto>
+
+<div class="content">
+    <ul>
+        @foreach (var article in Model)
+        {
+            <li>
+                <a asp-controller="Home" asp-action="Detail" asp-route-articleId="@article.Id">
+                    <h5>@article.Title</h5>
+                    <p>
+                        @(article.Content.Length > 50 ? article.Content.Substring(0, 50) : article.Content) ...
+                    </p>
+                    <span>
+                        @article.CreatedDate.ToString("MMMM dd, yyyy")
+                    </span>
+                </a>
+            </li>
+        }
+    </ul>
+</div>

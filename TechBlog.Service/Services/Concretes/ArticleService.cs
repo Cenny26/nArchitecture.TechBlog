@@ -118,6 +118,30 @@ public class ArticleService : IArticleService
         }
     }
 
+    public async Task<List<RecommendedArticleDto>> GetRandomRecommendedArticlesAsync()
+    {
+        _logger.LogDebug(FormatLogMessages.EventDebug("GetRandomRecommendedArticlesAsync", "called"));
+
+        try
+        {
+            var random = new Random();
+
+            var articles = await _unitOfWork.GetRepository<Article>().GetAllAsync();
+            var randomArticles = articles.Count() >= 3
+                                ? articles.OrderBy(x => random.Next()).Take(3)
+                                : articles;
+            var map = _mapper.Map<List<RecommendedArticleDto>>(randomArticles);
+
+            _logger.LogDebug(FormatLogMessages.EventDebug("GetRandomRecommendedArticlesAsync", "completed"));
+            return map;
+        }
+        catch (Exception exc)
+        {
+            _logger.LogError(exc, FormatLogMessages.EventError("fetching", "the recommended articles"));
+            throw;
+        }
+    }
+
     public async Task<string> UpdateArticleAsync(ArticleUpdateDto articleUpdateDto)
     {
         _logger.LogDebug(FormatLogMessages.EventDebug("UpdateArticleAsync", "called"));
