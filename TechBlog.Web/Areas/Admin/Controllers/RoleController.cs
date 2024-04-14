@@ -20,7 +20,6 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         public async Task<IActionResult> Index()
         {
             var roles = await _roleService.GetAllRolesAsync();
-
             return View(roles);
         }
     }

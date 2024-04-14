@@ -14,7 +14,6 @@ namespace TechBlog.Service.Services.Concretes
         private readonly RoleManager<AppRole> _roleManager;
         private readonly IMapper _mapper;
         private readonly ILogger<RoleService> _logger;
-
         public RoleService(RoleManager<AppRole> roleManager, IMapper mapper, ILogger<RoleService> logger)
         {
             _roleManager = roleManager;

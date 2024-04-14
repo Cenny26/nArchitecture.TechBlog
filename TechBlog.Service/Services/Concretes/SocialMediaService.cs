@@ -5,23 +5,20 @@ using System.Security.Claims;
 using TechBlog.DataAccess.UnitOfWorks;
 using TechBlog.Entity.DTOs.SocialMediaAccounts;
 using TechBlog.Entity.Entities;
+using TechBlog.Service.Bases;
 using TechBlog.Service.Extensions;
 using TechBlog.Service.Helpers.Constants;
 using TechBlog.Service.Services.Abstractions;
 
 namespace TechBlog.Service.Services.Concretes
 {
-    public class SocialMediaService : ISocialMediaService
+    public class SocialMediaService : BaseHandler, ISocialMediaService
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
         private readonly ILogger<SocialMediaService> _logger;
         private readonly IHttpContextAccessor _accessor;
         private readonly ClaimsPrincipal _user;
-        public SocialMediaService(IUnitOfWork unitOfWork, IMapper mapper, ILogger<SocialMediaService> logger, IHttpContextAccessor accessor)
+        public SocialMediaService(IUnitOfWork _unitOfWork, IMapper _mapper, ILogger<SocialMediaService> logger, IHttpContextAccessor accessor) : base(_unitOfWork, _mapper)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
             _logger = logger;
             _accessor = accessor;
             _user = _accessor.HttpContext.User;
@@ -76,6 +73,8 @@ namespace TechBlog.Service.Services.Concretes
                 var media = await _unitOfWork.GetRepository<SocialMediaAccount>().GetByGuidAsync(mediaId);
 
                 media.IsDeleted = true;
+                media.ModifiedBy = userEmail;
+                media.ModifiedDate = DateTime.Now;
                 media.DeletedTime = DateTime.Now;
                 media.DeletedBy = userEmail;
 
@@ -99,9 +98,13 @@ namespace TechBlog.Service.Services.Concretes
 
             try
             {
+                var userEmail = _user.GetLoggedInEmail();
+
                 var media = await _unitOfWork.GetRepository<SocialMediaAccount>().GetByGuidAsync(mediaId);
 
                 media.IsDeleted = false;
+                media.ModifiedBy = userEmail;
+                media.ModifiedDate = DateTime.Now;
                 media.DeletedTime = null;
                 media.DeletedBy = null;
 
@@ -172,6 +175,7 @@ namespace TechBlog.Service.Services.Concretes
                 socialMedia.MediaName = socialMediaUpdateDto.MediaName;
                 socialMedia.NormalizedMediaName = socialMediaUpdateDto.NormalizedMediaName;
                 socialMedia.MediaLink = socialMediaUpdateDto.MediaLink;
+                socialMedia.ModifiedBy = userEmail;
                 socialMedia.ModifiedDate = DateTime.Now;
 
                 await _unitOfWork.GetRepository<SocialMediaAccount>().UpdateAsync(socialMedia);

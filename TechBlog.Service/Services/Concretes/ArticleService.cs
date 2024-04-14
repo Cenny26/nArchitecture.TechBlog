@@ -6,6 +6,7 @@ using TechBlog.DataAccess.UnitOfWorks;
 using TechBlog.Entity.DTOs.Articles;
 using TechBlog.Entity.Entities;
 using TechBlog.Entity.Enums;
+using TechBlog.Service.Bases;
 using TechBlog.Service.Extensions;
 using TechBlog.Service.Helpers.Constants;
 using TechBlog.Service.Helpers.Images.Abstractions;
@@ -15,18 +16,14 @@ using TechBlog.Service.Services.Abstractions;
 
 namespace TechBlog.Service.Services.Concretes;
 
-public class ArticleService : IArticleService
+public class ArticleService : BaseHandler, IArticleService
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
     private readonly IHttpContextAccessor _accessor;
     private readonly IImageHelper _imageHelper;
     private readonly ILogger<ArticleService> _logger;
     private readonly ClaimsPrincipal _user;
-    public ArticleService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor accessor, IImageHelper imageHelper, ILogger<ArticleService> logger)
+    public ArticleService(IUnitOfWork _unitOfWork, IMapper _mapper, IHttpContextAccessor accessor, IImageHelper imageHelper, ILogger<ArticleService> logger) : base(_unitOfWork, _mapper)
     {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
         _accessor = accessor;
         _imageHelper = imageHelper;
         _logger = logger;
@@ -210,6 +207,8 @@ public class ArticleService : IArticleService
             var article = await _unitOfWork.GetRepository<Article>().GetByGuidAsync(articleId);
 
             article.IsDeleted = true;
+            article.ModifiedBy = userEmail;
+            article.ModifiedDate = DateTime.Now;
             article.DeletedTime = DateTime.Now;
             article.DeletedBy = userEmail;
 
@@ -252,9 +251,13 @@ public class ArticleService : IArticleService
 
         try
         {
+            var userEmail = _user.GetLoggedInEmail();
+
             var article = await _unitOfWork.GetRepository<Article>().GetByGuidAsync(articleId);
 
             article.IsDeleted = false;
+            article.ModifiedBy = userEmail;
+            article.ModifiedDate = DateTime.Now;
             article.DeletedTime = null;
             article.DeletedBy = null;
 

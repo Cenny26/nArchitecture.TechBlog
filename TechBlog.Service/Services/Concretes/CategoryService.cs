@@ -5,6 +5,7 @@ using System.Security.Claims;
 using TechBlog.DataAccess.UnitOfWorks;
 using TechBlog.Entity.DTOs.Categories;
 using TechBlog.Entity.Entities;
+using TechBlog.Service.Bases;
 using TechBlog.Service.Extensions;
 using TechBlog.Service.Helpers.Constants;
 using TechBlog.Service.Services.Abstractions;
@@ -13,18 +14,13 @@ using TechBlog.Service.Services.Abstractions;
 
 namespace TechBlog.Service.Services.Concretes
 {
-    public class CategoryService : ICategoryService
+    public class CategoryService : BaseHandler, ICategoryService
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _accessor;
         private readonly ILogger<CategoryService> _logger;
         private readonly ClaimsPrincipal _user;
-
-        public CategoryService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor accessor, ILogger<CategoryService> logger)
+        public CategoryService(IUnitOfWork _unitOfWork, IMapper _mapper, IHttpContextAccessor accessor, ILogger<CategoryService> logger) : base(_unitOfWork, _mapper)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
             _accessor = accessor;
             _logger = logger;
             _user = _accessor.HttpContext.User;
@@ -147,6 +143,8 @@ namespace TechBlog.Service.Services.Concretes
 
                 category.IsDeleted = true;
                 category.DeletedBy = userEmail;
+                category.DeletedTime = DateTime.Now;
+                category.ModifiedBy = userEmail;
                 category.ModifiedDate = DateTime.Now;
 
                 await _unitOfWork.GetRepository<Category>().UpdateAsync(category);
@@ -162,7 +160,7 @@ namespace TechBlog.Service.Services.Concretes
             }
         }
 
-        public async Task<List<CategoryDto>> GetAllCategoriesDeleted()
+        public async Task<List<CategoryDto>> GetAllDeletedCategoriesAsync()
         {
             _logger.LogDebug(FormatLogMessages.EventDebug("GetAllCategoriesDeleted", "called"));
 
@@ -187,11 +185,15 @@ namespace TechBlog.Service.Services.Concretes
 
             try
             {
+                var userEmail = _user.GetLoggedInEmail();
+
                 var category = await _unitOfWork.GetRepository<Category>().GetByGuidAsync(categoryId);
 
                 category.IsDeleted = false;
                 category.DeletedTime = null;
                 category.DeletedBy = null;
+                category.DeletedTime = DateTime.Now;
+                category.ModifiedBy = userEmail;
 
                 await _unitOfWork.GetRepository<Category>().UpdateAsync(category);
                 await _unitOfWork.SaveAsync();

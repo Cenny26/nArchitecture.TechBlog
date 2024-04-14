@@ -67,6 +67,7 @@ namespace TechBlog.Web.Areas.Admin.Controllers
                 {
                     result.AddingToIdentityModelState(this.ModelState);
                     validation.AddingToModelState(this.ModelState);
+
                     return View(new UserAddDto() { Roles = roles });
                 }
             }

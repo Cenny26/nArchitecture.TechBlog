@@ -7,7 +7,7 @@ namespace TechBlog.Service.Services.Abstractions
     {
         Task<List<CategoryDto>> GetAllCategoriesNonDeleted();
         Task<List<CategoryDto>> GetAllCategoriesNonDeletedTake24();
-        Task<List<CategoryDto>> GetAllCategoriesDeleted();
+        Task<List<CategoryDto>> GetAllDeletedCategoriesAsync();
         Task CreateCategoryAsync(CategoryAddDto categoryAddDto);
         Task<Category> GetCategoryByGuid(Guid categoryId);
         Task<string> UpdateCategoryAsync(CategoryUpdateDto categoryUpdateDto);

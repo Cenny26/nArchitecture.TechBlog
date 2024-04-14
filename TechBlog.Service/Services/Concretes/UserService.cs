@@ -7,26 +7,23 @@ using TechBlog.DataAccess.UnitOfWorks;
 using TechBlog.Entity.DTOs.Users;
 using TechBlog.Entity.Entities;
 using TechBlog.Entity.Enums;
+using TechBlog.Service.Bases;
 using TechBlog.Service.Extensions;
 using TechBlog.Service.Helpers.Images.Abstractions;
 using TechBlog.Service.Services.Abstractions;
 
 namespace TechBlog.Service.Services.Concretes
 {
-    public class UserService : IUserService
+    public class UserService : BaseHandler, IUserService
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<AppRole> _roleManager;
         private readonly IHttpContextAccessor _accessor;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IImageHelper _imageHelper;
         private readonly ClaimsPrincipal _user;
-        public UserService(IUnitOfWork unitOfWork, IMapper mapper, UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, IHttpContextAccessor accessor, SignInManager<AppUser> signInManager, IImageHelper imageHelper)
+        public UserService(IUnitOfWork _unitOfWork, IMapper _mapper, UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, IHttpContextAccessor accessor, SignInManager<AppUser> signInManager, IImageHelper imageHelper) : base(_unitOfWork, _mapper)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
             _userManager = userManager;
             _roleManager = roleManager;
             _accessor = accessor;

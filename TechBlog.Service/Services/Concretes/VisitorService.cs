@@ -13,7 +13,6 @@ namespace TechBlog.Service.Services.Concretes
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<VisitorService> _logger;
-
         public VisitorService(IUnitOfWork unitOfWork, ILogger<VisitorService> logger)
         {
             _unitOfWork = unitOfWork;

@@ -40,7 +40,7 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         [Authorize(Roles = $"{RoleConsts.Superadmin}, {RoleConsts.Admin}")]
         public async Task<IActionResult> DeletedCategories()
         {
-            var categories = await _categoryService.GetAllCategoriesDeleted();
+            var categories = await _categoryService.GetAllDeletedCategoriesAsync();
             return View(categories);
         }
 
