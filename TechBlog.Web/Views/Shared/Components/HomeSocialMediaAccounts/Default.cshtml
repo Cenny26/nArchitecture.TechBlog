@@ -1,0 +1,14 @@
+﻿@model List<SocialMediaAccountDto>
+
+<div class="collapse navbar-collapse" style="flex-grow:0" id="navbarResponsive">
+    <ul class="navbar-nav ml-auto">
+        @foreach (var media in Model)
+        {
+            <li class="nav-item active">
+                <a href="@media.MediaLink" class="nav-link" target="_blank">
+                    <i style="font-size: 22px;" class="fa-brands fa-@media.MediaName"></i>
+                </a>
+            </li>
+        }
+    </ul>
+</div>

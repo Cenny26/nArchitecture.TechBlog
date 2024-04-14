@@ -69,5 +69,13 @@
                 return "An error occurred while updating the profile.";
             }
         }
+
+        public static class GeneralHomePageData
+        {
+            public static string FruitlessSearch()
+            {
+                return "No articles were found as a result of your search! You can continue searching on the home page.";
+            }
+        }
     }
 }

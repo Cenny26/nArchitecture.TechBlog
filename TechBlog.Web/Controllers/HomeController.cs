@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
+using NToastNotify;
 using System.Diagnostics;
 using TechBlog.Entity.Entities;
 using TechBlog.Service.Services.Abstractions;
 using TechBlog.Web.Models;
+using TechBlog.Web.ResultMessages;
 
 namespace TechBlog.Web.Controllers;
 
@@ -11,12 +13,14 @@ public class HomeController : Controller
     private readonly IArticleService _articleService;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IVisitorService _visitorService;
+    private readonly IToastNotification _notification;
 
-    public HomeController(IArticleService articleService, IHttpContextAccessor httpContextAccessor, IVisitorService visitorService)
+    public HomeController(IArticleService articleService, IHttpContextAccessor httpContextAccessor, IVisitorService visitorService, IToastNotification notification)
     {
         _articleService = articleService;
         _httpContextAccessor = httpContextAccessor;
         _visitorService = visitorService;
+        _notification = notification;
     }
 
     [HttpGet]
@@ -34,7 +38,13 @@ public class HomeController : Controller
     public async Task<IActionResult> Search(string keyword, int currentPage = 1, int pageSize = 3, bool isAscending = false)
     {
         var articles = await _articleService.SearchAsync(keyword, currentPage, pageSize, isAscending);
-        return View(articles);
+        if (articles.Articles.Count > 0)
+        {
+            return View(articles);
+        }
+
+        _notification.AddInfoToastMessage(ActionMessages.GeneralHomePageData.FruitlessSearch(), new ToastrOptions { Title = "A fruitless search!" });
+        return RedirectToAction("Index");
     }
 
     [HttpGet]

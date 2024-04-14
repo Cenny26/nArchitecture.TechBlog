@@ -1,0 +1,10 @@
+﻿@model List<SocialMediaAccountDto>
+
+<div class="col-lg-12">
+    <ul class="social-icons">
+        @foreach (var media in Model)
+        {
+            <li><a href="@media.MediaLink" target="_blank">@media.NormalizedMediaName</a></li>
+        }
+    </ul>
+</div>

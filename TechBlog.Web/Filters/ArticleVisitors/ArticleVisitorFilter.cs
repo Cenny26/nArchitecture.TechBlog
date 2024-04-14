@@ -9,7 +9,6 @@ namespace TechBlog.Web.Filters.ArticleVisitors
     public class ArticleVisitorFilter : IAsyncActionFilter
     {
         private readonly IVisitorService _visitorService;
-
         public ArticleVisitorFilter(IVisitorService visitorService)
         {
             _visitorService = visitorService;
@@ -34,8 +33,6 @@ namespace TechBlog.Web.Filters.ArticleVisitors
             {
                 await _visitorService.CreateVisitorAsync(visitor);
             }
-
-            await next();
         }
     }
 }
