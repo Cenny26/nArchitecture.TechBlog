@@ -23,7 +23,6 @@ namespace TechBlog.Service.Services.Concretes
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IImageHelper _imageHelper;
         private readonly ClaimsPrincipal _user;
-
         public UserService(IUnitOfWork unitOfWork, IMapper mapper, UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, IHttpContextAccessor accessor, SignInManager<AppUser> signInManager, IImageHelper imageHelper)
         {
             _unitOfWork = unitOfWork;

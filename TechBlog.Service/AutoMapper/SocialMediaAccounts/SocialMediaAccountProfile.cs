@@ -9,6 +9,8 @@ namespace TechBlog.Service.AutoMapper.SocialMediaAccounts
         public SocialMediaAccountProfile()
         {
             CreateMap<SocialMediaAccountDto, SocialMediaAccount>().ReverseMap();
+            CreateMap<SocialMediaAddDto, SocialMediaAccount>().ReverseMap();
+            CreateMap<SocialMediaUpdateDto, SocialMediaAccount>().ReverseMap();
         }
     }
 }

@@ -16,7 +16,7 @@ namespace TechBlog.DataAccess.Mappings
                 MediaName = "linkedin",
                 NormalizedMediaName = "LINKEDIN",
                 MediaLink = "https://www.linkedin.com/in/Kennans26",
-                CreatedBy = "superadmin@gmai.com",
+                CreatedBy = "superadmin@gmail.com",
                 CreatedDate = DateTime.Now
             };
             var githubAcc = new SocialMediaAccount()
@@ -25,7 +25,7 @@ namespace TechBlog.DataAccess.Mappings
                 MediaName = "github",
                 NormalizedMediaName = "GITHUB",
                 MediaLink = "https://www.github.com/Cenny26",
-                CreatedBy = "superadmin@gmai.com",
+                CreatedBy = "superadmin@gmail.com",
                 CreatedDate = DateTime.Now
             };
             var instagramAcc = new SocialMediaAccount()
@@ -34,7 +34,7 @@ namespace TechBlog.DataAccess.Mappings
                 MediaName = "instagram",
                 NormalizedMediaName = "INSTAGRAM",
                 MediaLink = "https://www.instagram.com/Kennans26",
-                CreatedBy = "superadmin@gmai.com",
+                CreatedBy = "superadmin@gmail.com",
                 CreatedDate = DateTime.Now
             };
 

@@ -23,7 +23,6 @@ public class ArticleService : IArticleService
     private readonly IImageHelper _imageHelper;
     private readonly ILogger<ArticleService> _logger;
     private readonly ClaimsPrincipal _user;
-
     public ArticleService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor accessor, IImageHelper imageHelper, ILogger<ArticleService> logger)
     {
         _unitOfWork = unitOfWork;

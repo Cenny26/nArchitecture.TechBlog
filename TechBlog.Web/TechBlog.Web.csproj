@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Content Remove="Areas\Admin\Views\SocialMedia\DeletedSocialMediaAccounts.cshtml" />
       <Content Remove="Views\Home\ComingSoon.cshtml" />
       <Content Remove="Views\Home\Search.cshtml" />
     </ItemGroup>
@@ -40,17 +41,23 @@
     </ItemGroup>
 
     <ItemGroup>
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\SocialMedia\DeletedSocialMediaAccounts.cshtml" />
       <_ContentIncludedByDefault Remove="Views\Home\ComingSoon.cshtml" />
       <_ContentIncludedByDefault Remove="Views\Home\Search.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
+      <None Include="Areas\Admin\Views\SocialMedia\DeletedSocialMediaAccounts.cshtml" />
       <None Include="Views\Home\ComingSoon.cshtml" />
       <None Include="Views\Home\Search.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
       <UpToDateCheckInput Remove="Views\Home\ComingSoon.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <UpToDateCheckInput Remove="Areas\Admin\Views\SocialMedia\DeletedSocialMediaAccounts.cshtml" />
     </ItemGroup>
 
 </Project>

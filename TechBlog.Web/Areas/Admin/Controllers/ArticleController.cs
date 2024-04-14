@@ -20,7 +20,6 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         private readonly IMapper _mapper;
         private readonly IValidator<Article> _validator;
         private readonly IToastNotification _notification;
-
         public ArticleController(IArticleService articleService, ICategoryService categoryService, IMapper mapper, IValidator<Article> validator, IToastNotification notification)
         {
             _articleService = articleService;
@@ -64,6 +63,7 @@ namespace TechBlog.Web.Areas.Admin.Controllers
             if (result.IsValid)
             {
                 await _articleService.CreateArticleAsync(articleAddDto);
+
                 _notification.AddSuccessToastMessage(ActionMessages.Article.Add(articleAddDto.Title), new ToastrOptions { Title = "Successful!" });
                 return RedirectToAction("Index", "Article", new { Area = "Admin" });
             }
@@ -91,7 +91,7 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = $"{RoleConsts.Superadmin}, {RoleConsts.Admin}")] 
+        [Authorize(Roles = $"{RoleConsts.Superadmin}, {RoleConsts.Admin}")]
         public async Task<IActionResult> Update(ArticleUpdateDto articleUpdateDto)
         {
             var map = _mapper.Map<Article>(articleUpdateDto);
@@ -100,8 +100,8 @@ namespace TechBlog.Web.Areas.Admin.Controllers
             if (result.IsValid)
             {
                 var title = await _articleService.UpdateArticleAsync(articleUpdateDto);
-                _notification.AddSuccessToastMessage(ActionMessages.Article.Update(title), new ToastrOptions { Title = "Successful!" });
 
+                _notification.AddSuccessToastMessage(ActionMessages.Article.Update(title), new ToastrOptions { Title = "Successful!" });
                 return RedirectToAction("Index", "Article", new { Area = "Admin" });
             }
             else
@@ -120,8 +120,8 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         public async Task<IActionResult> Delete(Guid articleId)
         {
             var title = await _articleService.SafeDeleteArticleAsync(articleId);
-            _notification.AddSuccessToastMessage(ActionMessages.Article.Delete(title), new ToastrOptions { Title = "Successful!" });
 
+            _notification.AddSuccessToastMessage(ActionMessages.Article.Delete(title), new ToastrOptions { Title = "Successful!" });
             return RedirectToAction("Index", "Article", new { Area = "Admin" });
         }
 
@@ -130,8 +130,8 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         public async Task<IActionResult> UndoDelete(Guid articleId)
         {
             var title = await _articleService.UndoDeleteArticleAsync(articleId);
-            _notification.AddSuccessToastMessage(ActionMessages.Article.UndoDelete(title), new ToastrOptions { Title = "Successful!" });
 
+            _notification.AddSuccessToastMessage(ActionMessages.Article.UndoDelete(title), new ToastrOptions { Title = "Successful!" });
             return RedirectToAction("Index", "Article", new { Area = "Admin" });
         }
     }

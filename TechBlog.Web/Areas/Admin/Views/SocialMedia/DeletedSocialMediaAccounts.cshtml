@@ -1,0 +1,71 @@
+﻿@model List<SocialMediaAccountDto>
+
+<div class="container-xxl flex-grow-1 container-p-y">
+
+    <h4 class="py-3 mb-4">
+        <span class="text-muted fw-light">Recycle Bin /</span> Social Media
+    </h4>
+
+    <!-- Basic Bootstrap Table -->
+    <div class="card">
+        <div class="table-responsive text-nowrap m-5">
+
+            <table class="table table-bordered" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Media Name</th>
+                        <th>Media Link</th>
+                        <th>Created Date</th>
+                        <th>Creator</th>
+                        <th>Status</th>
+                        @{
+                            @if (User.IsInRole(RoleConsts.Superadmin))
+                            {
+                                <th>Transactions</th>
+                            }
+                        }
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>Media Name</th>
+                        <th>Media Link</th>
+                        <th>Created Date</th>
+                        <th>Creator</th>
+                        <th>Status</th>
+                        @{
+                            @if (User.IsInRole(RoleConsts.Superadmin))
+                            {
+                                <th>Transactions</th>
+                            }
+                        }
+                    </tr>
+                </tfoot>
+                <tbody class="table-border-bottom-0">
+                    @foreach (var media in Model)
+                    {
+                        <tr name="@media.Id">
+                            <td>@media.MediaName</td>
+                            <td>@media.MediaLink</td>
+                            <td>@media.CreatedDate.ToShortDateString()</td>
+                            <td>@media.CreatedBy</td>
+                            <td>@(media.IsDeleted ? "Inactive" : "Active")</td>
+                            @{
+                                @if (User.IsInRole(RoleConsts.Superadmin))
+                                {
+                                    <td>
+                                        <a class="btn btn-warning btn-sm" data-id="@media.Id" asp-route-mediaId="@media.Id" asp-area="Admin" asp-controller="SocialMedia" asp-action="UndoDelete">
+                                            <i class="bx bx-undo"></i>
+                                        </a>
+                                    </td>
+                                }
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!--/ Basic Bootstrap Table -->
+
+</div>

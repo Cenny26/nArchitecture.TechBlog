@@ -70,6 +70,26 @@
             }
         }
 
+        public static class SocialMedia
+        {
+            public static string Add(string mediaName)
+            {
+                return $"Social Media with name: {mediaName} has been added successfully.";
+            }
+            public static string Update(string mediaName)
+            {
+                return $"Social Media with name: {mediaName} has been updated successfully.";
+            }
+            public static string Delete(string mediaName)
+            {
+                return $"Social Meida with name: {mediaName} has been deleted successfully.";
+            }
+            public static string UndoDelete(string mediaName)
+            {
+                return $"Social Media with name: {mediaName} has been successfully undo from deleted social medias.";
+            }
+        }
+
         public static class GeneralHomePageData
         {
             public static string FruitlessSearch()
