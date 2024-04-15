@@ -96,6 +96,10 @@
             {
                 return "No articles were found as a result of your search! You can continue searching on the home page.";
             }
+            public static string EmptyCategorySearch()
+            {
+                return "There are currently no articles in this category. You can continue your search from the main page.";
+            }
         }
     }
 }
