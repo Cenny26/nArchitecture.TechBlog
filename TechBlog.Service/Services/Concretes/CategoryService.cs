@@ -45,21 +45,36 @@ namespace TechBlog.Service.Services.Concretes
             }
         }
 
-        public async Task<List<CategoryDto>> GetAllCategoriesNonDeletedTake24()
+        public async Task<List<CategoryDto>> GetRandomlyNonDeletedAndNonEmptyCategories()
         {
-            _logger.LogDebug(FormatLogMessages.EventDebug("GetAllCategoriesNonDeletedTake24", "called"));
+            _logger.LogDebug(FormatLogMessages.EventDebug("GetRandomlyNonDeletedAndNonEmptyCategories", "called"));
 
             try
             {
+                var randomCount = 12;
                 var categories = await _unitOfWork.GetRepository<Category>().GetAllAsync(x => !x.IsDeleted);
-                var map = _mapper.Map<List<CategoryDto>>(categories);
+                var nonEmptyCategories = new List<Category>();
 
-                _logger.LogDebug(FormatLogMessages.EventDebug("GetAllCategoriesNonDeletedTake24", "completed"));
-                return map.Take(24).ToList();
+                foreach (var category in categories)
+                {
+                    var articleCount = await _unitOfWork.GetRepository<Article>().CountAsync(a => a.CategoryId == category.Id);
+
+                    if (articleCount > 0)
+                    {
+                        nonEmptyCategories.Add(category);
+                    }
+                }
+
+                int countToTake = Math.Min(randomCount, nonEmptyCategories.Count);
+                var randomCategories = nonEmptyCategories.OrderBy(x => Guid.NewGuid()).Take(countToTake).ToList();
+                var map = _mapper.Map<List<CategoryDto>>(randomCategories);
+
+                _logger.LogDebug(FormatLogMessages.EventDebug("GetRandomlyNonDeletedAndNonEmptyCategories", "completed"));
+                return map;
             }
             catch (Exception exc)
             {
-                _logger.LogError(exc, FormatLogMessages.EventError("fetching", "the non deleted categories - 24 item"));
+                _logger.LogError(exc, FormatLogMessages.EventError("fetching", "the non deleted and non empty categories"));
                 throw;
             }
         }

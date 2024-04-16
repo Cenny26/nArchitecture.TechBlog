@@ -13,7 +13,7 @@ namespace TechBlog.Web.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var recommendedArticles = await _articleService.GetRandomRecommendedArticlesAsync();
+            var recommendedArticles = await _articleService.GetRandomlyRecommendedArticlesAsync();
             return View(recommendedArticles);
         }
     }

@@ -13,7 +13,7 @@ namespace TechBlog.Web.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var categories = await _categoryService.GetAllCategoriesNonDeletedTake24();
+            var categories = await _categoryService.GetRandomlyNonDeletedAndNonEmptyCategories();
             return View(categories);
         }
     }

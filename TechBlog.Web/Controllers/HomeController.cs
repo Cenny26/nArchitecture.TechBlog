@@ -28,24 +28,9 @@ public class HomeController : Controller
         var articles = await _articleService.GetAllArticlesWithCategoriesNonDeletedAsync();
         var pagingList = await _articleService.GetAllByPagingAsync(categoryId, currentPage, pageSize, isAscending);
 
-        #region Base
-        //When the project is first opened, it will not contain any article or category entities. Note: we absolutely need a category to be able to add an article.
-        #endregion
-        #region Situation
-        //If you add a certain category, but do not add articles, the home page should not open. This is because the number of articles within the project is 0.
-        #endregion
-        #region Situation
-        //In 2 cases, confusion may arise. The first of them: the presence of a certain number of articles belonging to the category in the project, and the second: the absence of any articles belonging to the category in the project (the category already exists).
-        #endregion
-
         if (!articles.Any())
             return View("ComingSoon");
-        if (pagingList.Articles.Count > 0)
-            return View(pagingList);
-
-        //If the category exists and no article is found, then the Index method will be redirected again, just like the first time. As a result, we can continue with all the pages and articles.
-        _notification.AddInfoToastMessage(ActionMessages.GeneralHomePageData.EmptyCategorySearch(), new ToastrOptions { Title = "A fruitless search!" });
-        return RedirectToAction("Index");
+        return View(pagingList);
     }
 
     [HttpGet]

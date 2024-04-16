@@ -114,17 +114,18 @@ public class ArticleService : BaseHandler, IArticleService
         }
     }
 
-    public async Task<List<RecommendedArticleDto>> GetRandomRecommendedArticlesAsync()
+    public async Task<List<RecommendedArticleDto>> GetRandomlyRecommendedArticlesAsync()
     {
         _logger.LogDebug(FormatLogMessages.EventDebug("GetRandomRecommendedArticlesAsync", "called"));
 
         try
         {
+            var randomCount = 3;
             var random = new Random();
 
             var articles = await _unitOfWork.GetRepository<Article>().GetAllAsync();
-            var randomArticles = articles.Count() >= 3
-                                ? articles.OrderBy(x => random.Next()).Take(3)
+            var randomArticles = articles.Count() >= randomCount
+                                ? articles.OrderBy(x => random.Next()).Take(randomCount)
                                 : articles;
             var map = _mapper.Map<List<RecommendedArticleDto>>(randomArticles);
 

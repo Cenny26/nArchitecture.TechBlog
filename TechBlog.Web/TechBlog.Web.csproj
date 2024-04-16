@@ -7,6 +7,13 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="wwwroot\images\user-images\**" />
+      <Content Remove="wwwroot\images\user-images\**" />
+      <EmbeddedResource Remove="wwwroot\images\user-images\**" />
+      <None Remove="wwwroot\images\user-images\**" />
+    </ItemGroup>
+
+    <ItemGroup>
       <Content Remove="Areas\Admin\Views\SocialMedia\DeletedSocialMediaAccounts.cshtml" />
       <Content Remove="Views\Home\ComingSoon.cshtml" />
       <Content Remove="Views\Home\Search.cshtml" />
@@ -29,7 +36,6 @@
 
     <ItemGroup>
       <Folder Include="Areas\Admin\Models\" />
-      <Folder Include="wwwroot\images\user-images\" />
     </ItemGroup>
 
     <ItemGroup>
