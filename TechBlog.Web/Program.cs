@@ -18,6 +18,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.LoadServiceLayerExtensions(config);
 builder.Services.LoadDataLayerExtension(builder.Configuration);
+
+// Add services for storage or cloud
+//builder.Services.AddStorage<LocalStorage>();
+
 builder.Services.AddSession();
 
 builder.Services.AddControllersWithViews(opt =>

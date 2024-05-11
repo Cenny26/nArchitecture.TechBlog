@@ -20,9 +20,10 @@ namespace TechBlog.Service.Helpers.Images.Concretes
             wwwroot = _env.WebRootPath;
         }
 
+        // todo: Moved appropriate method to CharacterRegulatory method under NameOperation class!
         private string ReplaceInvalidChars(string fileName)
         {
-            return fileName         
+            return fileName
                  .Replace("!", "")
                  .Replace("'", "")
                  .Replace("^", "")
@@ -60,6 +61,7 @@ namespace TechBlog.Service.Helpers.Images.Concretes
                  .Replace(" ", "");
         }
 
+        // todo: Moved appropriate method to DeleteAsync method under LocalStorage class!
         public void Delete(string imageName)
         {
             var fileToDelete = Path.Combine($"{wwwroot}/{imgFolder}/{imageName}");
