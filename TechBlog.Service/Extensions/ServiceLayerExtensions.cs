@@ -13,6 +13,7 @@ using TechBlog.Service.Services.Abstractions;
 using TechBlog.Service.Services.Abstractions.Storage;
 using TechBlog.Service.Services.Concretes;
 using TechBlog.Service.Services.Concretes.Storage;
+using TechBlog.Service.Services.Concretes.Storage.Azure;
 using TechBlog.Service.Services.Concretes.Storage.Local;
 
 namespace TechBlog.Service.Extensions;
@@ -64,14 +65,14 @@ public static class ServiceLayerExtensions
 
     public static void AddStorage(this IServiceCollection services, StorageType storageType)
     {
-        // todo: case Azure need to scoped for AzureService
+        // done: case Azure need to scoped for AzureService
         switch (storageType)
         {
             case StorageType.Local:
                 services.AddScoped<IStorage, LocalStorage>();
                 break;
             case StorageType.Azure:
-                //services.AddScoped<IStorage, AzureStorage>();
+                services.AddScoped<IStorage, AzureStorage>();
                 break;
             case StorageType.AWS:
                 //services.AddScoped<IStorage, AWSStorage>();

@@ -26,7 +26,7 @@ namespace TechBlog.Service.Services.Concretes.Storage.Local
         }
 
         public bool HasFile(string path, string fileName)
-            => File.Exists($"{path}\\{fileName}");
+            => File.Exists($"{path}/{fileName}");
 
         public async Task<List<(string fileName, string pathOrContainerName)>> UploadAsync(string path, IFormFileCollection files)
         {
@@ -40,8 +40,8 @@ namespace TechBlog.Service.Services.Concretes.Storage.Local
             {
                 string newFileName = await FileRenameAsync(uploadPath, file.Name, HasFile);
 
-                await CopyFileAsync($"{uploadPath}\\{newFileName}", file);
-                datas.Add((newFileName, $"{path}\\{newFileName}"));
+                await CopyFileAsync($"{uploadPath}/{newFileName}", file);
+                datas.Add((newFileName, $"{path}/{newFileName}"));
             }
 
             // todo : if the above if is not valid, a warning exception must be created and thrown stating that an error is received while loading as files as a result!
