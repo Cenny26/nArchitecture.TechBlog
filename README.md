@@ -9,6 +9,7 @@ This project is a technology blog application developed using .NET Core MVC. The
 - **Microsoft Identity**: Microsoft Identity is used for authentication.
 - **Razor View**: Razor Views, Layouts are used for web pages.
 - **Service Logging**: Serilog library is used to log actions in services (text sink).
+- **Storage Services With Solid Infrastructure**: Using the benefits of object-oriented programming, a storage service with a solid infrastructure was created. As a result, all services had storage services with the same infrastructure, but working in a unique way. In the mentioned project, it is possible to store only locally and via Azure Portal (cloud).
 
 ## Project Structure
 
