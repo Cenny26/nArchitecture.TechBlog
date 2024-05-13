@@ -18,7 +18,6 @@ namespace TechBlog.Service.Services.Concretes.Storage.Local
                 File.Delete($"{path}\\{fileName}");
             });
 
-
         public List<string> GetFiles(string path)
         {
             DirectoryInfo directory = new DirectoryInfo(path);
@@ -26,11 +25,11 @@ namespace TechBlog.Service.Services.Concretes.Storage.Local
         }
 
         public bool HasFile(string path, string fileName)
-            => File.Exists($"{path}/{fileName}");
+            => File.Exists($"{path}\\{fileName}");
 
         public async Task<List<(string fileName, string pathOrContainerName)>> UploadAsync(string path, IFormFileCollection files)
         {
-            // example path: wwwroot/images/article-images
+            // example path: wwwroot\\images\\article-images
             string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, path);
             if (!Directory.Exists(uploadPath))
                 Directory.CreateDirectory(uploadPath);
@@ -38,10 +37,10 @@ namespace TechBlog.Service.Services.Concretes.Storage.Local
             List<(string fileName, string path)> datas = new List<(string fileName, string path)>();
             foreach (IFormFile file in files)
             {
-                string newFileName = await FileRenameAsync(uploadPath, file.Name, HasFile);
+                string newFileName = await FileRenameAsync(uploadPath, file.FileName, HasFile);
 
-                await CopyFileAsync($"{uploadPath}/{newFileName}", file);
-                datas.Add((newFileName, $"{path}/{newFileName}"));
+                await CopyFileAsync($"{uploadPath}\\{newFileName}", file);
+                datas.Add((newFileName, $"{path}\\{newFileName}"));
             }
 
             // todo : if the above if is not valid, a warning exception must be created and thrown stating that an error is received while loading as files as a result!

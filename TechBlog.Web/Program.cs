@@ -4,6 +4,7 @@ using TechBlog.DataAccess.Context;
 using TechBlog.DataAccess.Extensions;
 using TechBlog.Entity.Entities;
 using TechBlog.Service.Extensions;
+using TechBlog.Service.Services.Concretes.Storage.Local;
 using TechBlog.Web.Filters.ArticleVisitors;
 
 var config = new ConfigurationBuilder()
@@ -20,7 +21,7 @@ builder.Services.LoadServiceLayerExtensions(config);
 builder.Services.LoadDataLayerExtension(builder.Configuration);
 
 // Add services for storage or cloud
-//builder.Services.AddStorage<LocalStorage>();
+builder.Services.AddStorage<LocalStorage>();
 
 builder.Services.AddSession();
 

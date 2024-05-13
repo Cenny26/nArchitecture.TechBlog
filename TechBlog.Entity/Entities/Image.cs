@@ -4,10 +4,7 @@ namespace TechBlog.Entity.Entities;
 
 public class Image : EntityBase
 {
-    public Image()
-    {
-        
-    }
+    public Image() { }
     public Image(string fileName, string fileType, string createdBy)
     {
         FileName = fileName;

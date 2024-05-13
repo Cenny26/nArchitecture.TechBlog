@@ -1,5 +1,9 @@
 ﻿@model ArticleListDto
 
+@{
+    string FullyArticleImageDirWithoutHostEnv = FileInfoConsts.FullyArticleImageDirWithoutHostEnv;
+}
+
 <section class="blog-posts">
     <div class="container">
         <div class="row">
@@ -13,11 +17,7 @@
                                 <div class="blog-post">
                                     <div class="blog-thumb">
                                         @{
-                                            if (item.Image is null)
-                                            {
-                                                <img src="~/stand-blog/assets/images/blog-post-01.jpg" alt="@item.Title">
-                                            }
-                                            <img src="~/images/@item.Image.FileName" alt="@item.Title">
+                                            <img src="~/@FullyArticleImageDirWithoutHostEnv/@item.Image.FileName" alt="@item.Title">
                                         }
                                     </div>
                                     <div class="down-content">

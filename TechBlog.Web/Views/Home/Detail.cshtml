@@ -1,5 +1,9 @@
 ﻿@model ArticleDto
 
+@{
+    string FullyArticleImageDirWithoutHostEnv = FileInfoConsts.FullyArticleImageDirWithoutHostEnv;
+}
+
 <section class="blog-posts">
     <div class="container">
         <div class="row">
@@ -14,7 +18,7 @@
                                         {
                                             <img src="~/stand-blog/assets/images/blog-post-01.jpg" alt="@Model.Title">
                                         }
-                                        <img src="~/images/@Model.Image.FileName" alt="@Model.Title">
+                                        <img src="~/@FullyArticleImageDirWithoutHostEnv/@Model.Image.FileName" alt="@Model.Title">
                                     }
                                 </div>
                                 <div class="down-content">

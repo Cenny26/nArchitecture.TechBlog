@@ -13,7 +13,6 @@ namespace TechBlog.Service.Helpers.Images.Concretes
         private const string imgFolder = "images";
         private const string articleImagesFolder = "article-images";
         private const string userImagesFolder = "user-images";
-
         public ImageHelper(IWebHostEnvironment env)
         {
             _env = env;
@@ -61,20 +60,12 @@ namespace TechBlog.Service.Helpers.Images.Concretes
                  .Replace(" ", "");
         }
 
-        // todo: Moved appropriate method to DeleteAsync method under LocalStorage class!
-        public void Delete(string imageName)
-        {
-            var fileToDelete = Path.Combine($"{wwwroot}/{imgFolder}/{imageName}");
-            if (File.Exists(fileToDelete))
-                File.Delete(fileToDelete);
-        }
-
         public async Task<ImageUploadedDto> Upload(string name, IFormFile imageFile, ImageType imageType, string folderName = null)
         {
             folderName ??= imageType == ImageType.User ? userImagesFolder : articleImagesFolder;
 
-            if (!Directory.Exists($"{wwwroot}/{imgFolder}/{folderName}"))
-                Directory.CreateDirectory($"{wwwroot}/{imgFolder}/{folderName}");
+            if (!Directory.Exists($"{wwwroot}\\{imgFolder}\\{folderName}"))
+                Directory.CreateDirectory($"{wwwroot}\\{imgFolder}\\{folderName}");
 
             string oldFileName = Path.GetFileNameWithoutExtension(imageFile.FileName);
             string fileExtension = Path.GetExtension(imageFile.FileName);
@@ -85,7 +76,7 @@ namespace TechBlog.Service.Helpers.Images.Concretes
 
             string newFileName = $"{name}_{dateTime.Microsecond}{fileExtension}";
 
-            var path = Path.Combine($"{wwwroot}/{imgFolder}/{folderName}", newFileName);
+            var path = Path.Combine($"{wwwroot}\\{imgFolder}\\{folderName}", newFileName);
 
             await using var streaem = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None, 1024 * 1024, useAsync: false);
             await imageFile.CopyToAsync(streaem);

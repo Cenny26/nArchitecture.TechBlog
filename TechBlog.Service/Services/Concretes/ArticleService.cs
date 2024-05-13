@@ -5,12 +5,12 @@ using System.Security.Claims;
 using TechBlog.DataAccess.UnitOfWorks;
 using TechBlog.Entity.DTOs.Articles;
 using TechBlog.Entity.Entities;
-using TechBlog.Entity.Enums;
 using TechBlog.Service.Bases;
 using TechBlog.Service.Extensions;
 using TechBlog.Service.Helpers.Constants;
 using TechBlog.Service.Helpers.Images.Abstractions;
 using TechBlog.Service.Services.Abstractions;
+using TechBlog.Service.Services.Abstractions.Storage;
 
 #nullable disable
 
@@ -22,8 +22,10 @@ public class ArticleService : BaseHandler, IArticleService
     private readonly IImageHelper _imageHelper;
     private readonly ILogger<ArticleService> _logger;
     private readonly ClaimsPrincipal _user;
-    public ArticleService(IUnitOfWork _unitOfWork, IMapper _mapper, IHttpContextAccessor accessor, IImageHelper imageHelper, ILogger<ArticleService> logger) : base(_unitOfWork, _mapper)
+    private readonly IStorage _localStorage;
+    public ArticleService(IUnitOfWork _unitOfWork, IMapper _mapper, IHttpContextAccessor accessor, IImageHelper imageHelper, ILogger<ArticleService> logger, IStorage storage) : base(_unitOfWork, _mapper)
     {
+        _localStorage = storage;
         _accessor = accessor;
         _imageHelper = imageHelper;
         _logger = logger;
@@ -36,11 +38,17 @@ public class ArticleService : BaseHandler, IArticleService
 
         try
         {
-            var userId = _user.GetLoggedInUserId();
-            var userEmail = _user.GetLoggedInEmail();
+            Guid userId = _user.GetLoggedInUserId();
+            string userEmail = _user.GetLoggedInEmail();
 
-            var imageUpload = await _imageHelper.Upload(articleAddDto.Title, articleAddDto.Photo, ImageType.Post);
-            Image image = new Image(imageUpload.FullName, articleAddDto.Photo.ContentType, userEmail);
+            // note: in the current situation there should be only 1 photo/image for a article
+            FormFileCollection articlePhoto = new FormFileCollection();
+            articlePhoto.Add(articleAddDto.Photo);
+
+            // done: refactoring was carried out with IStorage, UploadAsync method
+            List<(string fileName, string pathOrContainerName)> fileDatas = await _localStorage.UploadAsync(FileInfoConsts.FullyArticleImageDirWithoutHostEnv, articlePhoto);
+
+            Image image = new Image(fileDatas.FirstOrDefault().fileName, articleAddDto.Photo.ContentType, userEmail);
 
             await _unitOfWork.GetRepository<Image>().AddAsync(image);
 
@@ -145,18 +153,29 @@ public class ArticleService : BaseHandler, IArticleService
 
         try
         {
-            var userEmail = _user.GetLoggedInEmail();
+            string userEmail = _user.GetLoggedInEmail();
 
-            var article = await _unitOfWork.GetRepository<Article>().GetAsync(x => !x.IsDeleted && x.Id == articleUpdateDto.Id, x => x.Category, i => i.Image);
+            Article article = await _unitOfWork.GetRepository<Article>().GetAsync(x => !x.IsDeleted && x.Id == articleUpdateDto.Id, x => x.Category, i => i.Image);
 
-            if (articleUpdateDto.Photo != null)
+            if (articleUpdateDto.Photo is not null)
             {
-                _imageHelper.Delete(article.Image.FileName);
+                // done: refactoring was carried out with IStorage, DeleteAsync method
+                await _localStorage.DeleteAsync(FileInfoConsts.FullyArticleImageDirectory, article.Image.FileName);
 
-                var imageUpload = await _imageHelper.Upload(articleUpdateDto.Title, articleUpdateDto.Photo, ImageType.Post);
-                Image image = new Image(imageUpload.FullName, articleUpdateDto.Photo.ContentType, userEmail);
+                Image oldestArticleImage = await _unitOfWork.GetRepository<Image>().GetByGuidAsync(article.Image.Id);
+                await _unitOfWork.GetRepository<Image>().DeleteAsync(oldestArticleImage);
+                await _unitOfWork.SaveAsync();
+
+                // note: in the current situation there should be only 1 photo/image for a article
+                FormFileCollection articleImages = new FormFileCollection();
+                articleImages.Add(articleUpdateDto.Photo);
+
+                List<(string fileName, string pathOrContainerName)> fileDatas = await _localStorage.UploadAsync(FileInfoConsts.FullyArticleImageDirWithoutHostEnv, articleImages);
+
+                Image image = new Image(fileDatas.FirstOrDefault().fileName, articleUpdateDto.Photo.ContentType, userEmail);
 
                 await _unitOfWork.GetRepository<Image>().AddAsync(image);
+                await _unitOfWork.SaveAsync();
 
                 article.ImageId = image.Id;
             }
