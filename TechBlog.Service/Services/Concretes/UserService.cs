@@ -9,7 +9,6 @@ using TechBlog.Entity.Entities;
 using TechBlog.Service.Bases;
 using TechBlog.Service.Extensions;
 using TechBlog.Service.Services.Abstractions;
-using TechBlog.Service.Services.Abstractions.Storage;
 
 namespace TechBlog.Service.Services.Concretes
 {
@@ -20,14 +19,12 @@ namespace TechBlog.Service.Services.Concretes
         private readonly IHttpContextAccessor _accessor;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly ClaimsPrincipal _user;
-        private readonly IStorage _localStorage;
-        public UserService(IUnitOfWork _unitOfWork, IMapper _mapper, UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, IHttpContextAccessor accessor, SignInManager<AppUser> signInManager, IStorage storage) : base(_unitOfWork, _mapper)
+        public UserService(IUnitOfWork _unitOfWork, IMapper _mapper, UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, IHttpContextAccessor accessor, SignInManager<AppUser> signInManager) : base(_unitOfWork, _mapper)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _accessor = accessor;
             _signInManager = signInManager;
-            _localStorage = storage;
             _user = _accessor.HttpContext.User;
         }
 

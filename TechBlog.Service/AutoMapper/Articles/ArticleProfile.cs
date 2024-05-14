@@ -2,16 +2,17 @@ using AutoMapper;
 using TechBlog.Entity.DTOs.Articles;
 using TechBlog.Entity.Entities;
 
-namespace TechBlog.Service.AutoMapper.Articles;
-
-public class ArticleProfile : Profile
+namespace TechBlog.Service.AutoMapper.Articles
 {
-    public ArticleProfile()
+    public class ArticleProfile : Profile
     {
-        CreateMap<ArticleDto, Article>().ReverseMap();
-        CreateMap<ArticleUpdateDto, Article>().ReverseMap();
-        CreateMap<ArticleUpdateDto, ArticleDto>().ReverseMap();
-        CreateMap<ArticleAddDto, Article>().ReverseMap();
-        CreateMap<RecommendedArticleDto, Article>().ReverseMap();
+        public ArticleProfile()
+        {
+            CreateMap<ArticleDto, Article>().ReverseMap();
+            CreateMap<ArticleUpdateDto, Article>().ReverseMap();
+            CreateMap<ArticleUpdateDto, ArticleDto>().ReverseMap();
+            CreateMap<ArticleAddDto, Article>().ReverseMap();
+            CreateMap<RecommendedArticleDto, Article>().ReverseMap();
+        }
     }
 }

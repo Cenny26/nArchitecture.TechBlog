@@ -6,6 +6,7 @@
         {
             return $"{methodName} service {methodEvent}.";
         }
+
         public static string EventError(string methodEvent, string typeModel)
         {
             return $"An error occurred while {methodEvent} {typeModel}!";

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TechBlog.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class RestoredDb : Migration
+    public partial class migration_1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -64,6 +64,27 @@ namespace TechBlog.DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Images", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SocialMediaAccounts",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    MediaName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NormalizedMediaName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MediaLink = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SocialMediaAccounts", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -291,19 +312,24 @@ namespace TechBlog.DataAccess.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("2f673fe9-4ad1-493c-ab04-b3619397deb5"), "591460c4-64ee-4472-a24e-d2a043c8399b", "Superadmin", "SUPERADMIN" },
-                    { new Guid("62c7c6fd-01d6-4410-9e4a-53490b59a3c7"), "f9fd7b63-f75e-413f-a1ab-25efba2040e2", "Admin", "ADMIN" },
-                    { new Guid("bf78885c-c25e-4fa8-bc01-7b90eb93c840"), "4978d896-c7df-422b-a5a8-fb86febbd177", "User", "USER" }
+                    { new Guid("2f673fe9-4ad1-493c-ab04-b3619397deb5"), "fd9df3f1-8e75-42cb-b3b2-0739213f210a", "Superadmin", "SUPERADMIN" },
+                    { new Guid("62c7c6fd-01d6-4410-9e4a-53490b59a3c7"), "2aa5d7ea-f7c9-40b5-a8ad-ee133a93be3f", "Admin", "ADMIN" },
+                    { new Guid("bf78885c-c25e-4fa8-bc01-7b90eb93c840"), "4f9e2a99-4c18-4d74-a147-3c8c87676909", "User", "USER" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Images",
                 columns: new[] { "Id", "CreatedBy", "CreatedDate", "DeletedBy", "DeletedTime", "FileName", "FileType", "IsDeleted", "ModifiedBy", "ModifiedDate" },
+                values: new object[] { new Guid("a8cb5130-8ebb-429b-a048-1c70b90212fb"), "Admin", new DateTime(2024, 5, 14, 21, 5, 28, 83, DateTimeKind.Local).AddTicks(8884), null, null, "default-user.png", "image/png", false, null, null });
+
+            migrationBuilder.InsertData(
+                table: "SocialMediaAccounts",
+                columns: new[] { "Id", "CreatedBy", "CreatedDate", "DeletedBy", "DeletedTime", "IsDeleted", "MediaLink", "MediaName", "ModifiedBy", "ModifiedDate", "NormalizedMediaName" },
                 values: new object[,]
                 {
-                    { new Guid("3eb72197-9048-4826-ad10-cbca7094a4d1"), "Admin", new DateTime(2024, 4, 11, 12, 50, 50, 45, DateTimeKind.Local).AddTicks(1572), null, null, "test/meanproduct", "images/jpg", false, null, null },
-                    { new Guid("a8cb5130-8ebb-429b-a048-1c70b90212fb"), "Admin", new DateTime(2024, 4, 11, 12, 50, 50, 45, DateTimeKind.Local).AddTicks(1539), null, null, "test/meaninuser", "images/png", false, null, null },
-                    { new Guid("adb79c2d-b859-4ee6-acfa-8a81bf83fd68"), "Admin", new DateTime(2024, 4, 11, 12, 50, 50, 45, DateTimeKind.Local).AddTicks(1569), null, null, "test/meanoutuser", "images/png", false, null, null }
+                    { new Guid("c0964288-2e2d-4dfa-af1c-6b10af49ade0"), "superadmin@gmail.com", new DateTime(2024, 5, 14, 21, 5, 28, 85, DateTimeKind.Local).AddTicks(2354), null, null, false, "https://www.github.com/Cenny26", "github", null, null, "GITHUB" },
+                    { new Guid("d0ace0de-a504-48ca-b711-ab5199163b75"), "superadmin@gmail.com", new DateTime(2024, 5, 14, 21, 5, 28, 85, DateTimeKind.Local).AddTicks(2351), null, null, false, "https://www.linkedin.com/in/Kennans26", "linkedin", null, null, "LINKEDIN" },
+                    { new Guid("fefe7789-a13c-4cf7-81b6-a6de8e134c53"), "superadmin@gmail.com", new DateTime(2024, 5, 14, 21, 5, 28, 85, DateTimeKind.Local).AddTicks(2357), null, null, false, "https://www.instagram.com/Kennans26", "instagram", null, null, "INSTAGRAM" }
                 });
 
             migrationBuilder.InsertData(
@@ -311,8 +337,8 @@ namespace TechBlog.DataAccess.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "ImageId", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { new Guid("2ef9cdda-913e-4e51-a905-54cbb8eb75c5"), 0, "a32b68b9-6c63-4de6-85d4-151932a9c331", "superadmin@gmail.com", true, "Kanan", new Guid("a8cb5130-8ebb-429b-a048-1c70b90212fb"), "Huseynov", false, null, "SUPERADMIN@GMAIL.COM", "SUPERADMIN@GMAIL.COM", "AQAAAAIAAYagAAAAEGaQ3QByvsw3iXEjVmoi3A4GrUj2aCHoMmuKd6MJxjD4LVxSouSjCI1va6/qi4k08w==", "+994515268342", true, "0e97b976-9e0c-46f9-ab90-c5e934cfe509", false, "superadmin@gmail.com" },
-                    { new Guid("8bfa84a0-7e9e-44cb-b703-9a817212eaee"), 0, "7113c9dc-7b93-4c7a-99dc-0bb9cb879b27", "admin@gmail.com", true, "Kanan", new Guid("adb79c2d-b859-4ee6-acfa-8a81bf83fd68"), "Huseynov", false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAIAAYagAAAAEDZq4vGjDUglTOltrzlDws3cs382kV4Z56ayZf8P7rwyczK11h9mXigf1zNrcVsB2w==", "+994515268342", false, "84c1e52b-8ea9-43ab-b590-72e4265e140d", false, "admin@gmail.com" }
+                    { new Guid("2ef9cdda-913e-4e51-a905-54cbb8eb75c5"), 0, "c3601f76-1939-4520-b113-e3590b71e658", "superadmin@gmail.com", true, "Kanan", new Guid("a8cb5130-8ebb-429b-a048-1c70b90212fb"), "Huseynov", false, null, "SUPERADMIN@GMAIL.COM", "SUPERADMIN@GMAIL.COM", "AQAAAAIAAYagAAAAEEEKYO4PE50uXsTLDZ44XiGdtq+iAlF44xYXnS0A9E8g+MrnfgRrGn+vVUCuFLfXaQ==", "+994515268342", true, "500ff404-7004-408b-923a-d27f426abffb", false, "superadmin@gmail.com" },
+                    { new Guid("8bfa84a0-7e9e-44cb-b703-9a817212eaee"), 0, "de099d22-e87b-4dd0-80f4-5b84b373f527", "admin@gmail.com", true, "Kanan", new Guid("a8cb5130-8ebb-429b-a048-1c70b90212fb"), "Huseynov", false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAIAAYagAAAAEAW/HpcKNwOugSK7jJuOUIbCbIKWTMl2wz8bQhJ9TftcACIAYiCYh598Ckgiq+1dMg==", "+994515268342", false, "ec33bd9e-a437-4e69-8805-df576e9d6dd5", false, "admin@gmail.com" }
                 });
 
             migrationBuilder.InsertData(
@@ -409,6 +435,9 @@ namespace TechBlog.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "SocialMediaAccounts");
 
             migrationBuilder.DropTable(
                 name: "Articles");

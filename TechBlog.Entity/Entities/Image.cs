@@ -1,19 +1,20 @@
 using TechBlog.Core.Entities;
 
-namespace TechBlog.Entity.Entities;
-
-public class Image : EntityBase
+namespace TechBlog.Entity.Entities
 {
-    public Image() { }
-    public Image(string fileName, string fileType, string createdBy)
+    public class Image : EntityBase
     {
-        FileName = fileName;
-        FileType = fileType;
-        CreatedBy = createdBy;
-    }
+        public Image() { }
+        public Image(string fileName, string fileType, string createdBy)
+        {
+            FileName = fileName;
+            FileType = fileType;
+            CreatedBy = createdBy;
+        }
 
-    public string FileName { get; set; }
-    public string FileType { get; set; }
-    public ICollection<Article> Articles { get; set; }
-    public ICollection<AppUser> Users { get; set; }
+        public string FileName { get; set; }
+        public string FileType { get; set; }
+        public ICollection<Article> Articles { get; set; }
+        public ICollection<AppUser> Users { get; set; }
+    }
 }

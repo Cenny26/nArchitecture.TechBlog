@@ -6,16 +6,17 @@ using TechBlog.DataAccess.Repositories.Abstractions;
 using TechBlog.DataAccess.Repositories.Concretes;
 using TechBlog.DataAccess.UnitOfWorks;
 
-namespace TechBlog.DataAccess.Extensions;
-
-public static class DataLayerExtensions
+namespace TechBlog.DataAccess.Extensions
 {
-    public static IServiceCollection LoadDataLayerExtension(this IServiceCollection services, IConfiguration config)
+    public static class DataLayerExtensions
     {
-        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-        services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(
-            config.GetConnectionString("DefaultConnection")));
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
-        return services;
+        public static IServiceCollection LoadDataLayerExtension(this IServiceCollection services, IConfiguration config)
+        {
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(
+                config.GetConnectionString("DefaultConnection")));
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            return services;
+        }
     }
 }

@@ -4,10 +4,7 @@ namespace TechBlog.Entity.Entities
 {
     public class Visitor : IEntityBase
     {
-        public Visitor()
-        {
-                
-        }
+        public Visitor() { }
         public Visitor(string ipAddress, string userAgent)
         {
             IpAddress = ipAddress;

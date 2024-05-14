@@ -2,16 +2,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TechBlog.Entity.Entities;
 
-namespace TechBlog.DataAccess.Mappings;
-
-public class UserClaimMap : IEntityTypeConfiguration<AppUserClaim>
+namespace TechBlog.DataAccess.Mappings
 {
-    public void Configure(EntityTypeBuilder<AppUserClaim> builder)
+    public class UserClaimMap : IEntityTypeConfiguration<AppUserClaim>
     {
-        // Primary key
-        builder.HasKey(uc => uc.Id);
+        public void Configure(EntityTypeBuilder<AppUserClaim> builder)
+        {
+            // Primary key
+            builder.HasKey(uc => uc.Id);
 
-        // Maps to the AspNetUserClaims table
-        builder.ToTable("AspNetUserClaims");
+            // Maps to the AspNetUserClaims table
+            builder.ToTable("AspNetUserClaims");
+        }
     }
 }

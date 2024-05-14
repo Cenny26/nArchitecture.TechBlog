@@ -4,40 +4,45 @@ using Microsoft.AspNetCore.Mvc;
 using TechBlog.Entity.DTOs.Users;
 using TechBlog.Entity.Entities;
 
-namespace TechBlog.Web.Areas.Admin.Controllers;
-
-[Area("Admin")]
-public class AuthController : Controller
+namespace TechBlog.Web.Areas.Admin.Controllers
 {
-    private readonly UserManager<AppUser> _userManager;
-    private readonly SignInManager<AppUser> _signInManager;
-
-    public AuthController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+    [Area("Admin")]
+    public class AuthController : Controller
     {
-        _userManager = userManager;
-        _signInManager = signInManager;
-    }
-
-    [HttpGet]
-    public ActionResult Login()
-    {
-        return View();
-    }
-
-    [AllowAnonymous]
-    [HttpPost]
-    public async Task<ActionResult> Login(UserLoginDto userLoginDto)
-    {
-        if (ModelState.IsValid)
+        private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
+        public AuthController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
-            var user = await _userManager.FindByEmailAsync(userLoginDto.Email);
-            if (user != null)
+            _userManager = userManager;
+            _signInManager = signInManager;
+        }
+
+        [HttpGet]
+        public ActionResult Login()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<ActionResult> Login(UserLoginDto userLoginDto)
+        {
+            if (ModelState.IsValid)
             {
-                var result =
-                    await _signInManager.PasswordSignInAsync(user, userLoginDto.Password, userLoginDto.RememberMe,
-                        false);
-                if (result.Succeeded)
-                    return RedirectToAction("Index", "Home", new { Area = "Admin" });
+                var user = await _userManager.FindByEmailAsync(userLoginDto.Email);
+                if (user != null)
+                {
+                    var result =
+                        await _signInManager.PasswordSignInAsync(user, userLoginDto.Password, userLoginDto.RememberMe,
+                            false);
+                    if (result.Succeeded)
+                        return RedirectToAction("Index", "Home", new { Area = "Admin" });
+                    else
+                    {
+                        ModelState.AddModelError("", "Your email address or password is incorrect.");
+                        return View();
+                    }
+                }
                 else
                 {
                     ModelState.AddModelError("", "Your email address or password is incorrect.");
@@ -46,28 +51,23 @@ public class AuthController : Controller
             }
             else
             {
-                ModelState.AddModelError("", "Your email address or password is incorrect.");
                 return View();
             }
         }
-        else
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home", new { Area = "" });
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> AccessDenied()
         {
             return View();
         }
-    }
-
-    [Authorize]
-    [HttpGet]
-    public async Task<IActionResult> Logout()
-    {
-        await _signInManager.SignOutAsync();
-        return RedirectToAction("Index", "Home", new { Area = "" });
-    }
-
-    [Authorize]
-    [HttpGet]
-    public async Task<IActionResult> AccessDenied()
-    {
-        return View();
     }
 }

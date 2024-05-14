@@ -4,10 +4,7 @@ namespace TechBlog.Entity.Entities
 {
     public class ArticleVisitor : IEntityBase
     {
-        public ArticleVisitor()
-        {
-            
-        }
+        public ArticleVisitor() { }
         public ArticleVisitor(Guid articleId, int visitorId)
         {
             ArticleId = articleId;

@@ -12,8 +12,8 @@ using TechBlog.DataAccess.Context;
 namespace TechBlog.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240414092854_UpdatingSocialMediaAccounts")]
-    partial class UpdatingSocialMediaAccounts
+    [Migration("20240514170529_migration_1")]
+    partial class migration_1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -56,21 +56,21 @@ namespace TechBlog.DataAccess.Migrations
                         new
                         {
                             Id = new Guid("2f673fe9-4ad1-493c-ab04-b3619397deb5"),
-                            ConcurrencyStamp = "644d593d-106f-48c1-b445-19dea5370d5d",
+                            ConcurrencyStamp = "fd9df3f1-8e75-42cb-b3b2-0739213f210a",
                             Name = "Superadmin",
                             NormalizedName = "SUPERADMIN"
                         },
                         new
                         {
                             Id = new Guid("62c7c6fd-01d6-4410-9e4a-53490b59a3c7"),
-                            ConcurrencyStamp = "eaf61c12-cc30-4609-8243-4a4a8192d39d",
+                            ConcurrencyStamp = "2aa5d7ea-f7c9-40b5-a8ad-ee133a93be3f",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = new Guid("bf78885c-c25e-4fa8-bc01-7b90eb93c840"),
-                            ConcurrencyStamp = "37ff52a8-2822-40c7-be23-7ef5daa014f0",
+                            ConcurrencyStamp = "4f9e2a99-4c18-4d74-a147-3c8c87676909",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -183,7 +183,7 @@ namespace TechBlog.DataAccess.Migrations
                         {
                             Id = new Guid("2ef9cdda-913e-4e51-a905-54cbb8eb75c5"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "0abeaea1-4fc3-48e1-8353-478fdc3bc3b0",
+                            ConcurrencyStamp = "c3601f76-1939-4520-b113-e3590b71e658",
                             Email = "superadmin@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Kanan",
@@ -192,10 +192,10 @@ namespace TechBlog.DataAccess.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "SUPERADMIN@GMAIL.COM",
                             NormalizedUserName = "SUPERADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEGKMeX20DV0x/6GBJQnuHM4ZE3rqj+2X2Es13pi4GMmstB7RsI1BmRGO+IT2+8aFrg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEEEKYO4PE50uXsTLDZ44XiGdtq+iAlF44xYXnS0A9E8g+MrnfgRrGn+vVUCuFLfXaQ==",
                             PhoneNumber = "+994515268342",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "d0a8d2a1-ddb3-466b-9425-e357a595b1a0",
+                            SecurityStamp = "500ff404-7004-408b-923a-d27f426abffb",
                             TwoFactorEnabled = false,
                             UserName = "superadmin@gmail.com"
                         },
@@ -203,19 +203,19 @@ namespace TechBlog.DataAccess.Migrations
                         {
                             Id = new Guid("8bfa84a0-7e9e-44cb-b703-9a817212eaee"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d07209a8-32c6-4a9d-9e55-7c2c72608584",
+                            ConcurrencyStamp = "de099d22-e87b-4dd0-80f4-5b84b373f527",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Kanan",
-                            ImageId = new Guid("adb79c2d-b859-4ee6-acfa-8a81bf83fd68"),
+                            ImageId = new Guid("a8cb5130-8ebb-429b-a048-1c70b90212fb"),
                             LastName = "Huseynov",
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEI2oSNuFKyBVKvvNRajrrHy6UlVToihOT+3Ye4TYJyyQZYQ6zsdfUa91Cg/fa8VtWg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEAW/HpcKNwOugSK7jJuOUIbCbIKWTMl2wz8bQhJ9TftcACIAYiCYh598Ckgiq+1dMg==",
                             PhoneNumber = "+994515268342",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "01151d81-14cb-4bc1-8f8c-c2ad225c45f7",
+                            SecurityStamp = "ec33bd9e-a437-4e69-8805-df576e9d6dd5",
                             TwoFactorEnabled = false,
                             UserName = "admin@gmail.com"
                         });
@@ -470,27 +470,9 @@ namespace TechBlog.DataAccess.Migrations
                         {
                             Id = new Guid("a8cb5130-8ebb-429b-a048-1c70b90212fb"),
                             CreatedBy = "Admin",
-                            CreatedDate = new DateTime(2024, 4, 14, 13, 28, 53, 746, DateTimeKind.Local).AddTicks(577),
-                            FileName = "test/meaninuser",
-                            FileType = "images/png",
-                            IsDeleted = false
-                        },
-                        new
-                        {
-                            Id = new Guid("adb79c2d-b859-4ee6-acfa-8a81bf83fd68"),
-                            CreatedBy = "Admin",
-                            CreatedDate = new DateTime(2024, 4, 14, 13, 28, 53, 746, DateTimeKind.Local).AddTicks(604),
-                            FileName = "test/meanoutuser",
-                            FileType = "images/png",
-                            IsDeleted = false
-                        },
-                        new
-                        {
-                            Id = new Guid("3eb72197-9048-4826-ad10-cbca7094a4d1"),
-                            CreatedBy = "Admin",
-                            CreatedDate = new DateTime(2024, 4, 14, 13, 28, 53, 746, DateTimeKind.Local).AddTicks(608),
-                            FileName = "test/meanproduct",
-                            FileType = "images/jpg",
+                            CreatedDate = new DateTime(2024, 5, 14, 21, 5, 28, 83, DateTimeKind.Local).AddTicks(8884),
+                            FileName = "default-user.png",
+                            FileType = "image/png",
                             IsDeleted = false
                         });
                 });
@@ -542,9 +524,9 @@ namespace TechBlog.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("9f5471ad-2835-41aa-9c45-98401d97b248"),
-                            CreatedBy = "superadmin@gmai.com",
-                            CreatedDate = new DateTime(2024, 4, 14, 13, 28, 53, 748, DateTimeKind.Local).AddTicks(669),
+                            Id = new Guid("d0ace0de-a504-48ca-b711-ab5199163b75"),
+                            CreatedBy = "superadmin@gmail.com",
+                            CreatedDate = new DateTime(2024, 5, 14, 21, 5, 28, 85, DateTimeKind.Local).AddTicks(2351),
                             IsDeleted = false,
                             MediaLink = "https://www.linkedin.com/in/Kennans26",
                             MediaName = "linkedin",
@@ -552,9 +534,9 @@ namespace TechBlog.DataAccess.Migrations
                         },
                         new
                         {
-                            Id = new Guid("739424c1-e3f8-4974-9e55-2375e50faffb"),
-                            CreatedBy = "superadmin@gmai.com",
-                            CreatedDate = new DateTime(2024, 4, 14, 13, 28, 53, 748, DateTimeKind.Local).AddTicks(673),
+                            Id = new Guid("c0964288-2e2d-4dfa-af1c-6b10af49ade0"),
+                            CreatedBy = "superadmin@gmail.com",
+                            CreatedDate = new DateTime(2024, 5, 14, 21, 5, 28, 85, DateTimeKind.Local).AddTicks(2354),
                             IsDeleted = false,
                             MediaLink = "https://www.github.com/Cenny26",
                             MediaName = "github",
@@ -562,9 +544,9 @@ namespace TechBlog.DataAccess.Migrations
                         },
                         new
                         {
-                            Id = new Guid("2193514a-e3da-481c-ad74-57ce36e51458"),
-                            CreatedBy = "superadmin@gmai.com",
-                            CreatedDate = new DateTime(2024, 4, 14, 13, 28, 53, 748, DateTimeKind.Local).AddTicks(676),
+                            Id = new Guid("fefe7789-a13c-4cf7-81b6-a6de8e134c53"),
+                            CreatedBy = "superadmin@gmail.com",
+                            CreatedDate = new DateTime(2024, 5, 14, 21, 5, 28, 85, DateTimeKind.Local).AddTicks(2357),
                             IsDeleted = false,
                             MediaLink = "https://www.instagram.com/Kennans26",
                             MediaName = "instagram",

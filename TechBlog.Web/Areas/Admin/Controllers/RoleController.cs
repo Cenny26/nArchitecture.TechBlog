@@ -9,7 +9,6 @@ namespace TechBlog.Web.Areas.Admin.Controllers
     public class RoleController : Controller
     {
         private readonly IRoleService _roleService;
-
         public RoleController(IRoleService roleService)
         {
             _roleService = roleService;

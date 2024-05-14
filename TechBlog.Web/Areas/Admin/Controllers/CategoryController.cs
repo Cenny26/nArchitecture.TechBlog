@@ -19,7 +19,6 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         private readonly IMapper _mapper;
         private readonly IValidator<Category> _validator;
         private readonly IToastNotification _notification;
-
         public CategoryController(ICategoryService categoryService, IMapper mapper, IValidator<Category> validator, IToastNotification notification)
         {
             _categoryService = categoryService;

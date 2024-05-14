@@ -14,12 +14,8 @@ namespace TechBlog.Web.Filters.ArticleVisitors
             _visitorService = visitorService;
         }
 
-        //public bool Disable { get; set; }
-
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            //if(Disable) return next();
-
             List<Visitor> visitors = await _visitorService.GetAllVisitorsAsync();
 
             string getIp = context.HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();

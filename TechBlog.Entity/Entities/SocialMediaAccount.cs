@@ -4,10 +4,7 @@ namespace TechBlog.Entity.Entities
 {
     public class SocialMediaAccount : EntityBase
     {
-        public SocialMediaAccount()
-        {
-
-        }
+        public SocialMediaAccount() { }
         public SocialMediaAccount(string mediaName, string normalizedMediaName, string mediaLink, string createdBy)
         {
             MediaName = mediaName;

@@ -1,6 +1,4 @@
-namespace TechBlog.Core.Entities;
-
-public interface IEntityBase
+namespace TechBlog.Core.Entities
 {
-    
+    public interface IEntityBase { }
 }

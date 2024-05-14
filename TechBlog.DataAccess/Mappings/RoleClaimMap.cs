@@ -2,16 +2,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TechBlog.Entity.Entities;
 
-namespace TechBlog.DataAccess.Mappings;
-
-public class RoleClaimMap : IEntityTypeConfiguration<AppRoleClaim>
+namespace TechBlog.DataAccess.Mappings
 {
-    public void Configure(EntityTypeBuilder<AppRoleClaim> builder)
+    public class RoleClaimMap : IEntityTypeConfiguration<AppRoleClaim>
     {
-        // Primary key
-        builder.HasKey(rc => rc.Id);
+        public void Configure(EntityTypeBuilder<AppRoleClaim> builder)
+        {
+            // Primary key
+            builder.HasKey(rc => rc.Id);
 
-        // Maps to the AspNetRoleClaims table
-        builder.ToTable("AspNetRoleClaims");
+            // Maps to the AspNetRoleClaims table
+            builder.ToTable("AspNetRoleClaims");
+        }
     }
 }

@@ -14,70 +14,71 @@ using TechBlog.Service.Services.Concretes.Storage;
 using TechBlog.Service.Services.Concretes.Storage.Azure;
 using TechBlog.Service.Services.Concretes.Storage.Local;
 
-namespace TechBlog.Service.Extensions;
-
-public static class ServiceLayerExtensions
+namespace TechBlog.Service.Extensions
 {
-    [Obsolete]
-    public static IServiceCollection LoadServiceLayerExtensions(this IServiceCollection services, IConfiguration configuration)
+    public static class ServiceLayerExtensions
     {
-        var assembly = Assembly.GetExecutingAssembly();
-
-        services.AddScoped<IArticleService, ArticleService>();
-        services.AddScoped<ICategoryService, CategoryService>();
-        services.AddScoped<IRoleService, RoleService>();
-        services.AddScoped<IUserService, UserService>();
-        services.AddScoped<IDashboardService, DashboardService>();
-        services.AddScoped<IImageService, ImageService>();
-        services.AddScoped<IVisitorService, VisitorService>();
-        services.AddScoped<ISocialMediaService, SocialMediaService>();
-        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
-        services.AddAutoMapper(assembly);
-
-        services.AddControllersWithViews().AddFluentValidation(opt =>
+        [Obsolete]
+        public static IServiceCollection LoadServiceLayerExtensions(this IServiceCollection services, IConfiguration configuration)
         {
-            opt.RegisterValidatorsFromAssemblyContaining<ArticleValidator>();
-            opt.DisableDataAnnotationsValidation = true;
-            //opt.ValidatorOptions.LanguageManager.Culture = new System.Globalization.CultureInfo("az");
-        });
+            var assembly = Assembly.GetExecutingAssembly();
 
-        // Serilog configuration
-        Log.Logger = new LoggerConfiguration()
-            .ReadFrom.Configuration(configuration)
-            .CreateLogger();
+            services.AddScoped<IArticleService, ArticleService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IDashboardService, DashboardService>();
+            services.AddScoped<IImageService, ImageService>();
+            services.AddScoped<IVisitorService, VisitorService>();
+            services.AddScoped<ISocialMediaService, SocialMediaService>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-        services.AddLogging(loggingBuilder =>
+            services.AddAutoMapper(assembly);
+
+            services.AddControllersWithViews().AddFluentValidation(opt =>
+            {
+                opt.RegisterValidatorsFromAssemblyContaining<ArticleValidator>();
+                opt.DisableDataAnnotationsValidation = true;
+                //opt.ValidatorOptions.LanguageManager.Culture = new System.Globalization.CultureInfo("az");
+            });
+
+            // Serilog configuration
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(configuration)
+                .CreateLogger();
+
+            services.AddLogging(loggingBuilder =>
+            {
+                loggingBuilder.ClearProviders();
+                loggingBuilder.AddSerilog(dispose: true);
+            });
+
+            return services;
+        }
+
+        public static void AddStorage<T>(this IServiceCollection services) where T : Storage, IStorage
         {
-            loggingBuilder.ClearProviders();
-            loggingBuilder.AddSerilog(dispose: true);
-        });
+            services.AddScoped<IStorage, T>();
+        }
 
-        return services;
-    }
-
-    public static void AddStorage<T>(this IServiceCollection services) where T : Storage, IStorage
-    {
-        services.AddScoped<IStorage, T>();
-    }
-
-    public static void AddStorage(this IServiceCollection services, StorageType storageType)
-    {
-        // done: case Azure need to scoped for AzureService
-        switch (storageType)
+        public static void AddStorage(this IServiceCollection services, StorageType storageType)
         {
-            case StorageType.Local:
-                services.AddScoped<IStorage, LocalStorage>();
-                break;
-            case StorageType.Azure:
-                services.AddScoped<IStorage, AzureStorage>();
-                break;
-            case StorageType.AWS:
-                //services.AddScoped<IStorage, AWSStorage>();
-                break;
-            default:
-                services.AddScoped<IStorage, LocalStorage>();
-                break;
+            // done: case Azure need to scoped for AzureService
+            switch (storageType)
+            {
+                case StorageType.Local:
+                    services.AddScoped<IStorage, LocalStorage>();
+                    break;
+                case StorageType.Azure:
+                    services.AddScoped<IStorage, AzureStorage>();
+                    break;
+                case StorageType.AWS:
+                    //services.AddScoped<IStorage, AWSStorage>();
+                    break;
+                default:
+                    services.AddScoped<IStorage, LocalStorage>();
+                    break;
+            }
         }
     }
 }
