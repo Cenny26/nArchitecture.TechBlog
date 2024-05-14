@@ -6,11 +6,10 @@ using System.Security.Claims;
 using TechBlog.DataAccess.UnitOfWorks;
 using TechBlog.Entity.DTOs.Users;
 using TechBlog.Entity.Entities;
-using TechBlog.Entity.Enums;
 using TechBlog.Service.Bases;
 using TechBlog.Service.Extensions;
-using TechBlog.Service.Helpers.Images.Abstractions;
 using TechBlog.Service.Services.Abstractions;
+using TechBlog.Service.Services.Abstractions.Storage;
 
 namespace TechBlog.Service.Services.Concretes
 {
@@ -20,15 +19,15 @@ namespace TechBlog.Service.Services.Concretes
         private readonly RoleManager<AppRole> _roleManager;
         private readonly IHttpContextAccessor _accessor;
         private readonly SignInManager<AppUser> _signInManager;
-        private readonly IImageHelper _imageHelper;
         private readonly ClaimsPrincipal _user;
-        public UserService(IUnitOfWork _unitOfWork, IMapper _mapper, UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, IHttpContextAccessor accessor, SignInManager<AppUser> signInManager, IImageHelper imageHelper) : base(_unitOfWork, _mapper)
+        private readonly IStorage _localStorage;
+        public UserService(IUnitOfWork _unitOfWork, IMapper _mapper, UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, IHttpContextAccessor accessor, SignInManager<AppUser> signInManager, IStorage storage) : base(_unitOfWork, _mapper)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _accessor = accessor;
             _signInManager = signInManager;
-            _imageHelper = imageHelper;
+            _localStorage = storage;
             _user = _accessor.HttpContext.User;
         }
 
@@ -138,9 +137,6 @@ namespace TechBlog.Service.Services.Concretes
 
                     _mapper.Map(userProfileDto, user);
 
-                    if (userProfileDto.Photo != null)
-                        user.ImageId = await UploadImageForUser(userProfileDto);
-
                     await _userManager.UpdateAsync(user);
                     await _unitOfWork.SaveAsync();
 
@@ -155,9 +151,6 @@ namespace TechBlog.Service.Services.Concretes
 
                 _mapper.Map(userProfileDto, user);
 
-                if (userProfileDto.Photo != null)
-                    user.ImageId = await UploadImageForUser(userProfileDto);
-
                 await _userManager.UpdateAsync(user);
                 await _unitOfWork.SaveAsync();
 
@@ -165,17 +158,6 @@ namespace TechBlog.Service.Services.Concretes
             }
             else
                 return false;
-        }
-
-        private async Task<Guid> UploadImageForUser(UserProfileDto userProfileDto)
-        {
-            var userEmail = _user.GetLoggedInEmail();
-
-            var imageUpload = await _imageHelper.Upload($"{userProfileDto.FirstName}{userProfileDto.LastName}", userProfileDto.Photo, ImageType.User);
-            Image image = new Image(imageUpload.FullName, userProfileDto.Photo.ContentType, userEmail);
-            await _unitOfWork.GetRepository<Image>().AddAsync(image);
-
-            return image.Id;
         }
     }
 }

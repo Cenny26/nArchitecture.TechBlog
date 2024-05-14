@@ -22,7 +22,6 @@ namespace TechBlog.Web.Areas.Admin.Controllers
         private readonly IToastNotification _notification;
         private readonly IValidator<AppUser> _validator;
         private readonly IUserService _userService;
-
         public UserController(IMapper mapper, IToastNotification notification, IValidator<AppUser> validator, IUserService userService)
         {
             _mapper = mapper;

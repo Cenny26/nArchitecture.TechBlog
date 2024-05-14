@@ -1,4 +1,6 @@
-﻿namespace TechBlog.Entity.DTOs.Users
+﻿using TechBlog.Entity.Entities;
+
+namespace TechBlog.Entity.DTOs.Users
 {
     public class UserDto
     {
@@ -10,5 +12,6 @@
         public string PhoneNumber { get; set; }
         public int AccessFailedCount { get; set; }
         public string Role { get; set; }
+        public Image Image { get; set; }
     }
 }

@@ -13,14 +13,10 @@
                 <form asp-area="Admin" asp-controller="User" asp-action="Profile" method="POST" enctype="multipart/form-data">
                     <!-- Account -->
                     <div class="card-body">
-                        <div class="d-flex align-items-start align-items-sm-center gap-4">
-                            <img src="~/images/@Model.Image.FileName" alt="user-avatar" class="d-block rounded" height="100" width="150" id="uploadedAvatar">
-                            <div class="button-wrapper">
-                                <label for="upload" class="btn btn-primary me-2 mb-2" tabindex="0">
-                                    <i class="bx bx-upload d-block d-sm-none"></i>
-                                    <input asp-for="Photo" type="file" accept="image/*" class="account-file-input" />
-                                </label>
-                            </div>
+                        <div class="text-center">
+                            <p class="text-danger" style="color: red; font-weight: bold">
+                                It is not possible to change the profile image while the project is in preparation!
+                            </p>
                         </div>
                         <hr class="my-0">
                         <div class="card-body">

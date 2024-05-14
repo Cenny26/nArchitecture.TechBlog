@@ -7,8 +7,6 @@ using Serilog;
 using System.Reflection;
 using TechBlog.Entity.Enums;
 using TechBlog.Service.FluentValidations.Articles;
-using TechBlog.Service.Helpers.Images.Abstractions;
-using TechBlog.Service.Helpers.Images.Concretes;
 using TechBlog.Service.Services.Abstractions;
 using TechBlog.Service.Services.Abstractions.Storage;
 using TechBlog.Service.Services.Concretes;
@@ -30,7 +28,7 @@ public static class ServiceLayerExtensions
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IDashboardService, DashboardService>();
-        services.AddScoped<IImageHelper, ImageHelper>(); // todo: need to delete after the refactoring tasks!
+        services.AddScoped<IImageService, ImageService>();
         services.AddScoped<IVisitorService, VisitorService>();
         services.AddScoped<ISocialMediaService, SocialMediaService>();
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

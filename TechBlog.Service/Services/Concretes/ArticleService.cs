@@ -8,7 +8,6 @@ using TechBlog.Entity.Entities;
 using TechBlog.Service.Bases;
 using TechBlog.Service.Extensions;
 using TechBlog.Service.Helpers.Constants;
-using TechBlog.Service.Helpers.Images.Abstractions;
 using TechBlog.Service.Services.Abstractions;
 using TechBlog.Service.Services.Abstractions.Storage;
 
@@ -19,15 +18,13 @@ namespace TechBlog.Service.Services.Concretes
     public class ArticleService : BaseHandler, IArticleService
     {
         private readonly IHttpContextAccessor _accessor;
-        private readonly IImageHelper _imageHelper;
         private readonly ILogger<ArticleService> _logger;
         private readonly ClaimsPrincipal _user;
         private readonly IStorage _localStorage;
-        public ArticleService(IUnitOfWork _unitOfWork, IMapper _mapper, IHttpContextAccessor accessor, IImageHelper imageHelper, ILogger<ArticleService> logger, IStorage storage) : base(_unitOfWork, _mapper)
+        public ArticleService(IUnitOfWork _unitOfWork, IMapper _mapper, IHttpContextAccessor accessor, ILogger<ArticleService> logger, IStorage storage) : base(_unitOfWork, _mapper)
         {
             _localStorage = storage;
             _accessor = accessor;
-            _imageHelper = imageHelper;
             _logger = logger;
             _user = _accessor.HttpContext.User;
         }

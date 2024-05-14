@@ -15,7 +15,11 @@
                     <div asp-validation-summary="All" style="color:red"></div>
                     <input type="hidden" asp-for="Id" />
                     <div class="card-body">
-
+                        <div class="text-center">
+                            <p class="text-danger" style="color: red; font-weight: bold">
+                                It is not possible to change the profile image while the project is in preparation!
+                            </p>
+                        </div>
                         <div class="form-group">
                             <label asp-for="FirstName" id="defaultFormControlInput" class="form-label">User name</label>
                             <input asp-for="FirstName" type="text" class="form-control mb-3" id="defaultFormControlInput" placeholder="Enter a user name:" aria-describedby="defaultFormControlHelp">
