@@ -37,6 +37,9 @@
                         </div>
                         <div class="form-group">
                             <label asp-for="Photo" class="form-label">Photo</label>
+                            <p class="text-danger" style="color: red; font-weight: bold">
+                                You should be careful when adding image for the article, because you will not able to change the image of the article in project's current state!
+                            </p>
                             <input asp-for="Photo" type="file" accept="image/" class="form-control mb-3" id="defaultFormControlInput" aria-describedby="defaultFormControlHelp">
                             <span asp-validation-for="Photo" class="text-danger"></span>
                         </div>

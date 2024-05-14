@@ -19,7 +19,7 @@ namespace TechBlog.Service.Helpers.Images.Concretes
             wwwroot = _env.WebRootPath;
         }
 
-        // todo: Moved appropriate method to CharacterRegulatory method under NameOperation class!
+        // todo: moved appropriate method to CharacterRegulatory method under NameOperation class!
         private string ReplaceInvalidChars(string fileName)
         {
             return fileName
